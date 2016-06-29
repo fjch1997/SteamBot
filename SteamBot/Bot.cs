@@ -776,11 +776,11 @@ namespace SteamBot
         {
             var authFile = Path.Combine("authfiles", String.Format("{0}.auth", logOnDetails.Username));
             if (File.Exists(authFile))
-            {
                 SteamGuardAccount = Newtonsoft.Json.JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(File.ReadAllText(authFile));
+            if (SteamGuardAccount != null)
                 return SteamGuardAccount.GenerateSteamGuardCode();
-            }
-            return string.Empty;
+            else
+                return string.Empty;
         }
 
         /// <summary>
