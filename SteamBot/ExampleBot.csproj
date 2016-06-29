@@ -29,7 +29,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Bin\Release\</OutputPath>
+    <OutputPath>..\Bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,8 +51,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SteamKit2, Version=1.7.0.33680, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamKit2.1.7.0\lib\net45\SteamKit2.dll</HintPath>
-      <Private>True</Private>
+        <HintPath>..\packages\SteamKit2.1.7.0\lib\net45\SteamKit2.dll</HintPath>
+        <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
