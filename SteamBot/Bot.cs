@@ -142,7 +142,7 @@ namespace SteamBot
             }
         }
 
-        public CallbackManager SteamCallbackManager { get; private set; }
+        public CallbackManager SteamCallbackManager { get { return steamCallbackManager; } }
 
         public string SentryFilesDirectoryName => sentryFilesDirectoryName;
         public string AuthFilesDirectoryName => authFilesDirectoryName;
