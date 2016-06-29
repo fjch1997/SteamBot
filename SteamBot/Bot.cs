@@ -1112,7 +1112,10 @@ namespace SteamBot
             return inventory;
         }
 
-        public void AcceptAllMobileTradeConfirmations()
+        /// <summary>
+        /// This method pulls and confirm all mobile confirmations. It will be called by <see cref="TradeManager"/> after every successful trade.
+        /// </summary>
+        public virtual void AcceptAllMobileTradeConfirmations()
         {
             if (SteamGuardAccount == null)
             {
