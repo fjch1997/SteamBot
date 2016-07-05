@@ -209,6 +209,7 @@ namespace SteamTrade
 
                 bool captcha = loginJson != null && loginJson.captcha_needed;
                 bool steamGuard = loginJson != null && loginJson.emailauth_needed;
+                bool twoFactor = loginJson != null && loginJson.requires_twofactor;
 
                 string time = Uri.EscapeDataString(rsaJson.timestamp);
 
@@ -233,14 +234,19 @@ namespace SteamTrade
                     if (!string.IsNullOrEmpty(consoleText))
                     {
                         capText = Uri.EscapeDataString(consoleText);
-                }
+                    }
                 }
 
                 data.Add("captchagid", captcha ? capGid : "");
                 data.Add("captcha_text", captcha ? capText : "");
                 // Captcha end.
                 // Added Header for two factor code.
-                data.Add("twofactorcode", "");
+                if(twoFactor)
+                {
+                    Console.WriteLine("SteamWeb: SteamGuard Mobile Authenticator code is needed.");
+                    var twoFactorCode = Console.ReadLine();
+                    data.Add("twofactorcode", twoFactorCode);
+                }
 
                 // Added Header for remember login. It can also set to true.
                 data.Add("remember_login", "false");
@@ -291,7 +297,7 @@ namespace SteamTrade
                         cookieCollection = webResponse.Cookies;
                     }
                 }
-            } while (loginJson.captcha_needed || loginJson.emailauth_needed);
+            } while (loginJson.captcha_needed || loginJson.emailauth_needed || loginJson.requires_twofactor);
 
             // If the login was successful, we need to enter the cookies to steam.
             if (loginJson.success)
@@ -533,5 +539,7 @@ namespace SteamTrade
         public bool emailauth_needed { get; set; }
 
         public string emailsteamid { get; set; }
+
+        public bool requires_twofactor { get; set; }
     }
 }
