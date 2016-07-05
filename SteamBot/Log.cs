@@ -31,10 +31,10 @@ namespace SteamBot
 
         public Log(string logFile, string botName = "", LogLevel consoleLogLevel = LogLevel.Info, LogLevel fileLogLevel = LogLevel.Info)
         {
-            Directory.CreateDirectory(Path.Combine(System.Windows.Forms.Application.StartupPath, "logs"));
+            Directory.CreateDirectory(new FileInfo(logFile).DirectoryName);
             if (!string.IsNullOrEmpty(logFile))
             {
-                _FileStream = File.AppendText(Path.Combine("logs", logFile));
+                _FileStream = File.AppendText(logFile);
                 _FileStream.AutoFlush = true;
             }
             _botName = botName;
