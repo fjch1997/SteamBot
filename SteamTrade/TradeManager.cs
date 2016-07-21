@@ -229,13 +229,6 @@ namespace SteamTrade
             
             // fetch our inventory from the Steam API.
             myInventoryTask = Task.Factory.StartNew(() => Inventory.FetchInventory(me.ConvertToUInt64(), ApiKey, SteamWeb));
-            
-            // check that the schema was already successfully fetched
-            if (Trade.CurrentSchema == null)
-                Trade.CurrentSchema = Schema.FetchSchema (ApiKey);
-
-            if (Trade.CurrentSchema == null)
-                throw new TradeException ("Could not download the latest item schema.");
         }
 
         #endregion Public Methods

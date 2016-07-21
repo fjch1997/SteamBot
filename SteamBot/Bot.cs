@@ -577,14 +577,7 @@ namespace SteamBot
                 myUniqueId = callback.UniqueID.ToString();
 
                 UserWebLogOn();
-
-                if (Trade.CurrentSchema == null)
-                {
-                    Log.Info("Downloading Schema...");
-                    Trade.CurrentSchema = Schema.FetchSchema(ApiKey, schemaLang);
-                    Log.Success("Schema Downloaded!");
-                }
-
+                
                 SteamFriends.SetPersonaName(DisplayNamePrefix + DisplayName);
                 SteamFriends.SetPersonaState(EPersonaState.Online);
 
