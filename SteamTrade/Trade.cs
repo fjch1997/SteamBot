@@ -504,9 +504,7 @@ namespace SteamTrade
             //handler might think the bot is ready, when really it's not!
             if(!ready)
                 MeIsReady = false;
-
-            ValidateLocalTradeItems();
-
+            
             return RetryWebRequest(() => session.SetReadyWebCmd(ready));
         }
 
@@ -517,9 +515,7 @@ namespace SteamTrade
         {
             if(!MeIsReady)
                 return false;
-
-            ValidateLocalTradeItems();
-
+            
             return RetryWebRequest(session.AcceptTradeWebCmd);
         }
 
@@ -897,14 +893,6 @@ namespace SteamTrade
                 }
             }
             return null;
-        }
-
-        private void ValidateLocalTradeItems()
-        {
-            if (!myOfferedItemsLocalCopy.Values.OrderBy(o => o).SequenceEqual(MyOfferedItems.OrderBy(o => o)))
-            {
-                throw new TradeException("Error validating local copy of offered items in the trade");
-            }
         }
     }
 }
