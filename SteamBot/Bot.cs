@@ -18,7 +18,7 @@ using System.Text.RegularExpressions;
 
 namespace SteamBot
 {
-    public class Bot : IDisposable
+    public class Bot : IDisposable, INotifyPropertyChanged
     {
         #region Bot delegates
         public delegate UserHandler UserHandlerCreator(Bot bot, SteamID id);
@@ -103,7 +103,9 @@ namespace SteamBot
         /// Is bot fully Logged in.
         /// Set only when bot did successfully Log in.
         /// </summary>
-        public bool IsLoggedIn { get; private set; }
+        public bool IsLoggedIn { get { return isLoggedIn; } set { isLoggedIn = value; RaisePropertyChanged(nameof(IsLoggedIn)); } }
+        private bool isLoggedIn;
+
 
         /// <summary>
         /// The current trade the bot is in.
@@ -273,6 +275,13 @@ namespace SteamBot
         /// Return the code in <see cref="SteamGuardRequiredEventArgs.SteamGuard"/>
         /// </remarks>
         public event EventHandler<SteamGuardRequiredEventArgs> OnSteamGuardRequired;
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+        private void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         /// <summary>
         /// Starts the callback thread and connects to Steam via SteamKit2.
