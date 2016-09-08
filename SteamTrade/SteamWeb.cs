@@ -49,6 +49,7 @@ namespace SteamTrade
         /// <summary>
         /// CookieContainer to save all cookies during the Login. 
         /// </summary>
+        public CookieContainer Cookies => _cookies;
         private CookieContainer _cookies = new CookieContainer();
 
         /// <summary>
