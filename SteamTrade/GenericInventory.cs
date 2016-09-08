@@ -197,7 +197,7 @@ namespace SteamTrade
                         }
                         invResponse = JsonConvert.DeserializeObject(response);
 
-                        if (invResponse.success == false)
+                        if ((bool)invResponse.success == false)
                         {
                             _errors.Add("Fail to open backpack: " + invResponse.Error);
                             continue;
