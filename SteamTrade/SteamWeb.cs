@@ -150,36 +150,43 @@ namespace SteamTrade
             }
 
             // Get the response and return it.
-            try 
+            try
             {
                 return request.GetResponse() as HttpWebResponse;
             }
-            catch (WebException ex) 
+            catch (WebException ex)
             {
                 //this is thrown if response code is not 200
-                if (fetchError) 
+                if (fetchError)
                 {
                     var resp = ex.Response as HttpWebResponse;
-                    if (resp != null) 
+                    if (resp != null)
                     {
                         return resp;
                     }
                 }
-                throw;                
-            }            
+                throw;
+            }
         }
 
         /// <summary>
         /// Executes the login by using the Steam Website.
         /// This Method is not used by Steambot repository, but it could be very helpful if you want to build a own Steambot or want to login into steam services like backpack.tf/csgolounge.com.
-        /// Updated: 10-02-2015.
         /// </summary>
         /// <param name="username">Your Steam username.</param>
         /// <param name="password">Your Steam password.</param>
+        /// <param name="twoFactorCodeCallback">A function that will return the current Steam Guard Mobile Authenticator/two factor code when needed. If this parameter is null when a code is required, an exception will be thrown.</param>
         /// <returns>A bool containing a value, if the login was successful.</returns>
-        public bool DoLogin(string username, string password)
+        /// <exception cref="ArgumentNullException">One of the callback is null when it's needed.</exception>
+        /// <exception cref="SteamWebLoginException">See <see cref="Exception.Message"/> and <see cref="SteamWebLoginException.SteamResult"/> for details.</exception>
+        /// <exception cref="CryptographicException">An RSA key was not returned from steam.</exception>
+        public SteamResult DoLogin(string username, string password, bool rememberLogin, Func<string> twoFactorCodeCallback, Func<string, string> captchaCallback, Func<string> emailCodeCallback)
         {
-            var data = new NameValueCollection {{"username", username}};
+            if (username == null)
+                new ArgumentNullException(nameof(username));
+            if (password == null)
+                new ArgumentNullException(nameof(password));
+            var data = new NameValueCollection { { "username", username } };
             // First get the RSA key with which we will encrypt our password.
             string response = Fetch("https://steamcommunity.com/login/getrsakey", "POST", data, false);
             GetRsaKey rsaJson = JsonConvert.DeserializeObject<GetRsaKey>(response);
@@ -187,7 +194,7 @@ namespace SteamTrade
             // Validate, if we could get the rsa key.
             if (!rsaJson.success)
             {
-                return false;
+                throw new CryptographicException("Missing RSA key.");
             }
 
             // RSA Encryption.
@@ -213,10 +220,9 @@ namespace SteamTrade
             // Do this while we need a captcha or need email authentification. Probably you have misstyped the captcha or the SteamGaurd code if this comes multiple times.
             do
             {
-                Console.WriteLine("SteamWeb: Logging In...");
-
                 bool captcha = loginJson != null && loginJson.captcha_needed;
                 bool steamGuard = loginJson != null && loginJson.emailauth_needed;
+                bool twoFactor = loginJson != null && loginJson.requires_twofactor;
 
                 string time = Uri.EscapeDataString(rsaJson.timestamp);
 
@@ -228,49 +234,39 @@ namespace SteamTrade
                     capGid = Uri.EscapeDataString(loginJson.captcha_gid);
                 }
 
-                data = new NameValueCollection {{"password", encryptedBase64Password}, {"username", username}};
+                data = new NameValueCollection { { "password", encryptedBase64Password }, { "username", username } };
 
                 // Captcha Check.
                 string capText = "";
-                if (captcha)
-                {
-                    Console.WriteLine("SteamWeb: Captcha is needed.");
-                    System.Diagnostics.Process.Start("https://steamcommunity.com/public/captcha.php?gid=" + loginJson.captcha_gid);
-                    Console.WriteLine("SteamWeb: Type the captcha:");
-                    string consoleText = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(consoleText))
-                    {
-                        capText = Uri.EscapeDataString(consoleText);
-                }
-                }
+                if (captcha && captchaCallback != null)
+                    capText = captchaCallback("https://steamcommunity.com/public/captcha.php?gid=" + loginJson.captcha_gid);
+                else if (captcha)
+                    throw new ArgumentNullException(nameof(captchaCallback));
 
                 data.Add("captchagid", captcha ? capGid : "");
                 data.Add("captcha_text", captcha ? capText : "");
                 // Captcha end.
                 // Added Header for two factor code.
-                data.Add("twofactorcode", "");
+                if (twoFactor && twoFactorCodeCallback != null)
+                    data.Add("twofactorcode", twoFactorCodeCallback());
+                else if (twoFactor)
+                    throw new ArgumentNullException(nameof(twoFactorCodeCallback));
 
                 // Added Header for remember login. It can also set to true.
-                data.Add("remember_login", "false");
+                data.Add("remember_login", rememberLogin.ToString());
 
                 // SteamGuard check. If SteamGuard is enabled you need to enter it. Care probably you need to wait 7 days to trade.
                 // For further information about SteamGuard see: https://support.steampowered.com/kb_article.php?ref=4020-ALZM-5519&l=english.
-                if (steamGuard)
+                if (steamGuard && emailCodeCallback != null)
                 {
-                    Console.WriteLine("SteamWeb: SteamGuard is needed.");
-                    Console.WriteLine("SteamWeb: Type the code:");
-                    string consoleText = Console.ReadLine();
-                    if (!string.IsNullOrEmpty(consoleText))
-                    {
-                        steamGuardText = Uri.EscapeDataString(consoleText);
-                    }
+                    steamGuardText = emailCodeCallback();
                     steamGuardId = loginJson.emailsteamid;
-
-                    // Adding the machine name to the NameValueCollection, because it is requested by steam.
-                    Console.WriteLine("SteamWeb: Type your machine name:");
-                    consoleText = Console.ReadLine();
-                    var machineName = string.IsNullOrEmpty(consoleText) ? "" : Uri.EscapeDataString(consoleText);
-                    data.Add("loginfriendlyname", machineName != "" ? machineName : "defaultSteamBotMachine");
+                    //loginfriendlyname is no longer required.
+                    data.Add("loginfriendlyname", "");
+                }
+                else if (steamGuard)
+                {
+                    throw new ArgumentNullException(nameof(emailCodeCallback));
                 }
 
                 data.Add("emailauth", steamGuardText);
@@ -285,13 +281,9 @@ namespace SteamTrade
                 data.Add("rsatimestamp", time);
 
                 // Sending the actual login.
-                using(HttpWebResponse webResponse = Request("https://steamcommunity.com/login/dologin/", "POST", data, false))
+                using (HttpWebResponse webResponse = Request("https://steamcommunity.com/login/dologin/", "POST", data, false))
                 {
                     var stream = webResponse.GetResponseStream();
-                    if (stream == null)
-                    {
-                        return false;
-                    }
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         string json = reader.ReadToEnd();
@@ -299,7 +291,7 @@ namespace SteamTrade
                         cookieCollection = webResponse.Cookies;
                     }
                 }
-            } while (loginJson.captcha_needed || loginJson.emailauth_needed);
+            } while (loginJson.captcha_needed || loginJson.emailauth_needed || loginJson.requires_twofactor);
 
             // If the login was successful, we need to enter the cookies to steam.
             if (loginJson.success)
@@ -310,14 +302,12 @@ namespace SteamTrade
                     _cookies.Add(cookie);
                 }
                 SubmitCookies(_cookies);
-                return true;
+                return loginJson;
             }
             else
             {
-                Console.WriteLine("SteamWeb Error: " + loginJson.message);
-                return false;
+                throw new SteamWebLoginException(loginJson);
             }
-
         }
 
         ///<summary>
@@ -383,7 +373,7 @@ namespace SteamTrade
                 return true;
             }
         }
-        
+
         /// <summary>
         /// Authenticate using an array of cookies from a browser or whatever source, without contacting the server.
         /// It is recommended that you call <see cref="VerifyCookies"/> after calling this method to ensure that the cookies are valid.
@@ -434,7 +424,7 @@ namespace SteamTrade
         /// Method to submit cookies to Steam after Login.
         /// </summary>
         /// <param name="cookies">Cookiecontainer which contains cookies after the login to Steam.</param>
-        static void SubmitCookies (CookieContainer cookies)
+        static void SubmitCookies(CookieContainer cookies)
         {
             HttpWebRequest w = WebRequest.Create("https://steamcommunity.com/") as HttpWebRequest;
 
@@ -541,5 +531,49 @@ namespace SteamTrade
         public bool emailauth_needed { get; set; }
 
         public string emailsteamid { get; set; }
+
+        public bool requires_twofactor { get; set; }
+
+        [JsonProperty("login_complete")]
+        public bool LoginComplete { get; set; }
+
+        [JsonProperty("transfer_urls")]
+        public string[] TransferUrls { get; set; }
+
+        [JsonProperty("transfer_parameters")]
+        public TransferParameters TransferParameters { get; set; }
+    }
+
+    public class TransferParameters
+    {
+
+        [JsonProperty("steamid")]
+        public string Steamid { get; set; }
+
+        [JsonProperty("token")]
+        public string Token { get; set; }
+
+        [JsonProperty("auth")]
+        public string Auth { get; set; }
+
+        [JsonProperty("remember_login")]
+        public bool RememberLogin { get; set; }
+
+        [JsonProperty("webcookie")]
+        public string Webcookie { get; set; }
+
+        [JsonProperty("token_secure")]
+        public string TokenSecure { get; set; }
+    }
+
+
+    [Serializable]
+    public class SteamWebLoginException : Exception
+    {
+        public SteamWebLoginException(SteamResult steamResult):base(steamResult.message) { SteamResult = steamResult; }
+        public SteamResult SteamResult { get; set; }
+        protected SteamWebLoginException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }
