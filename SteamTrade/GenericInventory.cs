@@ -265,39 +265,15 @@ namespace SteamTrade
     /// </summary>
     public class ItemDescription
     {
-        [Obsolete("Use Name instead.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public string name => Name;
         [JsonProperty("name")]
         public string Name { get; set; }
-        [Obsolete("Use Type instead.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public string type => Type;
         [JsonProperty("type")]
         public string Type { get; set; }
-        [Obsolete("Use Tradable instead.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public bool tradable => Tradable;
         [JsonProperty("tradable")]
         public bool Tradable { get; set; }
-        [Obsolete("Use Marketable instead.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public bool marketable => Marketable;
         [JsonProperty("marketable")]
         public bool Marketable { get; set; }
-        [Obsolete("Use DescriptionId instead.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public string url => Url;
         public string Url { get; set; }
-        [Obsolete("Use ClassId instead.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public long classid => ClassId;
         [JsonProperty("classid")]
         public long ClassId { get; set; }
 
@@ -339,28 +315,8 @@ namespace SteamTrade
         /// This property can be null when not applicable.
         /// </summary>
         public JArray Tags { get; set; }
-
-        [Obsolete("Use AppData instead.")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [JsonIgnore]
-        public Dictionary<string, string> app_data => AppData;
+        
         [JsonIgnore]
         public Dictionary<string, string> AppData { get; set; }
-
-        public void debug_app_data()
-        {
-            Console.WriteLine("\n\"" + Name + "\"");
-            if (AppData == null)
-            {
-                Console.WriteLine("Doesn't have app_data");
-                return;
-            }
-
-            foreach (var value in AppData)
-            {
-                Console.WriteLine(string.Format("{0} = {1}", value.Key, value.Value));
-            }
-            Console.WriteLine("");
-        }
     }
 }
