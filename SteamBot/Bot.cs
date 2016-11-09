@@ -175,7 +175,21 @@ namespace SteamBot
         /// <param name="handlerCreator">A delegate to create <see cref="UserHandler"/>. All user handlers will be created using this.</param>
         /// <param name="debug">Debug mode shows more details when logging.</param>
         /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
-        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false) : this(config, apiKey, sentryFilesDirectoryName, Environment.CurrentDirectory + "\\authfiles", handlerCreator, debug, process) { }
+        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false) : this(config, apiKey, sentryFilesDirectoryName, Environment.CurrentDirectory + "\\authfiles", handlerCreator, null, debug, process) { }
+        /// <summary>
+        /// Initialize a new instance of <see cref="Bot"/>.
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="apiKey">If an API Key exists in parameter <paramref name="config"/>, the one in <paramref name="config"/> takes precedence.</param>
+        /// <param name="sentryFilesDirectoryName">Sentry files will be saved under this directory.</param>
+        /// <param name="authFilesDirectoryName">Auth files will be saved under this directory.</param>
+        /// <param name="handlerCreator">A delegate to create <see cref="UserHandler"/>. All user handlers will be created using this.</param>
+        /// <param name="debug">Debug mode shows more details when logging.</param>
+        /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
+        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false) : this(config, apiKey, sentryFilesDirectoryName, authFilesDirectoryName, handlerCreator, null, debug, process)
+        {
+
+        }
 
         /// <summary>
         /// Initialize a new instance of <see cref="Bot"/>.
@@ -187,7 +201,7 @@ namespace SteamBot
         /// <param name="handlerCreator">A delegate to create <see cref="UserHandler"/>. All user handlers will be created using this.</param>
         /// <param name="debug">Debug mode shows more details when logging.</param>
         /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
-        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false)
+        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, ILog log = null, bool debug = false, bool process = false)
         {
             this.sentryFilesDirectoryName = sentryFilesDirectoryName;
             this.authFilesDirectoryName = authFilesDirectoryName;
@@ -197,7 +211,7 @@ namespace SteamBot
                 Username = config.Username,
                 Password = config.Password
             };
-            DisplayName  = config.DisplayName;
+            DisplayName = config.DisplayName;
             ChatResponse = config.ChatResponse;
             MaximumTradeTime = config.MaximumTradeTime;
             MaximumActionGap = config.MaximumActionGap;
@@ -210,7 +224,7 @@ namespace SteamBot
             isProccess = process;
             try
             {
-                if( config.LogLevel != null )
+                if (config.LogLevel != null)
                 {
                     consoleLogLevel = (Log.LogLevel)Enum.Parse(typeof(Log.LogLevel), config.LogLevel, true);
                     Console.WriteLine(@"(Console) LogLevel configuration parameter used in bot {0} is depreciated and may be removed in future versions. Please use ConsoleLogLevel instead.", DisplayName);
@@ -234,7 +248,10 @@ namespace SteamBot
             }
 
             logFile = config.LogFile;
-            Log = new Log(logFile, DisplayName, consoleLogLevel, fileLogLevel);
+            if (log == null)
+                Log = new Log(logFile, DisplayName, consoleLogLevel, fileLogLevel);
+            else
+                Log = log;
             createHandler = handlerCreator;
             BotControlClass = config.BotControlClass;
             SteamWeb = new SteamWeb();
@@ -242,7 +259,7 @@ namespace SteamBot
             // Hacking around https
             ServicePointManager.ServerCertificateValidationCallback += SteamWeb.ValidateRemoteCertificate;
 
-            Log.Debug ("Initializing Steam Bot...");            
+            Log.Debug("Initializing Steam Bot...");
             SteamClient = new SteamClient();
             steamCallbackManager = new CallbackManager(SteamClient);
             SubscribeSteamCallbacks();
@@ -276,7 +293,7 @@ namespace SteamBot
         /// </remarks>
         public event EventHandler<SteamGuardRequiredEventArgs> OnSteamGuardRequired;
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         private void RaisePropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
@@ -323,7 +340,7 @@ namespace SteamBot
         /// <c>true</c>, if trade was opened,
         /// <c>false</c> if there is another trade that must be closed first.
         /// </returns>
-        public bool OpenTrade (SteamID other)
+        public bool OpenTrade(SteamID other)
         {
             if (CurrentTrade != null || CheckCookies() == false)
                 return false;
@@ -334,16 +351,16 @@ namespace SteamBot
         /// <summary>
         /// Closes the current active trade.
         /// </summary>
-        public void CloseTrade() 
+        public void CloseTrade()
         {
             if (CurrentTrade == null)
                 return;
-            UnsubscribeTrade (GetUserHandler (CurrentTrade.OtherSID), CurrentTrade);
-            tradeManager.StopTrade ();
+            UnsubscribeTrade(GetUserHandler(CurrentTrade.OtherSID), CurrentTrade);
+            tradeManager.StopTrade();
             CurrentTrade = null;
         }
 
-        void OnTradeTimeout(object sender, EventArgs args) 
+        void OnTradeTimeout(object sender, EventArgs args)
         {
             // ignore event params and just null out the trade.
             GetUserHandler(CurrentTrade.OtherSID).OnTradeTimeout();
@@ -451,7 +468,7 @@ namespace SteamBot
                     Log.Error("Error while polling trade offers: " + e);
                 }
 
-                Thread.Sleep(tradeOfferPollingIntervalSecs*1000);
+                Thread.Sleep(tradeOfferPollingIntervalSecs * 1000);
             }
         }
 
@@ -473,7 +490,7 @@ namespace SteamBot
             }
         }
 
-        bool HandleTradeSessionStart (SteamID other)
+        bool HandleTradeSessionStart(SteamID other)
         {
             if (CurrentTrade != null)
                 return false;
@@ -586,7 +603,7 @@ namespace SteamBot
                 myUniqueId = callback.UniqueID.ToString();
 
                 UserWebLogOn();
-                
+
                 SteamFriends.SetPersonaName(DisplayNamePrefix + DisplayName);
                 SteamFriends.SetPersonaState(EPersonaState.Online);
 
@@ -885,7 +902,7 @@ namespace SteamBot
                         catch (IOException)
                         {
                             Log.Error("Failed to save auth file. Aborting authentication.");
-                        }                        
+                        }
                     }
                     else
                     {
@@ -927,12 +944,12 @@ namespace SteamBot
             {
                 IsLoggedIn = SteamWeb.Authenticate(myUniqueId, SteamClient, myUserNonce);
 
-                if(!IsLoggedIn)
+                if (!IsLoggedIn)
                 {
                     Log.Warn("Authentication failed, retrying in 2s...");
                     Thread.Sleep(2000);
                 }
-            } while(!IsLoggedIn);
+            } while (!IsLoggedIn);
 
             Log.Success("User Authenticated!");
 
@@ -991,43 +1008,43 @@ namespace SteamBot
                 userHandlers.Remove(sid);
         }
 
-        static byte [] SHAHash (byte[] input)
+        static byte[] SHAHash(byte[] input)
         {
             SHA1Managed sha = new SHA1Managed();
-            
-            byte[] output = sha.ComputeHash( input );
-            
+
+            byte[] output = sha.ComputeHash(input);
+
             sha.Clear();
-            
+
             return output;
         }
 
         void OnUpdateMachineAuthCallback(SteamUser.UpdateMachineAuthCallback machineAuth)
         {
-            byte[] hash = SHAHash (machineAuth.Data);
+            byte[] hash = SHAHash(machineAuth.Data);
 
             Directory.CreateDirectory(sentryFilesDirectoryName);
 
-            File.WriteAllBytes (System.IO.Path.Combine(sentryFilesDirectoryName, String.Format("{0}.sentryfile", logOnDetails.Username)), machineAuth.Data);
-            
+            File.WriteAllBytes(System.IO.Path.Combine(sentryFilesDirectoryName, String.Format("{0}.sentryfile", logOnDetails.Username)), machineAuth.Data);
+
             var authResponse = new SteamUser.MachineAuthDetails
             {
                 BytesWritten = machineAuth.BytesToWrite,
                 FileName = machineAuth.FileName,
                 FileSize = machineAuth.BytesToWrite,
                 Offset = machineAuth.Offset,
-                
+
                 SentryFileHash = hash, // should be the sha1 hash of the sentry file we just wrote
-                
+
                 OneTimePassword = machineAuth.OneTimePassword, // not sure on this one yet, since we've had no examples of steam using OTPs
-                
+
                 LastError = 0, // result from win32 GetLastError
                 Result = EResult.OK, // if everything went okay, otherwise ~who knows~
                 JobID = machineAuth.JobID, // so we respond to the correct server job
             };
-            
+
             // send off our response
-            SteamUser.SendMachineAuthResponse (authResponse);
+            SteamUser.SendMachineAuthResponse(authResponse);
         }
 
         /// <summary>
@@ -1047,7 +1064,7 @@ namespace SteamBot
         /// </example>
         public void GetInventory()
         {
-            myInventoryTask = Task.Factory.StartNew((Func<Inventory>) FetchBotsInventory);
+            myInventoryTask = Task.Factory.StartNew((Func<Inventory>)FetchBotsInventory);
         }
 
         public void TradeOfferRouter(TradeOffer offer)
@@ -1068,7 +1085,7 @@ namespace SteamBot
         /// <summary>
         /// Subscribes all listeners of this to the trade.
         /// </summary>
-        public void SubscribeTrade (Trade trade, UserHandler handler)
+        public void SubscribeTrade(Trade trade, UserHandler handler)
         {
             trade.OnAwaitingConfirmation += handler._OnTradeAwaitingConfirmation;
             trade.OnClose += handler.OnTradeClose;
@@ -1082,11 +1099,11 @@ namespace SteamBot
             trade.OnUserSetReady += handler.OnTradeReadyHandler;
             trade.OnUserAccept += handler.OnTradeAcceptHandler;
         }
-        
+
         /// <summary>
         /// Unsubscribes all listeners of this from the current trade.
         /// </summary>
-        public void UnsubscribeTrade (UserHandler handler, Trade trade)
+        public void UnsubscribeTrade(UserHandler handler, Trade trade)
         {
             trade.OnAwaitingConfirmation -= handler._OnTradeAwaitingConfirmation;
             trade.OnClose -= handler.OnTradeClose;
@@ -1107,7 +1124,7 @@ namespace SteamBot
         private Inventory FetchBotsInventory()
         {
             var inventory = Inventory.FetchInventory(SteamUser.SteamID, ApiKey, SteamWeb);
-            if(inventory.IsPrivate)
+            if (inventory.IsPrivate)
             {
                 Log.Warn("The bot's backpack is private! If your bot adds any items it will fail! Your bot's backpack should be Public.");
             }
@@ -1141,7 +1158,7 @@ namespace SteamBot
                 {
                     Log.Error("Invalid session when trying to fetch trade confirmations.");
                 }
-            }                        
+            }
         }
 
         /// <summary>
@@ -1162,7 +1179,7 @@ namespace SteamBot
             if (!string.IsNullOrEmpty(token))
             {
                 data.Add("token", token);
-            }            
+            }
 
             var resp = SteamWeb.Fetch(url, "GET", data, false);
             if (string.IsNullOrWhiteSpace(resp))
@@ -1258,7 +1275,7 @@ namespace SteamBot
                 {
                     SteamCallbackManager.RunCallbacks();
 
-                    if(tradeOfferManager != null)
+                    if (tradeOfferManager != null)
                     {
                         tradeOfferManager.HandleNextPendingTradeOfferUpdate();
                     }
@@ -1316,7 +1333,7 @@ namespace SteamBot
             AcceptInvite.Body.AcceptInvite = true;
 
             this.SteamClient.Send(AcceptInvite);
-            
+
         }
 
         /// <summary>
@@ -1350,7 +1367,7 @@ namespace SteamBot
         }
 
         #endregion
-        
+
         public void Dispose()
         {
             Dispose(true);
