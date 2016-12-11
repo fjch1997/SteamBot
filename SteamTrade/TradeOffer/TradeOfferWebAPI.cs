@@ -28,18 +28,9 @@ namespace SteamTrade.TradeOffer
         {
             string options = string.Format("?key={0}&tradeofferid={1}&language={2}", apiKey, tradeofferid, "en_us");
             string url = String.Format(BaseUrl, "GetTradeOffer", "v1", options);
-            try
-            {
-                string response = steamWeb.Fetch(url, "GET", null, false);
-                var result = JsonConvert.DeserializeObject<ApiResponse<OfferResponse>>(response);
-                return result.Response;
-            }
-            catch (Exception ex)
-            {
-                //todo log
-                Debug.WriteLine(ex);
-            }
-            return new OfferResponse();
+            string response = steamWeb.Fetch(url, "GET", null, false);
+            var result = JsonConvert.DeserializeObject<ApiResponse<OfferResponse>>(response);
+            return result.Response;
         }
 
         public TradeOfferState GetOfferState(string tradeofferid)
@@ -73,17 +64,8 @@ namespace SteamTrade.TradeOffer
                 apiKey, BoolConverter(getSentOffers), BoolConverter(getReceivedOffers), BoolConverter(getDescriptions), language, BoolConverter(activeOnly), BoolConverter(historicalOnly), timeHistoricalCutoff);
             string url = String.Format(BaseUrl, "GetTradeOffers", "v1", options);
             string response = steamWeb.Fetch(url, "GET", null, false);
-            try
-            {
-                var result = JsonConvert.DeserializeObject<ApiResponse<OffersResponse>>(response);
-                return result.Response;
-            }
-            catch (Exception ex)
-            {
-                //todo log
-                Debug.WriteLine(ex);
-            }
-            return new OffersResponse();
+            var result = JsonConvert.DeserializeObject<ApiResponse<OffersResponse>>(response);
+            return result.Response;
         }
 
         private static string BoolConverter(bool value)
@@ -96,19 +78,10 @@ namespace SteamTrade.TradeOffer
             string options = string.Format("?key={0}&time_last_visit={1}", apiKey, timeLastVisit);
             string url = String.Format(BaseUrl, "GetTradeOffersSummary", "v1", options);
 
-            try
-            {
-                string response = steamWeb.Fetch(url, "GET", null, false);
-                var resp = JsonConvert.DeserializeObject<ApiResponse<TradeOffersSummary>>(response);
+            string response = steamWeb.Fetch(url, "GET", null, false);
+            var resp = JsonConvert.DeserializeObject<ApiResponse<TradeOffersSummary>>(response);
 
-                return resp.Response;
-            }
-            catch (Exception ex)
-            {
-                //todo log
-                Debug.WriteLine(ex);
-            }
-            return new TradeOffersSummary();
+            return resp.Response;
         }
 
         private bool DeclineTradeOffer(ulong tradeofferid)
