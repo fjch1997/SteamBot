@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using SteamKit2;
+using SteamTrade.Exceptions;
 using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -28,7 +29,7 @@ namespace SteamTrade.TradeOffer
         }
 
         public TradeOfferAcceptResponse Accept(string tradeOfferId)
-        {            
+        {
             var data = new NameValueCollection();
             data.Add("sessionid", steamWeb.SessionId);
             data.Add("serverid", "1");
@@ -36,7 +37,7 @@ namespace SteamTrade.TradeOffer
 
             string url = string.Format("https://steamcommunity.com/tradeoffer/{0}/accept", tradeOfferId);
             string referer = string.Format("https://steamcommunity.com/tradeoffer/{0}/", tradeOfferId);
-            
+
             string resp = steamWeb.Fetch(url, "POST", data, false, referer, true);
 
             if (!String.IsNullOrEmpty(resp))
@@ -45,7 +46,8 @@ namespace SteamTrade.TradeOffer
                 {
                     var res = JsonConvert.DeserializeObject<TradeOfferAcceptResponse>(resp);
                     //steam can return 'null' response
-                    if (res != null) {
+                    if (res != null)
+                    {
                         res.Accepted = string.IsNullOrEmpty(res.TradeError);
                         return res;
                     }
@@ -56,8 +58,8 @@ namespace SteamTrade.TradeOffer
                 }
             }
             //if it didn't work as expected, check the state, maybe it was accepted after all
-            var state = webApi.GetOfferState(tradeOfferId);            
-            return new TradeOfferAcceptResponse { Accepted = state == TradeOfferState.TradeOfferStateAccepted };            
+            var state = webApi.GetOfferState(tradeOfferId);
+            return new TradeOfferAcceptResponse { Accepted = state == TradeOfferState.TradeOfferStateAccepted };
         }
 
         public bool Decline(string tradeOfferId)
@@ -99,7 +101,7 @@ namespace SteamTrade.TradeOffer
             return false;
         }
 
-        public bool Cancel(string tradeOfferId)
+        public void Cancel(string tradeOfferId)
         {
             var data = new NameValueCollection();
             data.Add("sessionid", steamWeb.SessionId);
@@ -116,25 +118,26 @@ namespace SteamTrade.TradeOffer
                 try
                 {
                     var json = JsonConvert.DeserializeObject<NewTradeOfferResponse>(resp);
-                    if (json.TradeOfferId != null && json.TradeOfferId == tradeOfferId)
+                    if (json.TradeOfferId == null || json.TradeOfferId != tradeOfferId)
                     {
-                        return true;
+                        var state = webApi.GetOfferState(tradeOfferId);
+                        if (state != TradeOfferState.TradeOfferStateCanceled)
+                            throw new TradeJsonException("Trade offer could not be cancelled. See inner JsonException for details.", resp);
                     }
                 }
                 catch (JsonException jsex)
                 {
-                    Debug.WriteLine(jsex);
+                    var state = webApi.GetOfferState(tradeOfferId);
+                    if (state != TradeOfferState.TradeOfferStateCanceled)
+                        throw new TradeJsonException("Trade offer could not be cancelled. See inner JsonException for details.", jsex, resp);
                 }
             }
             else
             {
                 var state = webApi.GetOfferState(tradeOfferId);
-                if (state == TradeOfferState.TradeOfferStateCanceled)
-                {
-                    return true;
-                }
+                if (state != TradeOfferState.TradeOfferStateCanceled)
+                    throw new TradeException("Trade offer could not be cancelled. Server returned empty response. ");
             }
-            return false;
         }
 
         [Obsolete("Use NewTradeOfferResponse CounterOffer(string, SteamID, TradeOffer.TradeStatus, string) instead.")]
@@ -379,7 +382,7 @@ namespace SteamTrade.TradeOffer
     }
 
     public class TradeOfferAcceptResponse
-    {        
+    {
         public bool Accepted { get; set; }
 
         [JsonProperty("tradeid")]

@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Exceptions\TradeException.cs" />
+    <Compile Include="Exceptions\TradeJsonException.cs" />
     <Compile Include="ForeignInventory.cs" />
     <Compile Include="GenericInventory.cs" />
     <Compile Include="Tf2Value.cs" />
