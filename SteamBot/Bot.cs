@@ -549,7 +549,7 @@ namespace SteamBot
 
             SteamCallbackManager.Subscribe<SteamUser.LoggedOnCallback>(callback =>
             {
-                Log.Debug("Logged On Callback: {0}", callback.Result);
+                Log.Debug(Properties.Resources.LoggedOnCallback + "{0}", callback.Result);
 
                 if (callback.Result == EResult.OK)
                 {
@@ -557,7 +557,7 @@ namespace SteamBot
                 }
                 else
                 {
-                    Log.Error("Login Error: {0}", callback.Result);
+                    Log.Error(Properties.Resources.LoginError + "{0}", callback.Result);
                 }
 
                 if (callback.Result == EResult.AccountLoginDeniedNeedTwoFactor)
@@ -570,14 +570,15 @@ namespace SteamBot
                     else
                     {
                         logOnDetails.TwoFactorCode = mobileAuthCode;
-                        Log.Success("Generated 2FA code.");
+                        Log.Success(Properties.Resources.Regenerated2FACode);
                     }
                 }
                 else if (callback.Result == EResult.TwoFactorCodeMismatch)
                 {
                     SteamAuth.TimeAligner.AlignTime();
+                    Log.Warn(Properties.Resources.TwoFACodeMismatchRetryIn15Seconds);
                     logOnDetails.TwoFactorCode = SteamGuardAccount.GenerateSteamGuardCode();
-                    Log.Success("Regenerated 2FA code.");
+                    Log.Success(Properties.Resources.Regenerated2FACode);
                 }
                 else if (callback.Result == EResult.AccountLogonDenied)
                 {
@@ -614,7 +615,7 @@ namespace SteamBot
 
             SteamCallbackManager.Subscribe<SteamUser.WebAPIUserNonceCallback>(webCallback =>
             {
-                Log.Debug("Received new WebAPIUserNonce.");
+                Log.Debug(Properties.Resources.ReceivedNewWebAPIUserNonce);
 
                 if (webCallback.Result == EResult.OK)
                 {
@@ -623,7 +624,7 @@ namespace SteamBot
                 }
                 else
                 {
-                    Log.Error("WebAPIUserNonce Error: " + webCallback.Result);
+                    Log.Error(Properties.Resources.WebAPIUserNonceError + webCallback.Result);
                 }
             });
 
@@ -692,7 +693,7 @@ namespace SteamBot
 
                 if (callback.EntryType == EChatEntryType.ChatMsg)
                 {
-                    Log.Info("Chat Message from {0}: {1}",
+                    Log.Info(Properties.Resources.ChatMessageFrom,
                                          SteamFriends.GetFriendPersonaName(callback.Sender),
                                          callback.Message
                                          );
@@ -714,9 +715,9 @@ namespace SteamBot
                 bool started = HandleTradeSessionStart(callback.OtherClient);
 
                 if (!started)
-                    Log.Error("Could not start the trade session.");
+                    Log.Error(Properties.Resources.CouldNotStartTheTradeSession);
                 else
-                    Log.Debug("SteamTrading.SessionStartCallback handled successfully. Trade Opened.");
+                    Log.Debug(Properties.Resources.TradeOpened);
             });
 
             SteamCallbackManager.Subscribe<SteamTrading.TradeProposedCallback>(callback =>
@@ -770,13 +771,13 @@ namespace SteamBot
             {
                 if (callback.Response == EEconTradeResponse.Accepted)
                 {
-                    Log.Debug("Trade Status: {0}", callback.Response);
-                    Log.Info("Trade Accepted!");
+                    Log.Debug(Properties.Resources.TradeStatus + "{0}", callback.Response);
+                    Log.Info(Properties.Resources.TradeAccepted);
                     GetUserHandler(callback.OtherClient).OnTradeRequestReply(true, callback.Response.ToString());
                 }
                 else
                 {
-                    Log.Warn("Trade failed: {0}", callback.Response);
+                    Log.Warn(Properties.Resources.TradeFailed, callback.Response);
                     CloseTrade();
                     GetUserHandler(callback.OtherClient).OnTradeRequestReply(false, callback.Response.ToString());
                 }
@@ -788,7 +789,7 @@ namespace SteamBot
             SteamCallbackManager.Subscribe<SteamUser.LoggedOffCallback>(callback =>
             {
                 IsLoggedIn = false;
-                Log.Warn("Logged off Steam.  Reason: {0}", callback.Result);
+                Log.Warn(Properties.Resources.LoggedOffSteamReason + "{0}", callback.Result);
                 CancelTradeOfferPollingThread();
             });
 
@@ -798,7 +799,7 @@ namespace SteamBot
                 {
                     IsLoggedIn = false;
                     CloseTrade();
-                    Log.Warn("Disconnected from Steam Network!");
+                    Log.Warn(Properties.Resources.DisconnectedFromSteamNetwork);
                     CancelTradeOfferPollingThread();
                 }
 
@@ -946,12 +947,12 @@ namespace SteamBot
 
                 if (!IsLoggedIn)
                 {
-                    Log.Warn("Authentication failed, retrying in 2s...");
+                    Log.Warn(Properties.Resources.AuthenticationFailedRetryingIn2s);
                     Thread.Sleep(2000);
                 }
             } while (!IsLoggedIn);
 
-            Log.Success("User Authenticated!");
+            Log.Success(Properties.Resources.UserAuthenticated);
 
             tradeManager = new TradeManager(ApiKey, SteamWeb);
             tradeManager.SetTradeTimeLimits(MaximumTradeTime, MaximumActionGap, tradePollingInterval);

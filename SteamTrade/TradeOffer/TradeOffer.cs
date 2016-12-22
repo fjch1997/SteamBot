@@ -259,7 +259,8 @@ namespace SteamTrade.TradeOffer
             }
             if (IsOurOffer && OfferState == TradeOfferState.TradeOfferStateActive)
             {
-                return Session.Cancel(TradeOfferId);
+                Session.Cancel(TradeOfferId);
+                return true;
             }
             //todo: log wrong state
             Debug.WriteLine("Can't cancel a trade that is not active and ours");
