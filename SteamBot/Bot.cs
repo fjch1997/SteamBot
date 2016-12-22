@@ -577,6 +577,7 @@ namespace SteamBot
                 {
                     SteamAuth.TimeAligner.AlignTime();
                     Log.Warn(Properties.Resources.TwoFACodeMismatchRetryIn15Seconds);
+                    Thread.Sleep(15000);
                     logOnDetails.TwoFactorCode = SteamGuardAccount.GenerateSteamGuardCode();
                     Log.Success(Properties.Resources.Regenerated2FACode);
                 }
