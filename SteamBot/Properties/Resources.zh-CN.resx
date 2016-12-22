@@ -123,11 +123,17 @@
   <data name="ChatMessageFrom" xml:space="preserve">
     <value>来自 {0} 的聊天消息: {1}</value>
   </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>正在连接</value>
+  </data>
   <data name="CouldNotStartTheTradeSession" xml:space="preserve">
     <value>交易连接失败。</value>
   </data>
   <data name="DisconnectedFromSteamNetwork" xml:space="preserve">
     <value>与 Steam 的网络连接已断开。</value>
+  </data>
+  <data name="DoneLoadingBot" xml:space="preserve">
+    <value>虚拟 Steam 客户端载入完成！</value>
   </data>
   <data name="LoggedOffSteamReason" xml:space="preserve">
     <value>已从 Steam 登出，原因： </value>

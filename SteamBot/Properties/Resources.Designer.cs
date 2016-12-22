@@ -79,6 +79,15 @@ namespace SteamBot.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connecting....
+        /// </summary>
+        internal static string Connecting {
+            get {
+                return ResourceManager.GetString("Connecting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not start the trade session..
         /// </summary>
         internal static string CouldNotStartTheTradeSession {
@@ -93,6 +102,15 @@ namespace SteamBot.Properties {
         internal static string DisconnectedFromSteamNetwork {
             get {
                 return ResourceManager.GetString("DisconnectedFromSteamNetwork", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done Loading Bot..
+        /// </summary>
+        internal static string DoneLoadingBot {
+            get {
+                return ResourceManager.GetString("DoneLoadingBot", resourceCulture);
             }
         }
         

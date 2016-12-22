@@ -124,6 +124,7 @@ namespace SteamBot
         public ILog Log { get; set; }
 
         public SteamAuth.SteamGuardAccount SteamGuardAccount;
+        private CultureInfo culture;
         #endregion
 
         public IEnumerable<SteamID> FriendsList
@@ -303,19 +304,24 @@ namespace SteamBot
         /// <summary>
         /// Starts the callback thread and connects to Steam via SteamKit2.
         /// </summary>
-        /// <remarks>
-        /// THIS NEVER RETURNS.
-        /// </remarks>
         /// <returns><c>true</c>. See remarks</returns>
-        public bool StartBot()
+        public void StartBot()
         {
+            StartBot(Thread.CurrentThread.CurrentCulture);
+        }
+        /// <summary>
+        /// Starts the callback thread and connects to Steam via SteamKit2.
+        /// </summary>
+        /// <returns><c>true</c>. See remarks</returns>
+        public void StartBot(CultureInfo culture)
+        {
+            this.culture = culture;
             IsRunning = true;
-            Log.Info("Connecting...");
+            Log.Info(Properties.Resources.Connecting);
             if (!botThread.IsBusy)
                 botThread.RunWorkerAsync();
             SteamClient.Connect();
-            Log.Success("Done Loading Bot!");
-            return true; // never get here
+            Log.Success(Properties.Resources.DoneLoadingBot);
         }
 
         /// <summary>
@@ -1271,6 +1277,8 @@ namespace SteamBot
 
         private void BackgroundWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
             while (!botThread.CancellationPending)
             {
                 try

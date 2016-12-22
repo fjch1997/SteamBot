@@ -123,11 +123,17 @@
   <data name="ChatMessageFrom" xml:space="preserve">
     <value>Chat Message from {0}: {1}</value>
   </data>
+  <data name="Connecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
   <data name="CouldNotStartTheTradeSession" xml:space="preserve">
     <value>Could not start the trade session.</value>
   </data>
   <data name="DisconnectedFromSteamNetwork" xml:space="preserve">
     <value>Disconnected from Steam Network!</value>
+  </data>
+  <data name="DoneLoadingBot" xml:space="preserve">
+    <value>Done Loading Bot.</value>
   </data>
   <data name="LoggedOffSteamReason" xml:space="preserve">
     <value>Logged off Steam.  Reason: </value>
