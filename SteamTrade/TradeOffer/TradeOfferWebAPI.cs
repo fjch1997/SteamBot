@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SteamTrade.TradeOffer
 {
-    public class TradeOfferWebAPI
+    public class TradeOfferWebAPI : ITradeOfferWebAPI
     {
         private readonly SteamWeb steamWeb;
         private readonly string apiKey;

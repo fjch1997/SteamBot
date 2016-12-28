@@ -302,6 +302,15 @@ namespace SteamTrade
                     _cookies.Add(cookie);
                 }
                 SubmitCookies(_cookies);
+                foreach (Cookie cookie in _cookies.GetCookies(new Uri("https://steamcommunity.com/")))
+                {
+                    if (cookie.Name == "sessionid")
+                        SessionId = cookie.Value;
+                    else if (cookie.Name == "steamLogin")
+                        Token = cookie.Value;
+                    else if (cookie.Name == "steamLoginSecure")
+                        TokenSecure = cookie.Value;
+                }
                 return loginJson;
             }
             else
