@@ -77,7 +77,8 @@ namespace SteamTrade.TradeOffer
                 if (playerAvatars.Length > 0)
                 {
                     var data_miniprofile = playerAvatars[0].Attributes["data-miniprofile"];
-                    if (data_miniprofile != null && int.TryParse(data_miniprofile.Value, out int accountIdOther))
+                    int accountIdOther;
+                    if (data_miniprofile != null && int.TryParse(data_miniprofile.Value, out accountIdOther))
                         offer.AccountIdOther = accountIdOther;
                 }
                 offer.IsOurOffer = true;
@@ -98,7 +99,8 @@ namespace SteamTrade.TradeOffer
                 var banner = item.GetElementsByClassName("tradeoffer_items_banner").FirstOrDefault();
                 if (banner != null)
                 {
-                    if (DateTime.TryParse(banner.InnerText, out DateTime timeUpdated))
+                    DateTime timeUpdated;
+                    if (DateTime.TryParse(banner.InnerText, out timeUpdated))
                         offer.TimeUpdated = GetUnixTimestamp(timeUpdated);
 
                     if (banner.InnerText.Contains("Trade Offer Canceled"))
@@ -125,7 +127,8 @@ namespace SteamTrade.TradeOffer
                     if (i >= 0)
                     {
                         var dateString = footer.InnerText.Substring(i, footer.InnerText.Length - i);
-                        if (DateTime.TryParse(dateString, out DateTime result))
+                        DateTime result;
+                        if (DateTime.TryParse(dateString, out result))
                             offer.ExpirationTime = GetUnixTimestamp(result);
                     }
                 }
