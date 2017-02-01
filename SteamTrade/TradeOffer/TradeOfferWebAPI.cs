@@ -172,6 +172,9 @@ namespace SteamTrade.TradeOffer
         {
             get
             {
+                if(TradeOffersReceived == null && TradeOffersSent == null)
+                    return new Offer[0];
+
                 if (TradeOffersSent == null)
                 {
                     return TradeOffersReceived;
