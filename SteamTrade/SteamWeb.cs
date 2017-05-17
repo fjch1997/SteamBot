@@ -302,7 +302,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             string encryptedBase64Password = Convert.ToBase64String(encryptedPasswordBytes);
 
             SteamResult loginJson = null;
-            CookieCollection cookieCollection;
+            string cookieHeader;
             string steamGuardText = "";
             string steamGuardId = "";
 
@@ -377,7 +377,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                     {
                         string json = reader.ReadToEnd();
                         loginJson = JsonConvert.DeserializeObject<SteamResult>(json);
-                        cookieCollection = webResponse.Cookies;
+                        cookieHeader = webResponse.Headers[HttpResponseHeader.SetCookie];
                     }
                 }
             } while (loginJson.captcha_needed || loginJson.emailauth_needed || loginJson.requires_twofactor);
@@ -386,10 +386,9 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             if (loginJson.success)
             {
                 _cookies = new CookieContainer();
-                foreach (Cookie cookie in cookieCollection)
-                {
-                    _cookies.Add(cookie);
-                }
+                _cookies.SetCookies(new Uri("https://steamcommunity.com/"), cookieHeader);
+                _cookies.SetCookies(new Uri("https://store.steampowered.com/"), cookieHeader);
+                _cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
                 SubmitCookies(_cookies);
                 foreach (Cookie cookie in _cookies.GetCookies(new Uri("https://steamcommunity.com/")))
                 {

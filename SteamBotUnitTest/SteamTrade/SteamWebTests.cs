@@ -34,6 +34,7 @@ namespace SteamBotUnitTest.SteamTrade
         private SteamAuth.SteamGuardAccount sellerSteamGuardAccount;
         private GenericInventory sellerInventory;
         [OneTimeSetUp]
+        [Test]
         public void LoginTest()
         {
             try
@@ -67,7 +68,6 @@ namespace SteamBotUnitTest.SteamTrade
                     buyerSteamGuardAccount.Session = userLogin.Session;
                     using (var stream = File.Create(buyerSteamGuardAccountFileName))
                         serializer.Serialize(stream, buyerSteamGuardAccount);
-                    Thread.Sleep(15000);
                 }
                 var buyerSteamWebFileName = appDataDirectoryName + "\\buyerSteamWeb.bin";
                 if (File.Exists(buyerSteamWebFileName))
@@ -89,7 +89,6 @@ namespace SteamBotUnitTest.SteamTrade
                     Assert.NotNull(buyerSteamWeb.SessionId);
                     using (var stream = File.Create(buyerSteamWebFileName))
                         serializer.Serialize(stream, buyerSteamWeb);
-                    Thread.Sleep(15000);
                 }
                 //Seller
                 var sellerSteamGuardAccountFileName = appDataDirectoryName + "\\sellerSteamGuardAccount.bin";
@@ -115,7 +114,6 @@ namespace SteamBotUnitTest.SteamTrade
                     var loginResult = userLogin.DoLogin();
                     Assert.AreEqual(SteamAuth.LoginResult.LoginOkay, loginResult);
                     sellerSteamGuardAccount.Session = userLogin.Session;
-                    Thread.Sleep(15000);
                 }
 
                 var sellerSteamWebFileName = appDataDirectoryName + "\\sellerSteamWeb.bin";
@@ -138,7 +136,6 @@ namespace SteamBotUnitTest.SteamTrade
                     Assert.NotNull(sellerSteamWeb.SessionId);
                     using (var stream = File.Create(sellerSteamWebFileName))
                         serializer.Serialize(stream, sellerSteamWeb);
-                    Thread.Sleep(15000);
                 }
                 //Seller inventory
                 sellerInventory = new GenericInventory(sellerSteamWeb);
