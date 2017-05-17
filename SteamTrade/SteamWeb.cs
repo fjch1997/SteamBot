@@ -15,10 +15,10 @@ using System.Threading;
 
 namespace SteamTrade
 {
-
     /// <summary>
     /// SteamWeb class to create an API endpoint to the Steam Web.
     /// </summary>
+    [Serializable]
     public class SteamWeb
     {
         /// <summary>
@@ -197,20 +197,32 @@ namespace SteamTrade
                 throw new CryptographicException("Missing RSA key.");
             }
 
-            // RSA Encryption.
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            RSAParameters rsaParameters = new RSAParameters
+            //// RSA Encryption.
+            //RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            //RSAParameters rsaParameters = new RSAParameters
+            //{
+            //    Exponent = HexToByte(rsaJson.publickey_exp),
+            //    Modulus = HexToByte(rsaJson.publickey_mod)
+            //};
+
+            //rsa.ImportParameters(rsaParameters);
+
+            //// Encrypt the password and convert it.
+            //byte[] bytePassword = Encoding.ASCII.GetBytes(password);
+            //byte[] encodedPassword = rsa.Encrypt(bytePassword, false);
+            //string encryptedBase64Password = Convert.ToBase64String(encodedPassword);
+            RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
+            byte[] encryptedPasswordBytes;
+            using (var rsaEncryptor = new RSACryptoServiceProvider())
             {
-                Exponent = HexToByte(rsaJson.publickey_exp),
-                Modulus = HexToByte(rsaJson.publickey_mod)
-            };
-
-            rsa.ImportParameters(rsaParameters);
-
-            // Encrypt the password and convert it.
-            byte[] bytePassword = Encoding.ASCII.GetBytes(password);
-            byte[] encodedPassword = rsa.Encrypt(bytePassword, false);
-            string encryptedBase64Password = Convert.ToBase64String(encodedPassword);
+                var passwordBytes = Encoding.ASCII.GetBytes(password);
+                var rsaParameters = rsaEncryptor.ExportParameters(false);
+                rsaParameters.Exponent = HexStringToByteArray(rsaJson.publickey_exp);
+                rsaParameters.Modulus = HexStringToByteArray(rsaJson.publickey_mod);
+                rsaEncryptor.ImportParameters(rsaParameters);
+                encryptedPasswordBytes = rsaEncryptor.Encrypt(passwordBytes, false);
+            }
+            string encryptedBase64Password = Convert.ToBase64String(encryptedPasswordBytes);
 
             SteamResult loginJson = null;
             CookieCollection cookieCollection;
@@ -317,6 +329,17 @@ namespace SteamTrade
             {
                 throw new SteamWebLoginException(loginJson);
             }
+        }
+
+        public static byte[] HexStringToByteArray(string hex)
+        {
+            int hexLen = hex.Length;
+            byte[] ret = new byte[hexLen / 2];
+            for (int i = 0; i < hexLen; i += 2)
+            {
+                ret[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+            return ret;
         }
 
         ///<summary>

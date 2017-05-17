@@ -90,7 +90,11 @@ namespace SteamTrade.TradeOffer
                     if (quote != null)
                     {
                         var innerText = HttpUtility.HtmlDecode(quote.InnerText);
-                        offer.Message = innerText.Substring(0, innerText.LastIndexOf("(?)")).Trim();
+                        var indexOfTheQuestionmark = innerText.LastIndexOf("(?)");
+                        if (indexOfTheQuestionmark == -1)
+                            offer.Message = innerText.Trim();
+                        else
+                            offer.Message = innerText.Substring(0, indexOfTheQuestionmark).Trim();
                     }
                 }
                 //TradeOfferId
