@@ -220,23 +220,8 @@ namespace SteamTrade
                         {
                             foreach (var class_instance in description)// classid + '_' + instenceid 
                             {
-                                if (class_instance.app_data != null)
-                                {
-                                    tmpAppData = new Dictionary<string, string>();
-                                    foreach (var value in class_instance.app_data)
-                                    {
-                                        tmpAppData.Add("" + value.Name, "" + value.Value);
-                                    }
-                                }
-                                else
-                                {
-                                    tmpAppData = null;
-                                }
                                 var descriptionObject = ((JObject)class_instance).ToObject<T>();
                                 descriptionObject.Url = (class_instance.actions != null && class_instance.actions.First["link"] != null ? class_instance.actions.First["link"] : "");
-                                descriptionObject.AppData = tmpAppData;
-                                descriptionObject.Descriptions = class_instance.descriptions as JArray;
-                                descriptionObject.Tags = class_instance.tags as JArray;
                                 _descriptions[(string)((class_instance.classid ?? '0') + "_" + (class_instance.instanceid ?? '0'))] = descriptionObject;
                                 break;
                             }
@@ -301,22 +286,5 @@ namespace SteamTrade
         public string MarketTradableRestriction { get; set; }
         [JsonProperty("market_marketable_restriction")]
         public string MarketMarketableRestriction { get; set; }
-
-        [JsonIgnore]
-        /// <summary>
-        /// Some apps may contain this type of descriptions. It's your responsiblity to parse it. 
-        /// This property can be null when not applicable.
-        /// </summary>
-        public JArray Descriptions { get; set; }
-
-        [JsonIgnore]
-        /// <summary>
-        /// Some apps may contain tags. It's your responsiblity to parse it. 
-        /// This property can be null when not applicable.
-        /// </summary>
-        public JArray Tags { get; set; }
-        
-        [JsonIgnore]
-        public Dictionary<string, string> AppData { get; set; }
     }
 }
