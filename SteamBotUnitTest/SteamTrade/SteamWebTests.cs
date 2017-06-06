@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,51 +34,109 @@ namespace SteamBotUnitTest.SteamTrade
         private SteamAuth.SteamGuardAccount sellerSteamGuardAccount;
         private GenericInventory sellerInventory;
         [OneTimeSetUp]
+        [Test]
         public void LoginTest()
         {
             try
             {
-                //Buyer
-                //Parse winAuthBackup
-                var uri = new Uri(buyerWinAuthBackup);
-                var queryString = HttpUtility.ParseQueryString(uri.Query);
-                buyerSteamGuardAccount = JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(queryString["data"]);
-                buyerSteamGuardAccount.DeviceID = queryString["deviceid"];
-                //SteamGuardAccount login
-                var userLogin = new SteamAuth.UserLogin(buyerUsername, buyerPassword);
-                userLogin.TwoFactorCode = buyerSteamGuardAccount.GenerateSteamGuardCode();
-                var loginResult = userLogin.DoLogin();
-                Assert.AreEqual(SteamAuth.LoginResult.LoginOkay, loginResult);
-                buyerSteamGuardAccount.Session = userLogin.Session;
-                Thread.Sleep(15000);
-                buyerSteamWeb = new SteamWeb();
-                buyerSteamWeb.DoLogin(buyerUsername, buyerPassword, true, () => buyerSteamGuardAccount.GenerateSteamGuardCode(), null, null);
-                Assert.IsTrue(buyerSteamWeb.VerifyCookies());
-                Assert.NotNull(buyerSteamWeb.Token);
-                Assert.NotNull(buyerSteamWeb.TokenSecure);
-                Assert.NotNull(buyerSteamWeb.SessionId);
-                Thread.Sleep(15000);
-
+                var serializer = new BinaryFormatter();
+                var appDataDirectoryName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\" + Assembly.GetExecutingAssembly().GetName().Name;
+                Directory.CreateDirectory(appDataDirectoryName);
+                var buyerSteamGuardAccountFileName = appDataDirectoryName + "\\buyerSteamGuardAccount.bin";
+                if (File.Exists(buyerSteamGuardAccountFileName))
+                {
+                    using (var stream = File.OpenRead(buyerSteamGuardAccountFileName))
+                    {
+                        var buyerSteamGuardAccount = (SteamAuth.SteamGuardAccount)serializer.Deserialize(stream);
+                        if (buyerSteamGuardAccount.RefreshSession())
+                            this.buyerSteamGuardAccount = buyerSteamGuardAccount;
+                    }
+                }
+                if (this.buyerSteamGuardAccount == null)
+                {
+                    //Buyer
+                    //Parse winAuthBackup
+                    var uri = new Uri(buyerWinAuthBackup);
+                    var queryString = HttpUtility.ParseQueryString(uri.Query);
+                    buyerSteamGuardAccount = JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(queryString["data"]);
+                    buyerSteamGuardAccount.DeviceID = queryString["deviceid"];
+                    //SteamGuardAccount login
+                    var userLogin = new SteamAuth.UserLogin(buyerUsername, buyerPassword);
+                    userLogin.TwoFactorCode = buyerSteamGuardAccount.GenerateSteamGuardCode();
+                    var loginResult = userLogin.DoLogin();
+                    Assert.AreEqual(SteamAuth.LoginResult.LoginOkay, loginResult);
+                    buyerSteamGuardAccount.Session = userLogin.Session;
+                    using (var stream = File.Create(buyerSteamGuardAccountFileName))
+                        serializer.Serialize(stream, buyerSteamGuardAccount);
+                }
+                var buyerSteamWebFileName = appDataDirectoryName + "\\buyerSteamWeb.bin";
+                if (File.Exists(buyerSteamWebFileName))
+                {
+                    using (var stream = File.OpenRead(buyerSteamWebFileName))
+                    {
+                        var buyerSteamWeb = (SteamWeb)serializer.Deserialize(stream);
+                        if (buyerSteamWeb.VerifyCookies())
+                            this.buyerSteamWeb = buyerSteamWeb;
+                    }
+                }
+                if (this.buyerSteamWeb == null)
+                {
+                    buyerSteamWeb = new SteamWeb();
+                    buyerSteamWeb.DoLogin(buyerUsername, buyerPassword, true, () => buyerSteamGuardAccount.GenerateSteamGuardCode(), null, null);
+                    Assert.IsTrue(buyerSteamWeb.VerifyCookies());
+                    Assert.NotNull(buyerSteamWeb.Token);
+                    Assert.NotNull(buyerSteamWeb.TokenSecure);
+                    Assert.NotNull(buyerSteamWeb.SessionId);
+                    using (var stream = File.Create(buyerSteamWebFileName))
+                        serializer.Serialize(stream, buyerSteamWeb);
+                }
                 //Seller
-                //Parse winAuthBackup
-                uri = new Uri(sellerWinAuthBackup);
-                queryString = HttpUtility.ParseQueryString(uri.Query);
-                sellerSteamGuardAccount = JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(queryString["data"]);
-                sellerSteamGuardAccount.DeviceID = queryString["deviceid"];
-                //SteamGuardAccount login
-                userLogin = new SteamAuth.UserLogin(sellerUsername, sellerPassword);
-                userLogin.TwoFactorCode = sellerSteamGuardAccount.GenerateSteamGuardCode();
-                loginResult = userLogin.DoLogin();
-                Assert.AreEqual(SteamAuth.LoginResult.LoginOkay, loginResult);
-                sellerSteamGuardAccount.Session = userLogin.Session;
-                Thread.Sleep(15000);
-                sellerSteamWeb = new SteamWeb();
-                sellerSteamWeb.DoLogin(sellerUsername, sellerPassword, true, () => sellerSteamGuardAccount.GenerateSteamGuardCode(), null, null);
-                Assert.IsTrue(sellerSteamWeb.VerifyCookies());
-                Assert.NotNull(sellerSteamWeb.Token);
-                Assert.NotNull(sellerSteamWeb.TokenSecure);
-                Assert.NotNull(sellerSteamWeb.SessionId);
+                var sellerSteamGuardAccountFileName = appDataDirectoryName + "\\sellerSteamGuardAccount.bin";
+                if (File.Exists(sellerSteamGuardAccountFileName))
+                {
+                    using (var stream = File.OpenRead(sellerSteamGuardAccountFileName))
+                    {
+                        var sellerSteamGuardAccount = (SteamAuth.SteamGuardAccount)serializer.Deserialize(stream);
+                        if (sellerSteamGuardAccount.RefreshSession())
+                            this.sellerSteamGuardAccount = sellerSteamGuardAccount;
+                    }
+                }
+                if (this.sellerSteamGuardAccount == null)
+                {
+                    //Parse winAuthBackup
+                    var uri = new Uri(sellerWinAuthBackup);
+                    var queryString = HttpUtility.ParseQueryString(uri.Query);
+                    sellerSteamGuardAccount = JsonConvert.DeserializeObject<SteamAuth.SteamGuardAccount>(queryString["data"]);
+                    sellerSteamGuardAccount.DeviceID = queryString["deviceid"];
+                    //SteamGuardAccount login
+                    var userLogin = new SteamAuth.UserLogin(sellerUsername, sellerPassword);
+                    userLogin.TwoFactorCode = sellerSteamGuardAccount.GenerateSteamGuardCode();
+                    var loginResult = userLogin.DoLogin();
+                    Assert.AreEqual(SteamAuth.LoginResult.LoginOkay, loginResult);
+                    sellerSteamGuardAccount.Session = userLogin.Session;
+                }
 
+                var sellerSteamWebFileName = appDataDirectoryName + "\\sellerSteamWeb.bin";
+                if (File.Exists(sellerSteamWebFileName))
+                {
+                    using (var stream = File.OpenRead(sellerSteamWebFileName))
+                    {
+                        var sellerSteamWeb = (SteamWeb)serializer.Deserialize(stream);
+                        if (sellerSteamWeb.VerifyCookies())
+                            this.sellerSteamWeb = sellerSteamWeb;
+                    }
+                }
+                if (this.sellerSteamWeb == null)
+                {
+                    sellerSteamWeb = new SteamWeb();
+                    sellerSteamWeb.DoLogin(sellerUsername, sellerPassword, true, () => sellerSteamGuardAccount.GenerateSteamGuardCode(), null, null);
+                    Assert.IsTrue(sellerSteamWeb.VerifyCookies());
+                    Assert.NotNull(sellerSteamWeb.Token);
+                    Assert.NotNull(sellerSteamWeb.TokenSecure);
+                    Assert.NotNull(sellerSteamWeb.SessionId);
+                    using (var stream = File.Create(sellerSteamWebFileName))
+                        serializer.Serialize(stream, sellerSteamWeb);
+                }
                 //Seller inventory
                 sellerInventory = new GenericInventory(sellerSteamWeb);
                 sellerInventory.LoadAsync(570, new long[] { 2 }, new SteamKit2.SteamID(sellerSteamId)).Wait();

@@ -13,13 +13,14 @@ using System.Net.Security;
 using SteamKit2;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SteamTrade
 {
-
     /// <summary>
     /// SteamWeb class to create an API endpoint to the Steam Web.
     /// </summary>
+    [Serializable]
     public class SteamWeb
     {
         /// <summary>
@@ -30,17 +31,17 @@ namespace SteamTrade
         /// <summary>
         /// Token of steam. Generated after login.
         /// </summary>
-        public string Token { get; private set; }
+        public string Token => _cookies.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
 
         /// <summary>
         /// Session id of Steam after Login.
         /// </summary>
-        public string SessionId { get; private set; }
+        public string SessionId => _cookies.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
 
         /// <summary>
         /// Token secure as string. It is generated after the Login.
         /// </summary>
-        public string TokenSecure { get; private set; }
+        public string TokenSecure => _cookies.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
 
         /// <summary>
         /// The Accept-Language header when sending all HTTP requests. Default value is determined according to the constructor caller thread's culture.
@@ -274,23 +275,35 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 throw new CryptographicException("Missing RSA key.");
             }
 
-            // RSA Encryption.
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            RSAParameters rsaParameters = new RSAParameters
+            //// RSA Encryption.
+            //RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            //RSAParameters rsaParameters = new RSAParameters
+            //{
+            //    Exponent = HexToByte(rsaJson.publickey_exp),
+            //    Modulus = HexToByte(rsaJson.publickey_mod)
+            //};
+
+            //rsa.ImportParameters(rsaParameters);
+
+            //// Encrypt the password and convert it.
+            //byte[] bytePassword = Encoding.ASCII.GetBytes(password);
+            //byte[] encodedPassword = rsa.Encrypt(bytePassword, false);
+            //string encryptedBase64Password = Convert.ToBase64String(encodedPassword);
+            RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
+            byte[] encryptedPasswordBytes;
+            using (var rsaEncryptor = new RSACryptoServiceProvider())
             {
-                Exponent = HexToByte(rsaJson.publickey_exp),
-                Modulus = HexToByte(rsaJson.publickey_mod)
-            };
-
-            rsa.ImportParameters(rsaParameters);
-
-            // Encrypt the password and convert it.
-            byte[] bytePassword = Encoding.ASCII.GetBytes(password);
-            byte[] encodedPassword = rsa.Encrypt(bytePassword, false);
-            string encryptedBase64Password = Convert.ToBase64String(encodedPassword);
+                var passwordBytes = Encoding.ASCII.GetBytes(password);
+                var rsaParameters = rsaEncryptor.ExportParameters(false);
+                rsaParameters.Exponent = HexStringToByteArray(rsaJson.publickey_exp);
+                rsaParameters.Modulus = HexStringToByteArray(rsaJson.publickey_mod);
+                rsaEncryptor.ImportParameters(rsaParameters);
+                encryptedPasswordBytes = rsaEncryptor.Encrypt(passwordBytes, false);
+            }
+            string encryptedBase64Password = Convert.ToBase64String(encryptedPasswordBytes);
 
             SteamResult loginJson = null;
-            CookieCollection cookieCollection;
+            string cookieHeader;
             string steamGuardText = "";
             string steamGuardId = "";
 
@@ -365,7 +378,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                     {
                         string json = reader.ReadToEnd();
                         loginJson = JsonConvert.DeserializeObject<SteamResult>(json);
-                        cookieCollection = webResponse.Cookies;
+                        cookieHeader = webResponse.Headers[HttpResponseHeader.SetCookie];
                     }
                 }
             } while (loginJson.captcha_needed || loginJson.emailauth_needed || loginJson.requires_twofactor);
@@ -374,26 +387,27 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             if (loginJson.success)
             {
                 _cookies = new CookieContainer();
-                foreach (Cookie cookie in cookieCollection)
-                {
-                    _cookies.Add(cookie);
-                }
+                _cookies.SetCookies(new Uri("https://steamcommunity.com/"), cookieHeader);
+                _cookies.SetCookies(new Uri("https://store.steampowered.com/"), cookieHeader);
+                _cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
                 SubmitCookies(_cookies);
-                foreach (Cookie cookie in _cookies.GetCookies(new Uri("https://steamcommunity.com/")))
-                {
-                    if (cookie.Name == "sessionid")
-                        SessionId = cookie.Value;
-                    else if (cookie.Name == "steamLogin")
-                        Token = cookie.Value;
-                    else if (cookie.Name == "steamLoginSecure")
-                        TokenSecure = cookie.Value;
-                }
                 return loginJson;
             }
             else
             {
                 throw new SteamWebLoginException(loginJson);
             }
+        }
+
+        public static byte[] HexStringToByteArray(string hex)
+        {
+            int hexLen = hex.Length;
+            byte[] ret = new byte[hexLen / 2];
+            for (int i = 0; i < hexLen; i += 2)
+            {
+                ret[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            }
+            return ret;
         }
 
         ///<summary>
@@ -407,8 +421,6 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         /// <returns>A bool, which is true if the login was successful.</returns>
         public bool Authenticate(string myUniqueId, SteamClient client, string myLoginKey)
         {
-            Token = TokenSecure = "";
-            SessionId = Convert.ToBase64String(Encoding.UTF8.GetBytes(myUniqueId));
             _cookies = new CookieContainer();
 
             using (dynamic userAuth = WebAPI.GetInterface("ISteamUserAuth"))
@@ -444,18 +456,16 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 }
                 catch (Exception)
                 {
-                    Token = TokenSecure = null;
                     return false;
                 }
-
-                Token = authResult["token"].AsString();
-                TokenSecure = authResult["tokensecure"].AsString();
-
+                
                 // Adding cookies to the cookie container.
-                _cookies.Add(new Cookie("sessionid", SessionId, string.Empty, SteamCommunityDomain));
-                _cookies.Add(new Cookie("steamLogin", Token, string.Empty, SteamCommunityDomain));
-                _cookies.Add(new Cookie("steamLoginSecure", TokenSecure, string.Empty, SteamCommunityDomain));
-
+                foreach (var uri in new Uri[] {new Uri("https://steamcommunity.com/"), new Uri("https://store.steampowered.com/"), new Uri("https://help.steampowered.com/") })
+                {
+                    _cookies.SetCookies(uri, $"steamLogin={authResult["token"].AsString()}; path=/; HttpOnly");
+                    _cookies.SetCookies(uri, $"steamLoginSecure={authResult["tokensecure"].AsString()}; path=/; secure; HttpOnly");
+                    _cookies.SetCookies(uri, $"sessionid={Convert.ToBase64String(Encoding.UTF8.GetBytes(myUniqueId))}; path=/");
+                }
                 return true;
             }
         }
@@ -488,9 +498,6 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 throw new ArgumentException("Cookie with name \"steamLoginSecure\" is not found.");
             if (sessionId == null)
                 throw new ArgumentException("Cookie with name \"sessionid\" is not found.");
-            Token = token;
-            TokenSecure = tokenSecure;
-            SessionId = sessionId;
             _cookies = cookieContainer;
         }
 

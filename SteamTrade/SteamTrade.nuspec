@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>SteamTrade</id>
+    <version>$version$</version>
+    <description>Automated bot software for interacting with Steam Trade</description>
+    <authors>Jessecar96</authors>
+  </metadata>
+  <files>
+    <file src="..\bin\Release\SteamTrade.dll" target="lib\net452"/>
+    <file src="..\bin\Release\SteamTrade.pdb" target="lib\net452"/>
+    <file src="..\bin\Release\zh-CN\SteamTrade.resources.dll" target="lib\net452\zh-CN"/>
+  </files>
+</package>
