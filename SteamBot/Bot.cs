@@ -1,20 +1,18 @@
-using System;
-using System.Threading.Tasks;
-using System.Web;
-using System.Net;
-using System.Text;
-using System.IO;
-using System.Threading;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.ComponentModel;
 using SteamBot.SteamGroups;
 using SteamKit2;
-using SteamTrade;
 using SteamKit2.Internal;
+using SteamTrade;
 using SteamTrade.TradeOffer;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
+using System.IO;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SteamBot
 {
@@ -52,6 +50,7 @@ namespace SteamBot
         private bool disposed = false;
         private string consoleInput;
         private Thread tradeOfferThread;
+        private bool pollTradeOffers = true;
         #endregion
 
         #region Public readonly variables
@@ -155,6 +154,32 @@ namespace SteamBot
         /// </summary>
         [Obsolete("Refactored to be Log instead of log")]
         public ILog log { get { return Log; } }
+
+        public bool PollTradeOffers
+        {
+            get
+            {
+                return pollTradeOffers;
+
+            }
+            set
+            {
+                if (pollTradeOffers == value)
+                    return;
+                if(value)
+                {
+                    pollTradeOffers = true;
+                    InitializeTradeOfferPolling();
+                }
+                else
+                {
+                    pollTradeOffers = false;
+                    UnsubscribeTradeOffer(tradeOfferManager);
+                    tradeOfferThread = null;
+                    tradeOfferManager = null;
+                }
+            }
+        }
 
 
         /// <summary>
@@ -964,10 +989,17 @@ namespace SteamBot
             tradeManager = new TradeManager(ApiKey, SteamWeb);
             tradeManager.SetTradeTimeLimits(MaximumTradeTime, MaximumActionGap, tradePollingInterval);
             tradeManager.OnTimeout += OnTradeTimeout;
+            cookiesAreInvalid = false;
+            if (PollTradeOffers)
+            {
+                InitializeTradeOfferPolling();
+            }
+        }
+
+        private void InitializeTradeOfferPolling()
+        {
             tradeOfferManager = new TradeOfferManager(ApiKey, SteamWeb);
             SubscribeTradeOffer(tradeOfferManager);
-            cookiesAreInvalid = false;
-
             // Success, check trade offers which we have received while we were offline
             SpawnTradeOfferPollingThread();
         }
