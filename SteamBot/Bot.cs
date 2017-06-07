@@ -160,7 +160,6 @@ namespace SteamBot
             get
             {
                 return pollTradeOffers;
-
             }
             set
             {
@@ -174,9 +173,12 @@ namespace SteamBot
                 else
                 {
                     pollTradeOffers = false;
-                    UnsubscribeTradeOffer(tradeOfferManager);
+                    if (tradeOfferManager != null)
+                    {
+                        UnsubscribeTradeOffer(tradeOfferManager);
+                        tradeOfferManager = null;
+                    }
                     tradeOfferThread = null;
-                    tradeOfferManager = null;
                 }
             }
         }
