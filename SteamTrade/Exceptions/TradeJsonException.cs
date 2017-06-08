@@ -24,5 +24,10 @@ namespace SteamTrade.Exceptions
         }
 
         public string OriginalServerResponse { get; set; }
+
+        public override string ToString()
+        {
+            return base.ToString() + "\r\n\r\n=================Original Server Response======================\r\n" + OriginalServerResponse;
+        }
     }
 }
