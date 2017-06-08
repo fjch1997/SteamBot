@@ -66,6 +66,7 @@
     <Compile Include="Exceptions\TradeJsonException.cs" />
     <Compile Include="ForeignInventory.cs" />
     <Compile Include="GenericInventory.cs" />
+    <Compile Include="ISteamWeb.cs" />
     <Compile Include="Properties\Resources.zh-CN.Designer.cs">
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
       <AutoGen>True</AutoGen>

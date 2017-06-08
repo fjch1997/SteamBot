@@ -21,7 +21,7 @@ namespace SteamTrade
     /// SteamWeb class to create an API endpoint to the Steam Web.
     /// </summary>
     [Serializable]
-    public class SteamWeb
+    public class SteamWeb : ISteamWeb
     {
         /// <summary>
         /// Base steam community domain.
@@ -274,21 +274,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             {
                 throw new CryptographicException("Missing RSA key.");
             }
-
-            //// RSA Encryption.
-            //RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            //RSAParameters rsaParameters = new RSAParameters
-            //{
-            //    Exponent = HexToByte(rsaJson.publickey_exp),
-            //    Modulus = HexToByte(rsaJson.publickey_mod)
-            //};
-
-            //rsa.ImportParameters(rsaParameters);
-
-            //// Encrypt the password and convert it.
-            //byte[] bytePassword = Encoding.ASCII.GetBytes(password);
-            //byte[] encodedPassword = rsa.Encrypt(bytePassword, false);
-            //string encryptedBase64Password = Convert.ToBase64String(encodedPassword);
+            
             RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
             byte[] encryptedPasswordBytes;
             using (var rsaEncryptor = new RSACryptoServiceProvider())
