@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace SteamTrade.TradeWebAPI
 {
@@ -132,6 +133,7 @@ namespace SteamTrade.TradeWebAPI
         }
     }
 
+    [JsonObject(MemberSerialization = MemberSerialization.Fields)]
     public class TradeUserAssets : IEquatable<TradeUserAssets>, IComparable<TradeUserAssets>
     {
         /// <summary>Iventory type</summary>

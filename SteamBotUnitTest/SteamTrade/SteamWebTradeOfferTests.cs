@@ -17,7 +17,7 @@ using System.Web;
 namespace SteamBotUnitTest.SteamTrade
 {
     [TestFixture]
-    class SteamWebTests
+    class SteamWebTradeOfferTests
     {
         private readonly ulong buyerSteamId = 76561198319214599UL;
         private readonly string buyerToken = "O4ZW_7D9";
