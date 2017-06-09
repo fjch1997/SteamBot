@@ -157,6 +157,15 @@ namespace SteamTrade
         /// Gets a an item by <see cref="TradeUserAssets.assetid"/>.
         /// </summary>
         /// <exception cref="KeyNotFoundException">The <paramref name="assetId"/> does not exist.</exception>
+        public JObject GetDescription(ulong assetId)
+        {
+            return GetDescription(items[assetId]);
+        }
+
+        /// <summary>
+        /// Gets a an item by <see cref="TradeUserAssets.assetid"/>.
+        /// </summary>
+        /// <exception cref="KeyNotFoundException">The <paramref name="assetId"/> does not exist.</exception>
         public Item GetItem(ulong assetId)
         {
             return items[assetId];
