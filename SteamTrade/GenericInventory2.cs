@@ -33,15 +33,11 @@ namespace SteamTrade
         [JsonIgnore]
         private Task task;
 
-        [OnDeserialized]
-        private void OnDeserialized(StreamingContext context)
+        [OnSerializing]
+        private void OnSerializing(StreamingContext context)
         {
-            if (items.Count == 0 && descriptions.Count == 0)
-            {
-                //It was serialized when it's still loading.
-                this.task = LoadAsync().ContinueWith(t => { if (t.Exception == null) this.task = null; });
-                task.ConfigureAwait(false);
-            }
+            if (!Loaded)
+                throw new InvalidOperationException(nameof(GenericInventory2) + " must be loaded before it can be serialized.");
         }
 
         /// <summary>

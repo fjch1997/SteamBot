@@ -15,6 +15,7 @@ using SteamBotUnitTest.Properties;
 using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace SteamBotUnitTest.SteamTrade
 {
@@ -69,7 +70,25 @@ namespace SteamBotUnitTest.SteamTrade
             }
             File.Delete(tempFileName);
         }
-        
+
+        [Test]
+        public void SerializationExceptionTest()
+        {
+            var genericInventory2 = new GenericInventory2(new DelegateFetchSteamWeb(async () =>
+            {
+                await Task.Delay(10000);
+                throw new InvalidOperationException();
+            }), 76561198058183411UL, 570U, 2U);
+            var serializer = new JsonSerializer() { ContractResolver = new DefaultContractResolver() { IgnoreSerializableAttribute = false } };
+            var tempFileName = Path.GetTempFileName();
+            using (var stream = File.Create(tempFileName))
+            using (var writer = new StreamWriter(stream))
+            {
+                Assert.Throws(typeof(TargetInvocationException), () => serializer.Serialize(writer, genericInventory2));
+            }
+            File.Delete(tempFileName);
+        }
+
         [JsonObject(MemberSerialization = MemberSerialization.Fields)]
         class DelegateFetchSteamWeb : ISteamWeb
         {
