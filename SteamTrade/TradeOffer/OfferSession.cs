@@ -12,13 +12,13 @@ namespace SteamTrade.TradeOffer
     public class OfferSession
     {
         private readonly TradeOfferWebAPI webApi;
-        private readonly SteamWeb steamWeb;
+        private readonly ISteamWeb steamWeb;
 
         internal JsonSerializerSettings JsonSerializerSettings { get; set; }
 
         internal const string SendUrl = "https://steamcommunity.com/tradeoffer/new/send";
 
-        public OfferSession(TradeOfferWebAPI webApi, SteamWeb steamWeb)
+        public OfferSession(TradeOfferWebAPI webApi, ISteamWeb steamWeb)
         {
             this.webApi = webApi;
             this.steamWeb = steamWeb;

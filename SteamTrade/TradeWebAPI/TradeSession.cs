@@ -17,7 +17,7 @@ namespace SteamTrade.TradeWebAPI
         private string sessionIdEsc;
         private string baseTradeURL;
 
-        private readonly SteamWeb SteamWeb;
+        private readonly ISteamWeb SteamWeb;
         private readonly SteamID OtherSID;
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace SteamTrade.TradeWebAPI
         /// </summary>
         /// <param name="otherSid">The Steam id of the other trading partner.</param>
         /// <param name="steamWeb">The SteamWeb instance for this bot</param>
-        public TradeSession(SteamID otherSid, SteamWeb steamWeb)
+        public TradeSession(SteamID otherSid, ISteamWeb steamWeb)
         {
             OtherSID = otherSid;
             SteamWeb = steamWeb;
@@ -239,7 +239,7 @@ namespace SteamTrade.TradeWebAPI
 
         private void Init()
         {
-            sessionIdEsc = Uri.UnescapeDataString(SteamWeb.SessionId);
+            this.sessionIdEsc = Uri.UnescapeDataString((string)this.SteamWeb.SessionId);
 
             Version = 1;
 

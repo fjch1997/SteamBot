@@ -16,7 +16,7 @@ namespace SteamTrade
     /// </summary>
     public class GenericInventory : GenericInventory<ItemDescription>
     {
-        public GenericInventory(SteamWeb steamWeb) : base(steamWeb) { }
+        public GenericInventory(ISteamWeb steamWeb) : base(steamWeb) { }
     }
 
     /// <summary>
@@ -24,9 +24,9 @@ namespace SteamTrade
     /// </summary>
     public class GenericInventory<T> where T : ItemDescription
     {
-        private readonly SteamWeb SteamWeb;
+        private readonly ISteamWeb SteamWeb;
 
-        public GenericInventory(SteamWeb steamWeb)
+        public GenericInventory(ISteamWeb steamWeb)
         {
             SteamWeb = steamWeb;
         }

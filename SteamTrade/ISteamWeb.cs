@@ -46,7 +46,7 @@ namespace SteamTrade
         /// Authenticate using SteamKit2 and ISteamUserAuth. 
         /// This does the same as SteamWeb.DoLogin(), but without contacting the Steam Website.
         /// </summary>
-        /// <remarks>Should this one doesnt work anymore, use <see cref="SteamWeb.DoLogin"/></remarks>
+        /// <remarks>Should this one doesnt work anymore, use <see cref="ISteamWeb.DoLogin"/></remarks>
         /// <param name="myUniqueId">Id what you get to login.</param>
         /// <param name="client">An instance of a SteamClient.</param>
         /// <param name="myLoginKey">Login Key of your account.</param>
@@ -74,7 +74,7 @@ namespace SteamTrade
         /// <param name="referer">Gets information about the URL of the client's previous request that linked to the current URL.</param>
         /// <param name="fetchError">If true, response codes other than HTTP 200 will still be returned, rather than throwing exceptions</param>
         /// <returns>The string of the http return stream.</returns>
-        /// <remarks>If you want to know how the request method works, use: <see cref="SteamWeb.Request"/></remarks>
+        /// <remarks>If you want to know how the request method works, use: <see cref="ISteamWeb.Request"/></remarks>
         string Fetch(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false);
         /// <summary>
         /// This method is using the Request method to return the full http stream from a web request as string.
@@ -86,7 +86,7 @@ namespace SteamTrade
         /// <param name="referer">Gets information about the URL of the client's previous request that linked to the current URL.</param>
         /// <param name="fetchError">If true, response codes other than HTTP 200 will still be returned, rather than throwing exceptions</param>
         /// <returns>The string of the http return stream.</returns>
-        /// <remarks>If you want to know how the request method works, use: <see cref="SteamWeb.Request"/></remarks>
+        /// <remarks>If you want to know how the request method works, use: <see cref="ISteamWeb.Request"/></remarks>
         Task<string> FetchAsync(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false);
         /// <summary>
         /// Custom wrapper for creating a HttpWebRequest, edited for Steam.

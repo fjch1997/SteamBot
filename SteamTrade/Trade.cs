@@ -76,7 +76,7 @@ namespace SteamTrade
         private int numUnknownStatusUpdates;
         private long tradeOfferID; //Used for email confirmation
 
-        internal Trade(SteamID me, SteamID other, SteamWeb steamWeb, Task<Inventory> myInventoryTask, Task<Inventory> otherInventoryTask)
+        internal Trade(SteamID me, SteamID other, ISteamWeb steamWeb, Task<Inventory> myInventoryTask, Task<Inventory> otherInventoryTask)
         {
             TradeStarted = false;
             OtherIsReady = false;

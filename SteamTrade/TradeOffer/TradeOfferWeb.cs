@@ -12,18 +12,18 @@ using System.Web;
 namespace SteamTrade.TradeOffer
 {
     /// <summary>
-    /// Countepart to <see cref="TradeOfferWebAPI"/>. Only except this download and parse HTML response instead of using Steam Web API. It returns trade offers that belongs to the account <see cref="SteamWeb"/> is logged on to. Limitations: Only recent offers are availale. Descriptions are not implemented yet but are possible to implement given some time. GetTradeOffersSummary is not implemented. Some trade offer states are not able to get. See comments for details.
+    /// Countepart to <see cref="TradeOfferWebAPI"/>. Only except this download and parse HTML response instead of using Steam Web API. It returns trade offers that belongs to the account <see cref="ISteamWeb"/> is logged on to. Limitations: Only recent offers are availale. Descriptions are not implemented yet but are possible to implement given some time. GetTradeOffersSummary is not implemented. Some trade offer states are not able to get. See comments for details.
     /// </summary>
     public class TradeOfferWeb : ITradeOfferWebAPI
     {
         private const string STEAM_COMMUNITY_BASE_URL = "http://steamcommunity.com/";
-        private readonly SteamWeb steamWeb;
+        private readonly ISteamWeb steamWeb;
         private string receivedTradeOfferUrl;
         private string receivedHistoricTradeOfferUrl;
         private string sentTradeOfferUrl;
         private string sentHistoricTradeOfferUrl;
 
-        public TradeOfferWeb(SteamWeb steamWeb)
+        public TradeOfferWeb(ISteamWeb steamWeb)
         {
             this.steamWeb = steamWeb;
         }
@@ -53,7 +53,7 @@ namespace SteamTrade.TradeOffer
         {
             GetTradeUrlsIfNull();
             if (language != "en_us")
-                throw new NotImplementedException($"Change of {nameof(language)} is not supported with {nameof(TradeOfferWeb)}. Language depends on {nameof(SteamWeb)}.{nameof(SteamWeb.AcceptLanguageHeader)}.");
+                throw new NotImplementedException($"Change of {nameof(language)} is not supported with {nameof(TradeOfferWeb)}. Language depends on {nameof(ISteamWeb)}.{nameof(ISteamWeb.AcceptLanguageHeader)}.");
             if (getDescriptions)
                 throw new NotImplementedException($"Getting descriptions is not implemented in {nameof(TradeOfferWeb)}.");
             var response = new OffersResponse();
@@ -145,11 +145,11 @@ namespace SteamTrade.TradeOffer
             return (Int32)(timeUpdated.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
 
-        private SteamWeb GetEnglishSteamWeb()
+        private ISteamWeb GetEnglishSteamWeb()
         {
             //Create a copy of SteamWeb because the preservation of old language cookie is not threadsafe
-            Uri steamCommunityUri = new Uri("https://" + SteamWeb.SteamCommunityDomain);
-            var steamWeb = new SteamWeb();
+            Uri steamCommunityUri = new Uri("https://" + ISteamWeb.SteamCommunityDomain);
+            var steamWeb = new ISteamWeb();
             steamWeb.Authenticate(this.steamWeb.Cookies.GetCookies(steamCommunityUri).Cast<Cookie>());
             steamWeb.Cookies.SetCookies(steamCommunityUri, "Steam_Language=english; expires=Fri, 24-Dec-2050 16:37:28 GMT; path=/");
             return steamWeb;
@@ -159,7 +159,7 @@ namespace SteamTrade.TradeOffer
         {
             GetTradeUrlsIfNull();
             if (timeHistoricalCutoff != "1389106496" || language != "en_us")
-                throw new NotImplementedException($"Change of {nameof(timeHistoricalCutoff)} or {nameof(language)} is not supported with {nameof(TradeOfferWeb)}. Language depends on {nameof(SteamWeb)}.{nameof(SteamWeb.AcceptLanguageHeader)}.");
+                throw new NotImplementedException($"Change of {nameof(timeHistoricalCutoff)} or {nameof(language)} is not supported with {nameof(TradeOfferWeb)}. Language depends on {nameof(ISteamWeb)}.{nameof(ISteamWeb.AcceptLanguageHeader)}.");
             var steamWeb = GetEnglishSteamWeb();
             var response = new OffersResponse();
             response.TradeOffersSent = new List<Offer>(ParseTradeOffer(steamWeb.Fetch(sentTradeOfferUrl, "GET", null, false)));
@@ -198,7 +198,7 @@ namespace SteamTrade.TradeOffer
         {
             GetTradeUrlsIfNull();
             if (timeHistoricalCutoff != "1389106496" || language != "en_us")
-                throw new NotImplementedException($"Change of {nameof(timeHistoricalCutoff)} or {nameof(language)} is not supported with {nameof(TradeOfferWeb)}. Language depends on {nameof(SteamWeb)}.{nameof(SteamWeb.AcceptLanguageHeader)}.");
+                throw new NotImplementedException($"Change of {nameof(timeHistoricalCutoff)} or {nameof(language)} is not supported with {nameof(TradeOfferWeb)}. Language depends on {nameof(ISteamWeb)}.{nameof(ISteamWeb.AcceptLanguageHeader)}.");
             var response = new OffersResponse() { TradeOffersReceived = new List<Offer>(), TradeOffersSent = new List<Offer>() };
             var steamWeb = GetEnglishSteamWeb();
             if (getSentOffers && !historicalOnly)
