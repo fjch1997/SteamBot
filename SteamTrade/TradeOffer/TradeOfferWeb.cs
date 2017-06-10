@@ -147,9 +147,7 @@ namespace SteamTrade.TradeOffer
 
         private ISteamWeb GetEnglishSteamWeb()
         {
-            //Create a copy of SteamWeb because the preservation of old language cookie is not threadsafe
-            Uri steamCommunityUri = new Uri("https://" + ISteamWeb.SteamCommunityDomain);
-            var steamWeb = new ISteamWeb();
+            Uri steamCommunityUri = new Uri("https://" + SteamWeb.SteamCommunityDomain);
             steamWeb.Authenticate(this.steamWeb.Cookies.GetCookies(steamCommunityUri).Cast<Cookie>());
             steamWeb.Cookies.SetCookies(steamCommunityUri, "Steam_Language=english; expires=Fri, 24-Dec-2050 16:37:28 GMT; path=/");
             return steamWeb;
