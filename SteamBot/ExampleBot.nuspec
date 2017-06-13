@@ -15,7 +15,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\SteamBot.exe" target="lib\net452"/>
+    <file src="bin\Release\SteamBot.dll" target="lib\net452"/>
     <file src="bin\Release\SteamBot.pdb" target="lib\net452"/>
     <file src="bin\Release\zh-CN\SteamBot.resources.dll" target="lib\net452\zh-CN"/>
   </files>
