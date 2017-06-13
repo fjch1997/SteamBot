@@ -10,7 +10,7 @@
       <dependency id="HtmlAgilityPack" version="[1.4.9.5,]" />
       <dependency id="Newtonsoft.Json" version="[8.0.2,]" />
       <dependency id="protobuf-net" version="[2.0.0.668,]" />
-      <dependency id="SteamAuth" version="1.0.1-CI00010" />
+      <dependency id="SteamAuth" version="1.0.6373.34393" />
       <dependency id="SteamKit2" version="[1.8.0,]" />
     </dependencies>
   </metadata>
