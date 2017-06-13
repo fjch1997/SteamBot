@@ -7,8 +7,8 @@
     <authors>Jessecar96</authors>
   </metadata>
   <files>
-    <file src="bin\Release\SteamTrade.dll" target="lib\net452"/>
-    <file src="bin\Release\SteamTrade.pdb" target="lib\net452"/>
-    <file src="bin\Release\zh-CN\SteamTrade.resources.dll" target="lib\net452\zh-CN"/>
+    <file src="..\bin\Release\SteamTrade.dll" target="lib\net452"/>
+    <file src="..\bin\Release\SteamTrade.pdb" target="lib\net452"/>
+    <file src="..\bin\Release\zh-CN\SteamTrade.resources.dll" target="lib\net452\zh-CN"/>
   </files>
 </package>
