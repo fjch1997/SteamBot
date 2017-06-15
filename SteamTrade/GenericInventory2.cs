@@ -12,6 +12,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace SteamTrade
 {
@@ -21,7 +22,7 @@ namespace SteamTrade
     /// This class is <see cref="Newtonsoft.Json"/> serializable when <see cref="DefaultContractResolver.IgnoreSerializableAttribute"/> is set to false.
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.Fields)]
-    public class GenericInventory2
+    public class GenericInventory2 : IEnumerable<GenericInventory2.Item>
     {
         [JsonIgnore]
         private readonly ISteamWeb steamWeb;
@@ -41,7 +42,7 @@ namespace SteamTrade
         }
 
         /// <summary>
-        /// If the inventory data has been loaded. After <see cref="Loaded"/> turns true, <see cref="GenericInventory2{T}"/> becomes immutable.
+        /// If the inventory data has been loaded. After <see cref="Loaded"/> turns true, <see cref="GenericInventory2"/> becomes immutable.
         /// </summary>
         public bool Loaded
         {
@@ -56,6 +57,18 @@ namespace SteamTrade
             }
         }
 
+        /// <summary>
+        /// appid.
+        /// </summary>
+        public uint AppId => appId;
+        /// <summary>
+        /// contextid.
+        /// </summary>
+        public uint ContextId => contextId;
+        
+        /// <summary>
+        /// Initialize a new instance of <see cref="GenericInventory2"/> and loads data.
+        /// </summary>
         public GenericInventory2(ISteamWeb steamWeb, ulong steamId64, uint appId, uint contextId)
         {
             this.steamWeb = steamWeb;
@@ -67,7 +80,7 @@ namespace SteamTrade
         }
 
         /// <summary>
-        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory2{T}"/>, create another instance.
+        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory2"/>, create another instance.
         /// </summary>
         /// <exception cref="TradeJsonException">Data has been downloaded but an error occurred while parsing it.</exception>
         /// <exception cref="WebException">A network error while connecting to steam servers.</exception>
@@ -82,7 +95,7 @@ namespace SteamTrade
         }
 
         /// <summary>
-        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory2{T}"/>, create another instance.
+        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory2"/>, create another instance.
         /// </summary>
         /// <exception cref="TradeJsonException">Data has been downloaded but an error occurred while parsing it.</exception>
         /// <exception cref="WebException">A network error while connecting to steam servers.</exception>
@@ -107,8 +120,6 @@ namespace SteamTrade
         /// <summary>
         /// Gets a typed description object. Deserialization from raw <see cref="JObject"/> will be performed everytime this is called.
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         /// <exception cref="InvalidCastException">Serialization failed.</exception>
         /// <exception cref="JsonException">Serialization failed.</exception>
         /// <exception cref="ArgumentException">Serialization failed.</exception>
@@ -167,6 +178,10 @@ namespace SteamTrade
             return items[assetId];
         }
 
+        /// <summary>
+        /// Gets the number of item this 
+        /// </summary>
+        /// <returns></returns>
         public int GetItemCount()
         {
             return items.Count;
@@ -191,7 +206,7 @@ namespace SteamTrade
         }
 
         /// <summary>
-        /// Removes an item with the given <paramref name="assetId"/>. 
+        /// Removes an item with the given <paramref name="item"/>. 
         /// This can avoid downloading the lastest inventory data when an item has been traded out of the inventory but nothing was received in return.
         /// </summary>
         /// <returns>true if the item and its description was removed successfully; otherwise, false.</returns>
@@ -252,12 +267,29 @@ namespace SteamTrade
         }
 
         /// <summary>
-        /// Class containing basic information about an item. For more details, use <see cref="DescriptionId"/> as dictionary key to access <see cref="GenericInventory{T}.Descriptions"/>.
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>A <see cref="IEnumerable{T}"/> that can be used to iterate through the collection.</returns>
+        public IEnumerator<Item> GetEnumerator()
+        {
+            return items.Select(i => i.Value).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return items.Select(i => i.Value).GetEnumerator();
+        }
+
+        /// <summary>
+        /// Class containing basic information about an item.
         /// </summary>
         /// <remarks>This class is immutable.</remarks>
         [JsonObject(MemberSerialization = MemberSerialization.Fields)]
         public class Item : TradeUserAssets
         {
+            /// <summary>
+            /// Initailize a new instance of <see cref="Item"/>.
+            /// </summary>
             public Item(uint appid, uint contextid, ulong assetid, ulong classId, ulong instanceId, int amount = 1) : base((int)appid, contextid, assetid, amount)
             {
                 ClassId = classId;
@@ -267,6 +299,9 @@ namespace SteamTrade
             public ulong ClassId { get; private set; }
             public ulong InstanceId { get; private set; }
 
+            /// <summary>
+            /// Gets a string representation of all properties.
+            /// </summary>
             public override string ToString()
             {
                 return $"id:{assetid}, appid:{appid}, contextid:{contextid}, amount:{amount}, classid:{ClassId}, instanceid: {InstanceId}";
