@@ -120,4 +120,7 @@
   <data name="SteamWebNotLoggedInExceptionMessage" xml:space="preserve">
     <value>SteamWeb is not logged in.</value>
   </data>
+  <data name="TwoFactorCodeIsInvalid" xml:space="preserve">
+    <value>Two factor code is invalid.</value>
+  </data>
 </root>

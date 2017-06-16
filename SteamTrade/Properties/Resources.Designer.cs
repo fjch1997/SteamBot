@@ -68,5 +68,14 @@ namespace SteamTrade.Properties {
                 return ResourceManager.GetString("SteamWebNotLoggedInExceptionMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Two factor code is invalid..
+        /// </summary>
+        internal static string TwoFactorCodeIsInvalid {
+            get {
+                return ResourceManager.GetString("TwoFactorCodeIsInvalid", resourceCulture);
+            }
+        }
     }
 }

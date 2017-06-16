@@ -120,4 +120,7 @@
   <data name="SteamWebNotLoggedInExceptionMessage" xml:space="preserve">
     <value>Steam 未登录。</value>
   </data>
+  <data name="TwoFactorCodeIsInvalid" xml:space="preserve">
+    <value>Steam Guard 手机代码无效。</value>
+  </data>
 </root>

@@ -14,6 +14,7 @@ using SteamKit2;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using SteamTrade.Properties;
 
 namespace SteamTrade
 {
@@ -274,7 +275,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             {
                 throw new CryptographicException("Missing RSA key.");
             }
-            
+
             RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
             byte[] encryptedPasswordBytes;
             using (var rsaEncryptor = new RSACryptoServiceProvider())
@@ -292,7 +293,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             string cookieHeader;
             string steamGuardText = "";
             string steamGuardId = "";
-
+            
             // Do this while we need a captcha or need email authentification. Probably you have misstyped the captcha or the SteamGaurd code if this comes multiple times.
             do
             {
@@ -324,7 +325,12 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 // Captcha end.
                 // Added Header for two factor code.
                 if (twoFactor && twoFactorCodeCallback != null)
-                    data.Add("twofactorcode", twoFactorCodeCallback());
+                {
+                    var twoFactorCode = twoFactorCodeCallback();
+                    if (string.IsNullOrWhiteSpace(twoFactorCode))
+                        throw new ArgumentException(Resources.TwoFactorCodeIsInvalid);
+                    data.Add("twofactorcode", twoFactorCode);
+                }
                 else if (twoFactor)
                     throw new ArgumentNullException(nameof(twoFactorCodeCallback));
 
@@ -444,9 +450,9 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 {
                     return false;
                 }
-                
+
                 // Adding cookies to the cookie container.
-                foreach (var uri in new Uri[] {new Uri("https://steamcommunity.com/"), new Uri("https://store.steampowered.com/"), new Uri("https://help.steampowered.com/") })
+                foreach (var uri in new Uri[] { new Uri("https://steamcommunity.com/"), new Uri("https://store.steampowered.com/"), new Uri("https://help.steampowered.com/") })
                 {
                     _cookies.SetCookies(uri, $"steamLogin={authResult["token"].AsString()}; path=/; HttpOnly");
                     _cookies.SetCookies(uri, $"steamLoginSecure={authResult["tokensecure"].AsString()}; path=/; secure; HttpOnly");
