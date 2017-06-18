@@ -261,9 +261,9 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         /// <exception cref="CryptographicException">An RSA key was not returned from steam.</exception>
         public SteamResult DoLogin(string username, string password, bool rememberLogin, Func<string> twoFactorCodeCallback, Func<string, string> captchaCallback, Func<string> emailCodeCallback)
         {
-            if (username == null)
+            if (string.IsNullOrEmpty(username))
                 new ArgumentNullException(nameof(username));
-            if (password == null)
+            if (string.IsNullOrEmpty(password))
                 new ArgumentNullException(nameof(password));
             var data = new NameValueCollection { { "username", username } };
             // First get the RSA key with which we will encrypt our password.
