@@ -1,3 +1,4 @@
+using HtmlAgilityPack;
 using Newtonsoft.Json;
 using SteamKit2;
 using SteamTrade.Exceptions;
@@ -11,14 +12,14 @@ namespace SteamTrade.TradeOffer
 {
     public class OfferSession
     {
-        private readonly TradeOfferWebAPI webApi;
+        private readonly ITradeOfferWebAPI webApi;
         private readonly ISteamWeb steamWeb;
 
         internal JsonSerializerSettings JsonSerializerSettings { get; set; }
 
         internal const string SendUrl = "https://steamcommunity.com/tradeoffer/new/send";
 
-        public OfferSession(TradeOfferWebAPI webApi, ISteamWeb steamWeb)
+        public OfferSession(ITradeOfferWebAPI webApi, ISteamWeb steamWeb)
         {
             this.webApi = webApi;
             this.steamWeb = steamWeb;
@@ -54,14 +55,17 @@ namespace SteamTrade.TradeOffer
                 }
                 catch (JsonException)
                 {
-                    return new TradeOfferAcceptResponse { TradeError = "Error parsing server response: " + resp };
+                    if (TryParseHtmlTradeError(resp, out var tradeError))
+                        return new TradeOfferAcceptResponse { TradeError = tradeError };
+                    else
+                        return new TradeOfferAcceptResponse { TradeError = "Error parsing server response: " + resp };
                 }
             }
             //if it didn't work as expected, check the state, maybe it was accepted after all
             var state = webApi.GetOfferState(tradeOfferId);
             return new TradeOfferAcceptResponse { Accepted = state == TradeOfferState.TradeOfferStateAccepted };
         }
-
+        
         public bool Decline(string tradeOfferId)
         {
             var data = new NameValueCollection();
@@ -122,14 +126,16 @@ namespace SteamTrade.TradeOffer
                     {
                         var state = webApi.GetOfferState(tradeOfferId);
                         if (state != TradeOfferState.TradeOfferStateCanceled)
-                            throw new TradeJsonException("Trade offer could not be cancelled. See inner JsonException for details.", resp);
+                            throw new TradeException("Trade offer could not be cancelled. Original server response: " + resp);
                     }
                 }
-                catch (JsonException jsex)
+                catch (JsonException)
                 {
+                    if (TryParseHtmlTradeError(resp, out var tradeError))
+                        throw new TradeException(tradeError);
                     var state = webApi.GetOfferState(tradeOfferId);
                     if (state != TradeOfferState.TradeOfferStateCanceled)
-                        throw new TradeJsonException("Trade offer could not be cancelled. See inner JsonException for details.", jsex, resp);
+                        throw new TradeException("Trade offer could not be cancelled. Original server response: " + resp);
                 }
             }
             else
@@ -351,13 +357,41 @@ namespace SteamTrade.TradeOffer
             string resp = steamWeb.Fetch(url, "POST", data, false, referer, true);
             if (!String.IsNullOrEmpty(resp))
             {
-                return JsonConvert.DeserializeObject<NewTradeOfferResponse>(resp);
+                try
+                {
+                    return JsonConvert.DeserializeObject<NewTradeOfferResponse>(resp);
+                }
+                catch (JsonException)
+                {
+                    if (TryParseHtmlTradeError(resp, out var tradeError))
+                        return new NewTradeOfferResponse { TradeError = tradeError };
+                    else
+                        return new NewTradeOfferResponse { TradeError = "Error parsing server response: " + resp };
+                }
             }
             else
             {
                 throw new WebException("The response has no content.");
             }
         }
+        private static bool TryParseHtmlTradeError(string response, out string tradeError)
+        {
+            //Parse HTML error response
+            try
+            {
+                var document = new HtmlDocument();
+                document.LoadHtml(response);
+                if (document.GetElementbyId("error_msg") is var error_msg)
+                {
+                    tradeError = error_msg.InnerText.Trim();
+                    return true;
+                }
+            }
+            catch { }
+            tradeError = null;
+            return false;
+        }
+
     }
 
     public class NewTradeOfferResponse
