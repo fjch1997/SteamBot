@@ -16,6 +16,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
+using SteamTrade.Exceptions;
 
 namespace SteamBotUnitTest.SteamTrade
 {
@@ -87,6 +88,20 @@ namespace SteamBotUnitTest.SteamTrade
                 Assert.Throws(typeof(TargetInvocationException), () => serializer.Serialize(writer, genericInventory2));
             }
             File.Delete(tempFileName);
+        }
+
+        [Test]
+        public void LoadErrorTest()
+        {
+            var genericInventory2 = new GenericInventory2(new DelegateFetchSteamWeb(() =>
+            {
+                using (var reader = new StreamReader(new MemoryStream(Resources.inventoryError)))
+                {
+                    return reader.ReadToEndAsync();
+                }
+            }), 76561198058183411UL, 570U, 2U);
+            var exception = (TradeJsonException)Assert.Throws(typeof(TradeJsonException), () => genericInventory2.Wait());
+            Assert.True(exception.Message.Contains("此个人资料是私密的。"));
         }
 
         [JsonObject(MemberSerialization = MemberSerialization.Fields)]

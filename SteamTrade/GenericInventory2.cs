@@ -65,7 +65,7 @@ namespace SteamTrade
         /// contextid.
         /// </summary>
         public uint ContextId => contextId;
-        
+
         /// <summary>
         /// Initialize a new instance of <see cref="GenericInventory2"/> and loads data.
         /// </summary>
@@ -88,9 +88,14 @@ namespace SteamTrade
         {
             if (task != null)
             {
-                task.Wait();
-                if (task.Exception != null)
-                    throw task.Exception;
+                try
+                {
+                    task.Wait();
+                }
+                catch(AggregateException ex) when (ex.InnerExceptions.Count == 1)
+                {
+                    throw ex.InnerException;
+                }
             }
         }
 
@@ -234,7 +239,13 @@ namespace SteamTrade
                 var successProperty = jsonObject["success"];
                 if (successProperty != null && !successProperty.Value<bool>())
                 {
-                    throw new TradeJsonException("Failed to parse inventory. " + jsonObject["strError"].Value<string>(), response);
+                    var strError = jsonObject["strError"];
+                    if (strError != null)
+                        throw new TradeJsonException("Failed to parse inventory. " + strError.Value<string>(), response);
+                    var error = jsonObject["Error"];
+                    if (error != null)
+                        throw new TradeJsonException("Failed to parse inventory. " + error.Value<string>(), response);
+                    throw new TradeJsonException("Invalid format.", response);
                 }
 
                 //Read more
