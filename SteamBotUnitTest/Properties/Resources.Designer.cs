@@ -79,5 +79,23 @@ namespace SteamBotUnitTest.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
+        ///&lt;html class=&quot; responsive&quot; lang=&quot;zh-cn&quot;&gt;
+        ///&lt;head&gt;
+        ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
+        ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
+        ///    &lt;meta name=&quot;theme-color&quot; content=&quot;#171a21&quot;&gt;
+        ///    &lt;title&gt;Steam 社区 :: 交易报价&lt;/title&gt;
+        ///    &lt;link rel=&quot;shortcut icon&quot; href=&quot;/favicon.ico&quot; type=&quot;image/x-icon&quot;&gt;
+        ///    &lt;link href=&quot;http://steamcommunity-a.akamaihd.net/public/shared/css/motiva_sans.css?v=Sd0odMs2NjL1&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
+        ///     [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SentTradeOfferPage {
+            get {
+                return ResourceManager.GetString("SentTradeOfferPage", resourceCulture);
+            }
+        }
     }
 }
