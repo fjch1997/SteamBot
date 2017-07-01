@@ -52,8 +52,17 @@ namespace SteamTrade
         /// <summary>
         /// CookieContainer to save all cookies during the Login. 
         /// </summary>
-        public CookieContainer Cookies => _cookies;
-        private CookieContainer _cookies = new CookieContainer();
+        public CookieContainer Cookies
+        {
+            get
+            {
+                if (_cookies == null)
+                    _cookies = new CookieContainer();
+                return _cookies;
+            }
+            set => _cookies = value;
+        }
+        private CookieContainer _cookies;
 
         /// <summary>
         /// This method is using the Request method to return the full http stream from a web request as string.
@@ -293,7 +302,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             string cookieHeader;
             string steamGuardText = "";
             string steamGuardId = "";
-            
+
             // Do this while we need a captcha or need email authentification. Probably you have misstyped the captcha or the SteamGaurd code if this comes multiple times.
             do
             {
