@@ -21,7 +21,7 @@ namespace SteamTrade
         /// <summary>
         /// CookieContainer to save all cookies during the Login. 
         /// </summary>
-        CookieContainer Cookies { get; }
+        CookieContainer Cookies { get; set; }
         /// <summary>
         /// Session id of Steam after Login.
         /// </summary>  
