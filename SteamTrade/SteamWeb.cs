@@ -32,17 +32,17 @@ namespace SteamTrade
         /// <summary>
         /// Token of steam. Generated after login.
         /// </summary>
-        public string Token => _cookies.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
+        public string Token => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
 
         /// <summary>
         /// Session id of Steam after Login.
         /// </summary>
-        public string SessionId => _cookies.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
+        public string SessionId => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
 
         /// <summary>
         /// Token secure as string. It is generated after the Login.
         /// </summary>
-        public string TokenSecure => _cookies.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
+        public string TokenSecure => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
 
         /// <summary>
         /// The Accept-Language header when sending all HTTP requests. Default value is determined according to the constructor caller thread's culture.
