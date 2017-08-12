@@ -7,6 +7,7 @@
     <authors>Jessecar96</authors>
     <dependencies>
       <dependency id="SteamTrade" version="1.0" />
+      <dependency id="System.ValueTuple" version="4.3.1" />
     </dependencies>
   </metadata>
   <files>
