@@ -5,6 +5,9 @@
     <version>$version$</version>
     <description>Automated bot software for interacting with Steam Trade</description>
     <authors>Jessecar96</authors>
+    <dependencies>
+      <dependency id="SteamTrade" version="1.0" />
+    </dependencies>
   </metadata>
   <files>
     <file src="bin\Release\SteamBot.pdb" target="lib\net452"/>
