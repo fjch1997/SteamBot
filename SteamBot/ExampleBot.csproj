@@ -93,7 +93,6 @@
     <Compile Include="SteamGuardRequiredEventArgs.cs" />
     <Compile Include="Bot.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="AdminUserHandler.cs" />
     <Compile Include="BotManager.cs" />
     <Compile Include="BotManagerInterpreter.cs" />
     <Compile Include="Configuration.cs" />
@@ -103,7 +102,6 @@
     <Compile Include="TF2GC\MsgDelete.cs" />
     <Compile Include="TradeOfferUserHandler.cs" />
     <Compile Include="UserHandler.cs" />
-    <Compile Include="SimpleUserHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

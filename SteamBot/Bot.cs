@@ -529,7 +529,6 @@ namespace SteamBot
                 return false;
             try
             {
-                tradeManager.InitializeTrade(SteamUser.SteamID, other);
                 CurrentTrade = tradeManager.CreateTrade(SteamUser.SteamID, other);
                 CurrentTrade.OnClose += CloseTrade;
                 SubscribeTrade(CurrentTrade, GetUserHandler(other));
@@ -761,40 +760,7 @@ namespace SteamBot
                     SteamTrade.RespondToTrade(callback.TradeID, false);
                     return;
                 }
-
-                try
-                {
-                    tradeManager.InitializeTrade(SteamUser.SteamID, callback.OtherClient);
-                }
-                catch (WebException we)
-                {
-                    SteamFriends.SendChatMessage(callback.OtherClient,
-                             EChatEntryType.ChatMsg,
-                             "Trade error: " + we.Message);
-
-                    SteamTrade.RespondToTrade(callback.TradeID, false);
-                    return;
-                }
-                catch (Exception)
-                {
-                    SteamFriends.SendChatMessage(callback.OtherClient,
-                             EChatEntryType.ChatMsg,
-                             "Trade declined. Could not correctly fetch your backpack.");
-
-                    SteamTrade.RespondToTrade(callback.TradeID, false);
-                    return;
-                }
-
-                //if (tradeManager.OtherInventory.IsPrivate)
-                //{
-                //    SteamFriends.SendChatMessage(callback.OtherClient, 
-                //                                 EChatEntryType.ChatMsg,
-                //                                 "Trade declined. Your backpack cannot be private.");
-
-                //    SteamTrade.RespondToTrade (callback.TradeID, false);
-                //    return;
-                //}
-
+                
                 if (CurrentTrade == null && GetUserHandler(callback.OtherClient).OnTradeRequest())
                     SteamTrade.RespondToTrade(callback.TradeID, true);
                 else
@@ -1135,8 +1101,6 @@ namespace SteamBot
             trade.OnStatusError += handler.OnStatusError;
             //trade.OnTimeout += OnTradeTimeout;
             trade.OnAfterInit += handler.OnTradeInit;
-            trade.OnUserAddItem += handler.OnTradeAddItem;
-            trade.OnUserRemoveItem += handler.OnTradeRemoveItem;
             trade.OnMessage += handler.OnTradeMessageHandler;
             trade.OnUserSetReady += handler.OnTradeReadyHandler;
             trade.OnUserAccept += handler.OnTradeAcceptHandler;
@@ -1153,8 +1117,6 @@ namespace SteamBot
             trade.OnStatusError -= handler.OnStatusError;
             //Trade.OnTimeout -= OnTradeTimeout;
             trade.OnAfterInit -= handler.OnTradeInit;
-            trade.OnUserAddItem -= handler.OnTradeAddItem;
-            trade.OnUserRemoveItem -= handler.OnTradeRemoveItem;
             trade.OnMessage -= handler.OnTradeMessageHandler;
             trade.OnUserSetReady -= handler.OnTradeReadyHandler;
             trade.OnUserAccept -= handler.OnTradeAcceptHandler;
