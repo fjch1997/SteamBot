@@ -39,7 +39,6 @@ namespace SteamBot
         {
             Bot = bot;
             OtherSID = sid;
-            GetOtherInventory();
         }
 
         private bool HandleWaitingOnUserResponse(string message)
@@ -51,36 +50,7 @@ namespace SteamBot
             _waitingOnUserResponse = null;
             return true;
         }
-
-        /// <summary>
-        /// Gets the other's inventory and stores it in OtherInventory.
-        /// </summary>
-        /// <example> This sample shows how to find items in the other's inventory from a user handler.
-        /// <code>
-        /// GetInventory(); // Not necessary unless you know the user's inventory has changed
-        /// foreach (var item in OtherInventory)
-        /// {
-        ///     if (item.Defindex == 5021)
-        ///     {
-        ///         // Bot has a key in its inventory
-        ///     }
-        /// }
-        /// </code>
-        /// </example>
-        public void GetOtherInventory()
-        {
-            otherInventoryTask = Task.Factory.StartNew(() =>Inventory.FetchInventory(OtherSID, Bot.ApiKey, SteamWeb));
-        }
-
-        public Inventory OtherInventory
-        {
-            get
-            {
-                otherInventoryTask.Wait();
-                return otherInventoryTask.Result;
-            }
-        }
-
+        
         /// <summary>
         /// Gets the Bot's current trade.
         /// </summary>
