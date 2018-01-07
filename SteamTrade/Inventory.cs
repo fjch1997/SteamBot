@@ -38,7 +38,7 @@ namespace SteamTrade
         public static dynamic GetInventory(SteamID steamid, ISteamWeb steamWeb)
         {
             string url = String.Format (
-                "http://steamcommunity.com/profiles/{0}/inventory/json/440/2/?trading=1",
+                "https://steamcommunity.com/profiles/{0}/inventory/json/440/2/?trading=1",
                 steamid.ConvertToUInt64 ()
             );
             

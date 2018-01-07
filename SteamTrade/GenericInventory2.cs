@@ -230,7 +230,7 @@ namespace SteamTrade
         private async Task LoadAsync(int start = 0)
         {
             //Download
-            var response = await steamWeb.FetchAsync($"http://steamcommunity.com/profiles/{steamId64}/inventory/json/{appId}/{contextId}{(start == 0 ? "" : $"?start={start}")}", "GET", null, true, "", false);
+            var response = await steamWeb.FetchAsync($"https://steamcommunity.com/profiles/{steamId64}/inventory/json/{appId}/{contextId}{(start == 0 ? "" : $"?start={start}")}", "GET", null, true, "", false);
             JObject jsonObject;
             try
             {

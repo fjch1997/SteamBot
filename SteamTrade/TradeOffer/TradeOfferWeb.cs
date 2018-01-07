@@ -16,7 +16,7 @@ namespace SteamTrade.TradeOffer
     /// </summary>
     public class TradeOfferWeb : ITradeOfferWebAPI
     {
-        private const string STEAM_COMMUNITY_BASE_URL = "http://steamcommunity.com/";
+        private const string STEAM_COMMUNITY_BASE_URL = "https://steamcommunity.com/";
         private readonly ISteamWeb steamWeb;
         private string receivedTradeOfferUrl;
         private string receivedHistoricTradeOfferUrl;

@@ -185,7 +185,7 @@ namespace SteamTrade
                         retry:
                         try
                         {
-                            response = SteamWeb.Fetch($"http://steamcommunity.com/profiles/{steamid.ConvertToUInt64()}/inventory/json/{appid}/{contextId}{(start == 0 ? "" : $"?start={start}")}", "GET", null, true);
+                            response = SteamWeb.Fetch($"https://steamcommunity.com/profiles/{steamid.ConvertToUInt64()}/inventory/json/{appid}/{contextId}{(start == 0 ? "" : $"?start={start}")}", "GET", null, true);
                         }
                         catch (WebException)
                         {

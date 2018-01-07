@@ -997,7 +997,7 @@ namespace SteamBot
             catch
             {
                 // Even if exception is caught, we should still continue.
-                Log.Warn("Cookie check failed. http://steamcommunity.com is possibly down.");
+                Log.Warn("Cookie check failed. https://steamcommunity.com is possibly down.");
             }
 
             return true;
@@ -1203,7 +1203,7 @@ namespace SteamBot
         /// <returns>TradeOfferEscrowDuration</returns>
         public TradeOfferEscrowDuration GetEscrowDuration(string tradeOfferId)
         {
-            var url = "http://steamcommunity.com/tradeoffer/" + tradeOfferId;
+            var url = "https://steamcommunity.com/tradeoffer/" + tradeOfferId;
 
             var resp = SteamWeb.Fetch(url, "GET", null, false);
             if (string.IsNullOrWhiteSpace(resp))
