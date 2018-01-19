@@ -600,7 +600,7 @@ namespace SteamBot
                         var eva = new SteamGuardRequiredEventArgs();
                         FireOnSteamGuardRequired(eva);
                         if (!string.IsNullOrEmpty(eva.SteamGuard))
-                            mobileAuthCode = eva.SteamGuard;
+                            logOnDetails.TwoFactorCode = eva.SteamGuard;
                         else
                             Log.Error("Failed to generate 2FA code. Make sure you have linked the authenticator via SteamBot.");
                     }
