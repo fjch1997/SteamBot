@@ -165,7 +165,7 @@ namespace SteamBot
             {
                 if (pollTradeOffers == value)
                     return;
-                if(value)
+                if (value)
                 {
                     pollTradeOffers = true;
                     InitializeTradeOfferPolling();
@@ -613,17 +613,21 @@ namespace SteamBot
                 else if (callback.Result == EResult.TwoFactorCodeMismatch)
                 {
                     SteamAuth.TimeAligner.AlignTime();
-                    Log.Warn(Properties.Resources.TwoFACodeMismatchRetryIn15Seconds);
-                    Thread.Sleep(15000);
                     if (SteamGuardAccount != null)
+                    {
+                        Log.Warn(Properties.Resources.TwoFACodeMismatchRetryIn15Seconds);
+                        Thread.Sleep(15000);
                         logOnDetails.TwoFactorCode = SteamGuardAccount.GenerateSteamGuardCode();
+                        Log.Success(Properties.Resources.Regenerated2FACode);
+                    }
                     else
                     {
                         var eva = new SteamGuardRequiredEventArgs();
                         FireOnSteamGuardRequired(eva);
                         logOnDetails.TwoFactorCode = eva.SteamGuard;
+                        if(string.IsNullOrEmpty(eva.SteamGuard))
+                            Log.Warn(Properties.Resources.TwoFACodeMismatchRetryIn15Seconds);
                     }
-                    Log.Success(Properties.Resources.Regenerated2FACode);
                 }
                 else if (callback.Result == EResult.AccountLogonDenied)
                 {
@@ -772,7 +776,7 @@ namespace SteamBot
                     SteamTrade.RespondToTrade(callback.TradeID, false);
                     return;
                 }
-                
+
                 if (CurrentTrade == null && GetUserHandler(callback.OtherClient).OnTradeRequest())
                     SteamTrade.RespondToTrade(callback.TradeID, true);
                 else
