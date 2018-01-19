@@ -322,7 +322,7 @@ namespace SteamBot
         public event EventHandler<SteamGuardRequiredEventArgs> OnSteamGuardRequired;
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void RaisePropertyChanged(string propertyName)
+        protected void RaisePropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
