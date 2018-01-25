@@ -37,6 +37,7 @@ namespace SteamTrade
         /// <summary>
         /// Session id of Steam after Login.
         /// </summary>
+        [Obsolete("Session ID can be different between store.steampowered.com and steamcommunity.com. Use Cookies.GetCookies(new Uri(\"https://steamcommunity.com/\")).Cast<Cookie>().FirstOrDefault(c => c.Name == \"sessionid\")?.Value to get Session ID for the domain you are working with.")]
         public string SessionId => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
 
         /// <summary>
