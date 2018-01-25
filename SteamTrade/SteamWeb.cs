@@ -391,6 +391,8 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 _cookies.SetCookies(new Uri("https://steamcommunity.com/"), cookieHeader);
                 _cookies.SetCookies(new Uri("https://store.steampowered.com/"), cookieHeader);
                 _cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
+                _cookies.SetCookies(new Uri("https://store.steampowered.com/"), "sessionid=" + SessionId);
+                _cookies.SetCookies(new Uri("https://help.steampowered.com/"), "sessionid=" + SessionId);
                 SubmitCookies(_cookies);
                 return loginJson;
             }
