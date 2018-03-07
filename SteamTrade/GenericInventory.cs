@@ -14,6 +14,7 @@ namespace SteamTrade
     /// <summary>
     /// Generic Steam Backpack Interface.
     /// </summary>
+    [Obsolete]
     public class GenericInventory : GenericInventory<ItemDescription>
     {
         public GenericInventory(ISteamWeb steamWeb) : base(steamWeb) { }

@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Diagnostics;
+using Lloyd.Shared.Extensions;
 
 namespace SteamTrade
 {
@@ -29,8 +31,8 @@ namespace SteamTrade
         private readonly ulong steamId64;
         private readonly uint appId;
         private readonly uint contextId;
-        private readonly ConcurrentDictionary<ulong, Item> items = new ConcurrentDictionary<ulong, Item>();
-        private readonly ItemDescriptionConcurrentDictionary descriptions = new ItemDescriptionConcurrentDictionary();
+        private readonly Dictionary<ulong, Item> items = new Dictionary<ulong, Item>();
+        private readonly ItemDescriptionDictionary descriptions = new ItemDescriptionDictionary();
         [JsonIgnore]
         private Task task;
 
@@ -66,10 +68,12 @@ namespace SteamTrade
         /// </summary>
         public uint ContextId => contextId;
 
+        public List<string> Warnings { get; set; } = new List<string>();
+
         /// <summary>
         /// Initialize a new instance of <see cref="GenericInventory2"/> and loads data.
         /// </summary>
-        public GenericInventory2(ISteamWeb steamWeb, ulong steamId64, uint appId, uint contextId)
+        public GenericInventory2(ISteamWeb steamWeb, ulong steamId64, uint appId, uint contextId, string language = "english")
         {
             this.steamWeb = steamWeb;
             this.steamId64 = steamId64;
@@ -86,17 +90,7 @@ namespace SteamTrade
         /// <exception cref="WebException">A network error while connecting to steam servers.</exception>
         public void Wait()
         {
-            if (task != null)
-            {
-                try
-                {
-                    task.Wait();
-                }
-                catch(AggregateException ex) when (ex.InnerExceptions.Count == 1)
-                {
-                    throw ex.InnerException;
-                }
-            }
+            task?.Wait();
         }
 
         /// <summary>
@@ -200,9 +194,10 @@ namespace SteamTrade
         /// <returns>true if the item and its description was removed successfully; otherwise, false.</returns>
         public bool RemoveItem(ulong assetId)
         {
-            if (items.TryRemove(assetId, out Item item))
+            var item = items[assetId];
+            if (items.Remove(assetId))
             {
-                return descriptions.TryRemove((item.ClassId, item.InstanceId), out JObject description);
+                return descriptions.Remove((item.ClassId, item.InstanceId));
             }
             else
             {
@@ -217,9 +212,9 @@ namespace SteamTrade
         /// <returns>true if the item and its description was removed successfully; otherwise, false.</returns>
         public bool RemoveItem(Item item)
         {
-            if (items.TryRemove(item.assetid, out Item _item))
+            if (items.Remove(item.assetid))
             {
-                return descriptions.TryRemove((_item.ClassId, _item.InstanceId), out JObject description);
+                return descriptions.Remove((item.ClassId, item.InstanceId));
             }
             else
             {
@@ -230,53 +225,91 @@ namespace SteamTrade
         private async Task LoadAsync(int start = 0)
         {
             //Download
-            var response = await steamWeb.FetchAsync($"https://steamcommunity.com/profiles/{steamId64}/inventory/json/{appId}/{contextId}{(start == 0 ? "" : $"?start={start}")}", "GET", null, true, "", false);
-            JObject jsonObject;
-            try
-            {
-                jsonObject = (JObject)JsonConvert.DeserializeObject(response) ?? throw new TradeJsonException(response);
-                //Error message
-                var successProperty = jsonObject["success"];
-                if (successProperty != null && !successProperty.Value<bool>())
-                {
-                    var strError = jsonObject["strError"];
-                    if (strError != null)
-                        throw new TradeJsonException("Failed to parse inventory. " + strError.Value<string>(), response);
-                    var error = jsonObject["Error"];
-                    if (error != null)
-                        throw new TradeJsonException("Failed to parse inventory. " + error.Value<string>(), response);
-                    throw new TradeJsonException("Invalid format.", response);
-                }
+            List<JObject> responses = new List<JObject>();
 
-                //Read more
-                var moreProperty = jsonObject["more"];
-                if (moreProperty != null && moreProperty.Value<bool>())
-                {
-                    await LoadAsync((int)jsonObject["more_start"].Value<int>());
-                }
-                else
-                {
-                    //Parse
-                    foreach (JObject item in (jsonObject["rgInventory"]).Children<JProperty>().Select(p => p.Value))
-                    {
-                        var assetId = item["id"].Value<ulong>();
-                        items[assetId] = new Item(appId, contextId, assetId, item["classid"].Value<ulong>(), item["instanceid"].Value<ulong>(), item["amount"]?.Value<int>() ?? 1);
-                    }
-                    //Parse descirption
-                    var rgDescriptions = (JObject)jsonObject["rgDescriptions"];
-                    foreach (var item in items)
-                    {
-                        var key = item.Value.ClassId + "_" + item.Value.InstanceId;
-                        descriptions[(item.Value.ClassId, item.Value.InstanceId)] = (JObject)rgDescriptions.Property(key).Value;
-                    }
-                }
-            }
-            catch (Exception ex) when (!(ex is WebException) && !(ex is TradeJsonException))
+            //Download
+            (bool moreItem, ulong startAssetId, int totalItemCount, int counter) result = (true, 0, 0, 1);
+            do
             {
-                throw new TradeJsonException("Invalid format.", ex, response);
+                result = await RawDownloadAsync(responses, result.startAssetId, result.counter);
+            } while (result.moreItem);
+
+            foreach (var response in responses)
+            {
+                var assets = ((JArray)response["assets"] ?? throw new TradeJsonException("无法获取库存信息。数据格式有误。", response.ToString())).Values<JObject>().ToArray();
+                var length = assets.Length;
+                var descriptions = (JArray)response.Property("descriptions").Value;
+                for (int _i = 0; _i < length; _i++)
+                {
+                    var item = assets[_i];
+                    try
+                    {
+                        ulong id = 0;
+                        var assetId = item.Property("assetid");
+                        if (assetId == null || !ulong.TryParse(assetId.Value.ToString(), out id))
+                        {
+                            if (!long.TryParse(item["currencyid"]?.ToString(), out _))
+                            {
+                                continue;
+                            }
+                        }
+                        var classId = item["classid"].Value<ulong>();
+                        var instanceId = item["instanceid"].Value<ulong>();
+                        var amount = item["amount"]?.Value<int>() ?? 1;
+
+                        //Get description
+                        JObject description = null;
+                        foreach (JObject _description in descriptions)
+                        {
+                            if (_description.Property("classid").Value.ToString() == classId.ToString() && _description.Property("instanceid").Value.ToString() == instanceId.ToString())
+                            {
+                                description = _description;
+                                break;
+                            }
+                        }
+
+                        items[id] = new Item(appId, contextId, id, classId, instanceId, amount);
+                        this.descriptions[(classId, instanceId)] = description ?? throw new Exception("Description not found.");
+                    }
+                    catch (OperationCanceledException) { throw; }
+                    catch (Exception ex)
+                    {
+                        Warnings.Add("解析物品的过程中失败：" + ex.Message + "。输出的结果可能因此缺少某些项目");
+                    }
+                }
             }
         }
-
+        private async Task<(bool moreItem, ulong lastAssetId, int totalItemCount, int counter)> RawDownloadAsync(List<JObject> responses, ulong startAssetId = 0, int counter = 1, int maxItemCount = 5000)
+        {
+            string jsonString;
+            var retryCount = 0;
+            retry:
+            try
+            {
+                jsonString = await steamWeb.FetchAsync($"https://steamcommunity.com/inventory/{steamId64}/{appId}/{contextId}?l=schinese&count={maxItemCount}" + (startAssetId != 0UL ? $"&start_assetid={startAssetId}" : ""), "GET");
+            }
+            catch (WebException)
+            {
+                if (retryCount < 3)
+                {
+                    await Task.Delay(3000);
+                    retryCount++;
+                    goto retry;
+                }
+                throw;
+            }
+            var jsonResponse = (JObject)JsonConvert.DeserializeObject(jsonString);
+            if (!(bool)jsonResponse.Property("success").Value)
+            {
+                var errorText = jsonResponse.Property("Error")?.Value.ToString() ?? jsonResponse.Property("error")?.Value.ToString();
+                new TradeJsonException("无法获取库存信息：" + errorText, jsonString);
+            }
+            responses.Add(jsonResponse);
+            var moreItemProperty = jsonResponse.Property("more_items");
+            var lastAssetIdProperty = jsonResponse.Property("last_assetid");
+            return (moreItemProperty != null && (bool)moreItemProperty.Value, lastAssetIdProperty == null ? 0 : (ulong)lastAssetIdProperty.Value,
+                (int)jsonResponse.Property("total_inventory_count").Value, counter + 1);
+        }
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
@@ -320,6 +353,6 @@ namespace SteamTrade
         }
 
         [JsonArray]
-        class ItemDescriptionConcurrentDictionary : ConcurrentDictionary<(ulong classId, ulong instanceId), JObject> { }
+        class ItemDescriptionDictionary : Dictionary<(ulong classId, ulong instanceId), JObject> { }
     }
 }

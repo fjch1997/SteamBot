@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using SteamTrade.Properties;
+using Lloyd.Shared.Extensions;
 
 namespace SteamTrade
 {
@@ -81,18 +82,7 @@ namespace SteamTrade
             // Reading the response as stream and read it to the end. After that happened return the result as string.
             using (HttpWebResponse response = Request(url, method, data, ajax, referer, fetchError))
             {
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    // If the response stream is null it cannot be read. So return an empty string.
-                    if (responseStream == null)
-                    {
-                        return "";
-                    }
-                    using (StreamReader reader = new StreamReader(responseStream))
-                    {
-                        return reader.ReadToEnd();
-                    }
-                }
+                return response.ReadToEnd();
             }
         }
         /// <summary>
@@ -111,18 +101,7 @@ namespace SteamTrade
             // Reading the response as stream and read it to the end. After that happened return the result as string.
             using (HttpWebResponse response = await RequestAsync(url, method, data, ajax, referer, fetchError))
             {
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    // If the response stream is null it cannot be read. So return an empty string.
-                    if (responseStream == null)
-                    {
-                        return "";
-                    }
-                    using (StreamReader reader = new StreamReader(responseStream))
-                    {
-                        return await reader.ReadToEndAsync();
-                    }
-                }
+                return await response.ReadToEndAsync();
             }
         }
 

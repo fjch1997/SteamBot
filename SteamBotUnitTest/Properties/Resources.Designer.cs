@@ -19,7 +19,7 @@ namespace SteamBotUnitTest.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -73,6 +73,36 @@ namespace SteamBotUnitTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] NewApiSampleInventoryPage1 {
+            get {
+                object obj = ResourceManager.GetObject("NewApiSampleInventoryPage1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] NewApiSampleInventoryPage2 {
+            get {
+                object obj = ResourceManager.GetObject("NewApiSampleInventoryPage2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] NewApiSampleInventoryPage3 {
+            get {
+                object obj = ResourceManager.GetObject("NewApiSampleInventoryPage3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] SampleInventory {
             get {
                 object obj = ResourceManager.GetObject("SampleInventory", resourceCulture);
@@ -82,15 +112,14 @@ namespace SteamBotUnitTest.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;!DOCTYPE html&gt;
-        ///&lt;html class=&quot; responsive&quot; lang=&quot;zh-cn&quot;&gt;
+        ///&lt;html class=&quot; responsive&quot; lang=&quot;en&quot;&gt;
         ///&lt;head&gt;
         ///    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;&gt;
         ///    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;
         ///    &lt;meta name=&quot;theme-color&quot; content=&quot;#171a21&quot;&gt;
-        ///    &lt;title&gt;Steam 社区 :: 交易报价&lt;/title&gt;
+        ///    &lt;title&gt;Steam Community :: Trade Offers&lt;/title&gt;
         ///    &lt;link rel=&quot;shortcut icon&quot; href=&quot;/favicon.ico&quot; type=&quot;image/x-icon&quot;&gt;
-        ///    &lt;link href=&quot;http://steamcommunity-a.akamaihd.net/public/shared/css/motiva_sans.css?v=Sd0odMs2NjL1&quot; rel=&quot;stylesheet&quot; type=&quot;text/css&quot;&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///    &lt;link href=&quot;http://steamcommunity-a.akamaihd.net/public/shared/css/motiva_sans.css?v=Sd0odMs2NjL1&quot; rel=&quot;stylesheet&quot; type=&quot;text [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SentTradeOfferPage {
             get {

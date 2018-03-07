@@ -37,6 +37,15 @@
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Lloyd.Shared, Version=1.5.6598.42850, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lloyd.Shared.1.5.6598.42850\lib\net45\Lloyd.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Lloyd.Shared.LanguageResources, Version=1.5.6598.42837, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lloyd.Shared.LanguageResources.1.5.6598.42837\lib\net40-Client\Lloyd.Shared.LanguageResources.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -66,6 +75,9 @@
       <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +91,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SteamTrade\DelegateFetchSteamWeb.cs" />
     <Compile Include="SteamTrade\GenericInventory2Tests.cs" />
     <Compile Include="SteamTrade\GenericInventoryTest.cs" />
     <Compile Include="SteamTrade\SteamWebTradeOfferTests.cs" />
@@ -99,12 +112,16 @@
     <Fakes Include="Fakes\SteamTrade.fakes" />
     <None Include="packages.config" />
     <None Include="Resources\inventoryError.json" />
+    <None Include="Resources\NewApiSampleInventoryPage1.json" />
+    <None Include="Resources\NewApiSampleInventoryPage2.json" />
+    <None Include="Resources\NewApiSampleInventoryPage3.json" />
     <None Include="Resources\sampleInventory.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

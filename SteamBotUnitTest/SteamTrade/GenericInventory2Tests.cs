@@ -26,18 +26,57 @@ namespace SteamBotUnitTest.SteamTrade
         [Test]
         public void LoadTest()
         {
-            var genericInventory2 = new GenericInventory2(new DelegateFetchSteamWeb(() =>
+            var genericInventory2 = new GenericInventory2(new DelegateFetchSteamWeb(url =>
             {
-                using (var reader = new StreamReader(new MemoryStream(Resources.SampleInventory)))
+                if (url == "https://steamcommunity.com/inventory/76561198101672411/570/2?l=schinese&count=5000")
                 {
-                    return reader.ReadToEndAsync();
+                    using (var reader = new StreamReader(new MemoryStream(Resources.NewApiSampleInventoryPage1)))
+                    {
+                        return reader.ReadToEndAsync();
+                    }
                 }
-            }), 76561198058183411UL, 570U, 2U);
+                if (url == "https://steamcommunity.com/inventory/76561198101672411/570/2?l=schinese&count=5000&start_assetid=12942034383")
+                {
+                    using (var reader = new StreamReader(new MemoryStream(Resources.NewApiSampleInventoryPage2)))
+                    {
+                        return reader.ReadToEndAsync();
+                    }
+                }
+                if (url == "https://steamcommunity.com/inventory/76561198101672411/570/2?l=schinese&count=5000&start_assetid=8432580706")
+                {
+                    using (var reader = new StreamReader(new MemoryStream(Resources.NewApiSampleInventoryPage3)))
+                    {
+                        return reader.ReadToEndAsync();
+                    }
+                }
+                throw new AssertionException("Failed.");
+            }), 76561198101672411UL, 570U, 2U, "schinese");
             genericInventory2.Wait();
-            Assert.AreEqual(48, genericInventory2.GetItemCount());
-            var item = genericInventory2.GetDescription<ItemDescription>(1454279429U, 1454279430U);
-            Assert.AreEqual("封装的礼物", item.MarketName);
-            Assert.AreEqual("Wrapped Gift", item.MarketHashName);
+            Assert.AreEqual(10873, genericInventory2.GetItemCount());
+
+            var item = genericInventory2.GetDescription<ItemDescription>(230751399U, 2748948653U);
+            Assert.AreEqual("动能：魔狱霸主！", item.MarketName);
+            Assert.AreEqual("Kinetic: Crown of Hells!", item.MarketHashName);
+
+            item = genericInventory2.GetDescription<ItemDescription>(genericInventory2.GetItem(12997738541UL));
+            Assert.AreEqual("流浪剑客壁垒", item.MarketName);
+            Assert.AreEqual("Bulwark of the Rogue Knight", item.MarketHashName);
+            Assert.True(item.Tradable);
+
+            item = genericInventory2.GetDescription<ItemDescription>(12997738541UL);
+            Assert.AreEqual("流浪剑客壁垒", item.MarketName);
+            Assert.AreEqual("Bulwark of the Rogue Knight", item.MarketHashName);
+            Assert.True(item.Tradable);
+
+            item = genericInventory2.GetDescription<ItemDescription>(8611853506UL);
+            Assert.AreEqual("战乱天堂", item.MarketName);
+            Assert.AreEqual("Wartorn Heavens", item.MarketHashName);
+            Assert.False(item.Tradable);
+
+            foreach (var asset in genericInventory2)
+            {
+                Assert.NotNull(genericInventory2.GetDescription(asset));
+            }
         }
 
         [Test]
@@ -102,73 +141,6 @@ namespace SteamBotUnitTest.SteamTrade
             }), 76561198058183411UL, 570U, 2U);
             var exception = (TradeJsonException)Assert.Throws(typeof(TradeJsonException), () => genericInventory2.Wait());
             Assert.True(exception.Message.Contains("此个人资料是私密的。"));
-        }
-
-        [JsonObject(MemberSerialization = MemberSerialization.Fields)]
-        class DelegateFetchSteamWeb : ISteamWeb
-        {
-            [NonSerialized]
-            private Func<Task<string>> func;
-
-            public DelegateFetchSteamWeb(Func<Task<string>> func)
-            {
-                this.func = func ?? throw new ArgumentNullException(nameof(func));
-            }
-
-            public string AcceptLanguageHeader { get; set; } = "en-US,en;q=0.5";
-
-            public CookieContainer Cookies { get; set; } = new CookieContainer();
-
-            public string SessionId => throw new NotImplementedException();
-
-            public string Token => throw new NotImplementedException();
-
-            public string TokenSecure => throw new NotImplementedException();
-
-            public void Authenticate(IEnumerable<Cookie> cookies)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool Authenticate(string myUniqueId, SteamClient client, string myLoginKey)
-            {
-                throw new NotImplementedException();
-            }
-
-            public SteamResult DoLogin(string username, string password, bool rememberLogin, Func<string> twoFactorCodeCallback, Func<string, string> captchaCallback, Func<string> emailCodeCallback)
-            {
-                throw new NotImplementedException();
-            }
-
-            public string Fetch(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false)
-            {
-                return func().Result;
-            }
-
-            public Task<string> FetchAsync(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false)
-            {
-                return func();
-            }
-
-            public HttpWebResponse Request(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task<HttpWebResponse> RequestAsync(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
-            {
-                throw new NotImplementedException();
-            }
-
-            public bool VerifyCookies()
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }

@@ -559,30 +559,6 @@
         <member name="P:SteamTrade.Fakes.ShimForeignInventory.InventoryValidSetBoolean">
             <summary>Sets the shim of ForeignInventory.set_InventoryValid(Boolean value)</summary>
         </member>
-        <member name="T:SteamTrade.Fakes.ShimGenericInventory">
-            <summary>Shim type of SteamTrade.GenericInventory</summary>
-        </member>
-        <member name="M:SteamTrade.Fakes.ShimGenericInventory.#ctor">
-            <summary>Initializes a new shim instance</summary>
-        </member>
-        <member name="M:SteamTrade.Fakes.ShimGenericInventory.#ctor(SteamTrade.GenericInventory)">
-            <summary>Initializes a new shim for the given instance</summary>
-        </member>
-        <member name="T:SteamTrade.Fakes.ShimGenericInventory.AllInstances">
-            <summary>Define shims for all instances members</summary>
-        </member>
-        <member name="M:SteamTrade.Fakes.ShimGenericInventory.BehaveAsCurrent">
-            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
-        </member>
-        <member name="M:SteamTrade.Fakes.ShimGenericInventory.BehaveAsNotImplemented">
-            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimGenericInventory.Behavior">
-            <summary>Assigns the behavior for all methods of the shimmed type</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimGenericInventory.ConstructorISteamWeb">
-            <summary>Sets the shim of GenericInventory.GenericInventory(ISteamWeb steamWeb)</summary>
-        </member>
         <member name="T:SteamTrade.Fakes.ShimGenericInventory`1">
             <summary>Shim type of SteamTrade.GenericInventory`1</summary>
         </member>
@@ -811,6 +787,9 @@
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.AllInstances.OnSerializingStreamingContext">
             <summary>Sets the shim of GenericInventory2.OnSerializing(StreamingContext context)</summary>
         </member>
+        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.AllInstances.RawDownloadAsyncListOfJObjectUInt64Int32Int32">
+            <summary>Sets the shim of GenericInventory2.RawDownloadAsync(List`1&lt;JObject&gt; responses, UInt64 startAssetId, Int32 counter, Int32 maxItemCount)</summary>
+        </member>
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.AllInstances.RemoveItemGenericInventory2Item">
             <summary>Sets the shim of GenericInventory2.RemoveItem(Item item)</summary>
         </member>
@@ -825,6 +804,12 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.AllInstances.WaitAsync">
             <summary>Sets the shim of GenericInventory2.WaitAsync()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.AllInstances.WarningsGet">
+            <summary>Sets the shim of GenericInventory2.get_Warnings()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.AllInstances.WarningsSetListOfString">
+            <summary>Sets the shim of GenericInventory2.set_Warnings(List`1&lt;String&gt; value)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.AppIdGet">
             <summary>Sets the shim of GenericInventory2.get_AppId()</summary>
@@ -844,8 +829,8 @@
         <member name="M:SteamTrade.Fakes.ShimGenericInventory2.Bind(System.Collections.Generic.IEnumerable{SteamTrade.GenericInventory2.Item})">
             <summary>Binds the members of the interface to the shim.</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.ConstructorISteamWebUInt64UInt32UInt32">
-            <summary>Sets the shim of GenericInventory2.GenericInventory2(ISteamWeb steamWeb, UInt64 steamId64, UInt32 appId, UInt32 contextId)</summary>
+        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.ConstructorISteamWebUInt64UInt32UInt32String">
+            <summary>Sets the shim of GenericInventory2.GenericInventory2(ISteamWeb steamWeb, UInt64 steamId64, UInt32 appId, UInt32 contextId, String language)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.ContextIdGet">
             <summary>Sets the shim of GenericInventory2.get_ContextId()</summary>
@@ -885,6 +870,9 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.OnSerializingStreamingContext">
             <summary>Sets the shim of GenericInventory2.OnSerializing(StreamingContext context)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.RawDownloadAsyncListOfJObjectUInt64Int32Int32">
+            <summary>Sets the shim of GenericInventory2.RawDownloadAsync(List`1&lt;JObject&gt; responses, UInt64 startAssetId, Int32 counter, Int32 maxItemCount)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.RemoveItemGenericInventory2Item">
             <summary>Sets the shim of GenericInventory2.RemoveItem(Item item)</summary>
@@ -960,6 +948,12 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimGenericInventory2.WaitAsync">
             <summary>Sets the shim of GenericInventory2.WaitAsync()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.WarningsGet">
+            <summary>Sets the shim of GenericInventory2.get_Warnings()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimGenericInventory2.WarningsSetListOfString">
+            <summary>Sets the shim of GenericInventory2.set_Warnings(List`1&lt;String&gt; value)</summary>
         </member>
         <member name="T:SteamTrade.Fakes.ShimGetRsaKey">
             <summary>Shim type of SteamTrade.GetRsaKey</summary>
@@ -2140,6 +2134,9 @@
         <member name="P:SteamTrade.Fakes.ShimSteamWeb.AllInstances.CookiesGet">
             <summary>Sets the shim of SteamWeb.get_Cookies()</summary>
         </member>
+        <member name="P:SteamTrade.Fakes.ShimSteamWeb.AllInstances.CookiesSetCookieContainer">
+            <summary>Sets the shim of SteamWeb.set_Cookies(CookieContainer value)</summary>
+        </member>
         <member name="P:SteamTrade.Fakes.ShimSteamWeb.AllInstances.DoLoginStringStringBooleanFuncOfStringFuncOfStringStringFuncOfString">
             <summary>Sets the shim of SteamWeb.DoLogin(String username, String password, Boolean rememberLogin, Func`1&lt;String&gt; twoFactorCodeCallback, Func`2&lt;String,String&gt; captchaCallback, Func`1&lt;String&gt; emailCodeCallback)</summary>
         </member>
@@ -2199,6 +2196,9 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimSteamWeb.CookiesGet">
             <summary>Sets the shim of SteamWeb.get_Cookies()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSteamWeb.CookiesSetCookieContainer">
+            <summary>Sets the shim of SteamWeb.set_Cookies(CookieContainer value)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimSteamWeb.DoLoginStringStringBooleanFuncOfStringFuncOfStringStringFuncOfString">
             <summary>Sets the shim of SteamWeb.DoLogin(String username, String password, Boolean rememberLogin, Func`1&lt;String&gt; twoFactorCodeCallback, Func`2&lt;String,String&gt; captchaCallback, Func`1&lt;String&gt; emailCodeCallback)</summary>
@@ -2377,17 +2377,8 @@
         <member name="P:SteamTrade.Fakes.ShimTrade.AcceptTrade">
             <summary>Sets the shim of Trade.AcceptTrade()</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AddAllItemsByDefindexInt32UInt32">
-            <summary>Sets the shim of Trade.AddAllItemsByDefindex(Int32 defindex, UInt32 numToAdd)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AddItemByDefindexInt32">
-            <summary>Sets the shim of Trade.AddItemByDefindex(Int32 defindex)</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AddItemTradeUserAssets">
             <summary>Sets the shim of Trade.AddItem(TradeUserAssets item)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AddItemUInt64">
-            <summary>Sets the shim of Trade.AddItem(UInt64 itemid)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AddItemUInt64Int32Int64">
             <summary>Sets the shim of Trade.AddItem(UInt64 itemid, Int32 appid, Int64 contextid)</summary>
@@ -2398,17 +2389,8 @@
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.AcceptTrade">
             <summary>Sets the shim of Trade.AcceptTrade()</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.AddAllItemsByDefindexInt32UInt32">
-            <summary>Sets the shim of Trade.AddAllItemsByDefindex(Int32 defindex, UInt32 numToAdd)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.AddItemByDefindexInt32">
-            <summary>Sets the shim of Trade.AddItemByDefindex(Int32 defindex)</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.AddItemTradeUserAssets">
             <summary>Sets the shim of Trade.AddItem(TradeUserAssets item)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.AddItemUInt64">
-            <summary>Sets the shim of Trade.AddItem(UInt64 itemid)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.AddItemUInt64Int32Int64">
             <summary>Sets the shim of Trade.AddItem(UInt64 itemid, Int32 appid, Int64 contextid)</summary>
@@ -2469,9 +2451,6 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.MeIsReadySetBoolean">
             <summary>Sets the shim of Trade.set_MeIsReady(Boolean value)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.MyInventoryGet">
-            <summary>Sets the shim of Trade.get_MyInventory()</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.MyOfferedItemsGet">
             <summary>Sets the shim of Trade.get_MyOfferedItems()</summary>
@@ -2542,9 +2521,6 @@
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.OnUserSetReadyRemoveTradeUserSetReadyStateHandler">
             <summary>Sets the shim of Trade.remove_OnUserSetReady(UserSetReadyStateHandler value)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.OtherInventoryGet">
-            <summary>Sets the shim of Trade.get_OtherInventory()</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.OtherIsReadyGet">
             <summary>Sets the shim of Trade.get_OtherIsReady()</summary>
         </member>
@@ -2581,15 +2557,6 @@
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.Poll">
             <summary>Sets the shim of Trade.Poll()</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.RemoveAllItems">
-            <summary>Sets the shim of Trade.RemoveAllItems()</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.RemoveAllItemsByDefindexInt32UInt32">
-            <summary>Sets the shim of Trade.RemoveAllItemsByDefindex(Int32 defindex, UInt32 numToRemove)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.RemoveItemByDefindexInt32">
-            <summary>Sets the shim of Trade.RemoveItemByDefindex(Int32 defindex)</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.AllInstances.RemoveItemTradeUserAssets">
             <summary>Sets the shim of Trade.RemoveItem(TradeUserAssets item)</summary>
         </member>
@@ -2623,8 +2590,8 @@
         <member name="P:SteamTrade.Fakes.ShimTrade.CancelTrade">
             <summary>Sets the shim of Trade.CancelTrade()</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.ConstructorSteamIDSteamIDISteamWebTaskOfInventoryTaskOfInventory">
-            <summary>Sets the shim of Trade.Trade(SteamID me, SteamID other, ISteamWeb steamWeb, Task`1&lt;Inventory&gt; myInventoryTask, Task`1&lt;Inventory&gt; otherInventoryTask)</summary>
+        <member name="P:SteamTrade.Fakes.ShimTrade.ConstructorSteamIDSteamIDISteamWeb">
+            <summary>Sets the shim of Trade.Trade(SteamID me, SteamID other, ISteamWeb steamWeb)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.FireOnAwaitingConfirmation">
             <summary>Sets the shim of Trade.FireOnAwaitingConfirmation()</summary>
@@ -2679,9 +2646,6 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.MeIsReadySetBoolean">
             <summary>Sets the shim of Trade.set_MeIsReady(Boolean value)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.MyInventoryGet">
-            <summary>Sets the shim of Trade.get_MyInventory()</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.MyOfferedItemsGet">
             <summary>Sets the shim of Trade.get_MyOfferedItems()</summary>
@@ -2752,9 +2716,6 @@
         <member name="P:SteamTrade.Fakes.ShimTrade.OnUserSetReadyRemoveTradeUserSetReadyStateHandler">
             <summary>Sets the shim of Trade.remove_OnUserSetReady(UserSetReadyStateHandler value)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.OtherInventoryGet">
-            <summary>Sets the shim of Trade.get_OtherInventory()</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.OtherIsReadyGet">
             <summary>Sets the shim of Trade.get_OtherIsReady()</summary>
         </member>
@@ -2790,15 +2751,6 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.Poll">
             <summary>Sets the shim of Trade.Poll()</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.RemoveAllItems">
-            <summary>Sets the shim of Trade.RemoveAllItems()</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.RemoveAllItemsByDefindexInt32UInt32">
-            <summary>Sets the shim of Trade.RemoveAllItemsByDefindex(Int32 defindex, UInt32 numToRemove)</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTrade.RemoveItemByDefindexInt32">
-            <summary>Sets the shim of Trade.RemoveItemByDefindex(Int32 defindex)</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimTrade.RemoveItemTradeUserAssets">
             <summary>Sets the shim of Trade.RemoveItem(TradeUserAssets item)</summary>
@@ -2842,9 +2794,6 @@
         <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.CreateTradeSteamIDSteamID">
             <summary>Sets the shim of TradeManager.CreateTrade(SteamID me, SteamID other)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.InitializeTradeSteamIDSteamID">
-            <summary>Sets the shim of TradeManager.InitializeTrade(SteamID me, SteamID other)</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.IsTradeThreadRunningGet">
             <summary>Sets the shim of TradeManager.get_IsTradeThreadRunning()</summary>
         </member>
@@ -2863,12 +2812,6 @@
         <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.MaxTradeTimeSecSetInt32">
             <summary>Sets the shim of TradeManager.set_MaxTradeTimeSec(Int32 value)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.MyInventoryGet">
-            <summary>Sets the shim of TradeManager.get_MyInventory()</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.OtherInventoryGet">
-            <summary>Sets the shim of TradeManager.get_OtherInventory()</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.SetTradeTimeLimitsInt32Int32Int32">
             <summary>Sets the shim of TradeManager.SetTradeTimeLimits(Int32 maxTradeTime, Int32 maxActionGap, Int32 pollingInterval)</summary>
         </member>
@@ -2884,8 +2827,8 @@
         <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances.TradePollingIntervalSetInt32">
             <summary>Sets the shim of TradeManager.set_TradePollingInterval(Int32 value)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances._CreateTradeb__33_0">
-            <summary>Sets the shim of TradeManager.&lt;CreateTrade&gt;b__33_0()</summary>
+        <member name="P:SteamTrade.Fakes.ShimTradeManager.AllInstances._CreateTradeb__27_0">
+            <summary>Sets the shim of TradeManager.&lt;CreateTrade&gt;b__27_0()</summary>
         </member>
         <member name="M:SteamTrade.Fakes.ShimTradeManager.BehaveAsCurrent">
             <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
@@ -2911,9 +2854,6 @@
         <member name="P:SteamTrade.Fakes.ShimTradeManager.DebugPrintString">
             <summary>Sets the shim of TradeManager.DebugPrint(String output)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager.InitializeTradeSteamIDSteamID">
-            <summary>Sets the shim of TradeManager.InitializeTrade(SteamID me, SteamID other)</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTradeManager.IsTradeThreadRunningGet">
             <summary>Sets the shim of TradeManager.get_IsTradeThreadRunning()</summary>
         </member>
@@ -2932,12 +2872,6 @@
         <member name="P:SteamTrade.Fakes.ShimTradeManager.MaxTradeTimeSecSetInt32">
             <summary>Sets the shim of TradeManager.set_MaxTradeTimeSec(Int32 value)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager.MyInventoryGet">
-            <summary>Sets the shim of TradeManager.get_MyInventory()</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager.OtherInventoryGet">
-            <summary>Sets the shim of TradeManager.get_OtherInventory()</summary>
-        </member>
         <member name="P:SteamTrade.Fakes.ShimTradeManager.SetTradeTimeLimitsInt32Int32Int32">
             <summary>Sets the shim of TradeManager.SetTradeTimeLimits(Int32 maxTradeTime, Int32 maxActionGap, Int32 pollingInterval)</summary>
         </member>
@@ -2953,8 +2887,8 @@
         <member name="P:SteamTrade.Fakes.ShimTradeManager.TradePollingIntervalSetInt32">
             <summary>Sets the shim of TradeManager.set_TradePollingInterval(Int32 value)</summary>
         </member>
-        <member name="P:SteamTrade.Fakes.ShimTradeManager._CreateTradeb__33_0">
-            <summary>Sets the shim of TradeManager.&lt;CreateTrade&gt;b__33_0()</summary>
+        <member name="P:SteamTrade.Fakes.ShimTradeManager._CreateTradeb__27_0">
+            <summary>Sets the shim of TradeManager.&lt;CreateTrade&gt;b__27_0()</summary>
         </member>
         <member name="T:SteamTrade.Fakes.ShimTransferParameters">
             <summary>Shim type of SteamTrade.TransferParameters</summary>
@@ -3070,30 +3004,6 @@
         <member name="P:SteamTrade.Fakes.StubForeignInventory.InstanceObserver">
             <summary>Gets or sets the instance observer.</summary>
         </member>
-        <member name="T:SteamTrade.Fakes.StubGenericInventory">
-            <summary>Stub type of SteamTrade.GenericInventory</summary>
-        </member>
-        <member name="M:SteamTrade.Fakes.StubGenericInventory.#ctor(SteamTrade.ISteamWeb)">
-            <summary>Initializes a new instance</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.StubGenericInventory.CallBase">
-            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
-        </member>
-        <member name="M:SteamTrade.Fakes.StubGenericInventory.InitializeStub">
-            <summary>Initializes a new instance of type StubGenericInventory</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.StubGenericInventory.InstanceBehavior">
-            <summary>Gets or sets the instance behavior.</summary>
-        </member>
-        <member name="P:SteamTrade.Fakes.StubGenericInventory.InstanceObserver">
-            <summary>Gets or sets the instance observer.</summary>
-        </member>
-        <member name="M:SteamTrade.Fakes.StubGenericInventory.LoadImplementation(System.Int32,System.Collections.Generic.IEnumerable{System.Int64},SteamKit2.SteamID,System.Int32)">
-            <summary>Sets the stub of GenericInventory`1.LoadImplementation(Int32 appid, IEnumerable`1&lt;Int64&gt; contextIds, SteamID steamid, Int32 maxRetryCountForWebExceptions)</summary>
-        </member>
-        <member name="F:SteamTrade.Fakes.StubGenericInventory.LoadImplementationInt32IEnumerableOfInt64SteamIDInt32">
-            <summary>Sets the stub of GenericInventory`1.LoadImplementation(Int32 appid, IEnumerable`1&lt;Int64&gt; contextIds, SteamID steamid, Int32 maxRetryCountForWebExceptions)</summary>
-        </member>
         <member name="T:SteamTrade.Fakes.StubGenericInventory`1">
             <summary>Stub type of SteamTrade.GenericInventory`1</summary>
         </member>
@@ -3121,7 +3031,7 @@
         <member name="T:SteamTrade.Fakes.StubGenericInventory2">
             <summary>Stub type of SteamTrade.GenericInventory2</summary>
         </member>
-        <member name="M:SteamTrade.Fakes.StubGenericInventory2.#ctor(SteamTrade.ISteamWeb,System.UInt64,System.UInt32,System.UInt32)">
+        <member name="M:SteamTrade.Fakes.StubGenericInventory2.#ctor(SteamTrade.ISteamWeb,System.UInt64,System.UInt32,System.UInt32,System.String)">
             <summary>Initializes a new instance</summary>
         </member>
         <member name="P:SteamTrade.Fakes.StubGenericInventory2.CallBase">
