@@ -84,34 +84,12 @@ namespace SteamTrade.TradeOffer
             return resp.Response;
         }
 
-        private bool DeclineTradeOffer(ulong tradeofferid)
+        public ApiResponse<TradeHoldDurations> GetTradeHoldDurations(long steamId64, string tradeOfferAccessToken = null)
         {
-            string options = string.Format("?key={0}&tradeofferid={1}", apiKey, tradeofferid);
-            string url = String.Format(BaseUrl, "DeclineTradeOffer", "v1", options);
-            Debug.WriteLine(url);
-            string response = steamWeb.Fetch(url, "POST", null, false);
-            dynamic json = JsonConvert.DeserializeObject(response);
-
-            if (json == null || json.success != "1")
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private bool CancelTradeOffer(ulong tradeofferid)
-        {
-            string options = string.Format("?key={0}&tradeofferid={1}", apiKey, tradeofferid);
-            string url = String.Format(BaseUrl, "CancelTradeOffer", "v1", options);
-            Debug.WriteLine(url);
-            string response = steamWeb.Fetch(url, "POST", null, false);
-            dynamic json = JsonConvert.DeserializeObject(response);
-
-            if (json == null || json.success != "1")
-            {
-                return false;
-            }
-            return true;
+            var url = string.Format(BaseUrl, "GetTradeHoldDurations", "v1",
+                "?key=" + apiKey + "&steamid_target=" + steamId64 + (string.IsNullOrEmpty(tradeOfferAccessToken) ? "" : "&trade_offer_access_token=" + tradeOfferAccessToken));
+            var response = steamWeb.Fetch(url, "GET", null, false);
+            return JsonConvert.DeserializeObject<ApiResponse<TradeHoldDurations>>(response);
         }
     }
 
@@ -339,5 +317,21 @@ namespace SteamTrade.TradeOffer
 
         [JsonProperty("name")]
         public string Name { get; set; }
+    }
+
+    public class TradeHoldDurations
+    {
+        [JsonProperty("my_escrow")]
+        public Escrow MyEscrow { get; set; }
+        [JsonProperty("their_escrow")]
+        public Escrow TheirEscrow { get; set; }
+        [JsonProperty("both_escrow")]
+        public Escrow BothEscrow { get; set; }
+    }
+
+    public class Escrow
+    {
+        [JsonProperty("escrow_end_duration_seconds")]
+        public int EscrowEndDurationSeconds { get; set; }
     }
 }

@@ -96,6 +96,7 @@
     <Compile Include="SteamTrade\GenericInventoryTest.cs" />
     <Compile Include="SteamTrade\SteamWebTradeOfferTests.cs" />
     <Compile Include="SteamTrade\TF2ValueTests.cs" />
+    <Compile Include="SteamTrade\TradeOfferWebAPITests.cs" />
     <Compile Include="SteamTrade\TradeOfferWebTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +112,7 @@
     <None Include="app.config" />
     <Fakes Include="Fakes\SteamTrade.fakes" />
     <None Include="packages.config" />
+    <None Include="Resources\GetTradeHoldDurations.json" />
     <None Include="Resources\inventoryError.json" />
     <None Include="Resources\NewApiSampleInventoryPage1.json" />
     <None Include="Resources\NewApiSampleInventoryPage2.json" />

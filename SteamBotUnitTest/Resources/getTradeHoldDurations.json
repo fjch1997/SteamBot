@@ -1,0 +1,13 @@
+﻿{
+  "response": {
+    "my_escrow": {
+      "escrow_end_duration_seconds": 10000
+    },
+    "their_escrow": {
+      "escrow_end_duration_seconds": 10000
+    },
+    "both_escrow": {
+      "escrow_end_duration_seconds": 10000
+    }
+  }
+}

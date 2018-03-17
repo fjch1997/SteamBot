@@ -63,6 +63,16 @@ namespace SteamBotUnitTest.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] GetTradeHoldDurations {
+            get {
+                object obj = ResourceManager.GetObject("GetTradeHoldDurations", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] inventoryError {
             get {
                 object obj = ResourceManager.GetObject("inventoryError", resourceCulture);

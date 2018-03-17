@@ -3667,6 +3667,42 @@
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimDescription.ValueSetString">
             <summary>Sets the shim of Description.set_Value(String value)</summary>
         </member>
+        <member name="T:SteamTrade.TradeOffer.Fakes.ShimEscrow">
+            <summary>Shim type of SteamTrade.TradeOffer.Escrow</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimEscrow.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimEscrow.#ctor(SteamTrade.TradeOffer.Escrow)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:SteamTrade.TradeOffer.Fakes.ShimEscrow.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimEscrow.AllInstances.EscrowEndDurationSecondsGet">
+            <summary>Sets the shim of Escrow.get_EscrowEndDurationSeconds()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimEscrow.AllInstances.EscrowEndDurationSecondsSetInt32">
+            <summary>Sets the shim of Escrow.set_EscrowEndDurationSeconds(Int32 value)</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimEscrow.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimEscrow.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimEscrow.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimEscrow.Constructor">
+            <summary>Sets the shim of Escrow.Escrow()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimEscrow.EscrowEndDurationSecondsGet">
+            <summary>Sets the shim of Escrow.get_EscrowEndDurationSeconds()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimEscrow.EscrowEndDurationSecondsSetInt32">
+            <summary>Sets the shim of Escrow.set_EscrowEndDurationSeconds(Int32 value)</summary>
+        </member>
         <member name="T:SteamTrade.TradeOffer.Fakes.ShimHtmlAgilityPackExtensions">
             <summary>Shim type of SteamTrade.TradeOffer.HtmlAgilityPackExtensions</summary>
         </member>
@@ -4248,6 +4284,66 @@
         </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimOwnerAction.NameSetString">
             <summary>Sets the shim of OwnerAction.set_Name(String value)</summary>
+        </member>
+        <member name="T:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations">
+            <summary>Shim type of SteamTrade.TradeOffer.TradeHoldDurations</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.#ctor(SteamTrade.TradeOffer.TradeHoldDurations)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.AllInstances.BothEscrowGet">
+            <summary>Sets the shim of TradeHoldDurations.get_BothEscrow()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.AllInstances.BothEscrowSetEscrow">
+            <summary>Sets the shim of TradeHoldDurations.set_BothEscrow(Escrow value)</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.AllInstances.MyEscrowGet">
+            <summary>Sets the shim of TradeHoldDurations.get_MyEscrow()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.AllInstances.MyEscrowSetEscrow">
+            <summary>Sets the shim of TradeHoldDurations.set_MyEscrow(Escrow value)</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.AllInstances.TheirEscrowGet">
+            <summary>Sets the shim of TradeHoldDurations.get_TheirEscrow()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.AllInstances.TheirEscrowSetEscrow">
+            <summary>Sets the shim of TradeHoldDurations.set_TheirEscrow(Escrow value)</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.BothEscrowGet">
+            <summary>Sets the shim of TradeHoldDurations.get_BothEscrow()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.BothEscrowSetEscrow">
+            <summary>Sets the shim of TradeHoldDurations.set_BothEscrow(Escrow value)</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.Constructor">
+            <summary>Sets the shim of TradeHoldDurations.TradeHoldDurations()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.MyEscrowGet">
+            <summary>Sets the shim of TradeHoldDurations.get_MyEscrow()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.MyEscrowSetEscrow">
+            <summary>Sets the shim of TradeHoldDurations.set_MyEscrow(Escrow value)</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.TheirEscrowGet">
+            <summary>Sets the shim of TradeHoldDurations.get_TheirEscrow()</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeHoldDurations.TheirEscrowSetEscrow">
+            <summary>Sets the shim of TradeHoldDurations.set_TheirEscrow(Escrow value)</summary>
         </member>
         <member name="T:SteamTrade.TradeOffer.Fakes.ShimTradeOffer">
             <summary>Shim type of SteamTrade.TradeOffer.TradeOffer</summary>
@@ -5164,12 +5260,6 @@
         <member name="T:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.AllInstances">
             <summary>Define shims for all instances members</summary>
         </member>
-        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.AllInstances.CancelTradeOfferUInt64">
-            <summary>Sets the shim of TradeOfferWebAPI.CancelTradeOffer(UInt64 tradeofferid)</summary>
-        </member>
-        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.AllInstances.DeclineTradeOfferUInt64">
-            <summary>Sets the shim of TradeOfferWebAPI.DeclineTradeOffer(UInt64 tradeofferid)</summary>
-        </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.AllInstances.GetActiveTradeOffersBooleanBooleanBooleanString">
             <summary>Sets the shim of TradeOfferWebAPI.GetActiveTradeOffers(Boolean getSentOffers, Boolean getReceivedOffers, Boolean getDescriptions, String language)</summary>
         </member>
@@ -5178,6 +5268,9 @@
         </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.AllInstances.GetOfferStateString">
             <summary>Sets the shim of TradeOfferWebAPI.GetOfferState(String tradeofferid)</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.AllInstances.GetTradeHoldDurationsInt64String">
+            <summary>Sets the shim of TradeOfferWebAPI.GetTradeHoldDurations(Int64 steamId64, String tradeOfferAccessToken)</summary>
         </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.AllInstances.GetTradeOfferString">
             <summary>Sets the shim of TradeOfferWebAPI.GetTradeOffer(String tradeofferid)</summary>
@@ -5203,14 +5296,8 @@
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.BoolConverterBoolean">
             <summary>Sets the shim of TradeOfferWebAPI.BoolConverter(Boolean value)</summary>
         </member>
-        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.CancelTradeOfferUInt64">
-            <summary>Sets the shim of TradeOfferWebAPI.CancelTradeOffer(UInt64 tradeofferid)</summary>
-        </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.ConstructorStringISteamWeb">
             <summary>Sets the shim of TradeOfferWebAPI.TradeOfferWebAPI(String apiKey, ISteamWeb steamWeb)</summary>
-        </member>
-        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.DeclineTradeOfferUInt64">
-            <summary>Sets the shim of TradeOfferWebAPI.DeclineTradeOffer(UInt64 tradeofferid)</summary>
         </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.GetActiveTradeOffersBooleanBooleanBooleanString">
             <summary>Sets the shim of TradeOfferWebAPI.GetActiveTradeOffers(Boolean getSentOffers, Boolean getReceivedOffers, Boolean getDescriptions, String language)</summary>
@@ -5220,6 +5307,9 @@
         </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.GetOfferStateString">
             <summary>Sets the shim of TradeOfferWebAPI.GetOfferState(String tradeofferid)</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.GetTradeHoldDurationsInt64String">
+            <summary>Sets the shim of TradeOfferWebAPI.GetTradeHoldDurations(Int64 steamId64, String tradeOfferAccessToken)</summary>
         </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.ShimTradeOfferWebAPI.GetTradeOfferString">
             <summary>Sets the shim of TradeOfferWebAPI.GetTradeOffer(String tradeofferid)</summary>
@@ -5422,6 +5512,24 @@
         <member name="P:SteamTrade.TradeOffer.Fakes.StubDescription.InstanceObserver">
             <summary>Gets or sets the instance observer.</summary>
         </member>
+        <member name="T:SteamTrade.TradeOffer.Fakes.StubEscrow">
+            <summary>Stub type of SteamTrade.TradeOffer.Escrow</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.StubEscrow.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.StubEscrow.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.StubEscrow.InitializeStub">
+            <summary>Initializes a new instance of type StubEscrow</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.StubEscrow.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.StubEscrow.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
         <member name="T:SteamTrade.TradeOffer.Fakes.StubITradeOfferWebAPI">
             <summary>Stub type of SteamTrade.TradeOffer.ITradeOfferWebAPI</summary>
         </member>
@@ -5588,6 +5696,24 @@
             <summary>Gets or sets the instance behavior.</summary>
         </member>
         <member name="P:SteamTrade.TradeOffer.Fakes.StubOwnerAction.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:SteamTrade.TradeOffer.Fakes.StubTradeHoldDurations">
+            <summary>Stub type of SteamTrade.TradeOffer.TradeHoldDurations</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.StubTradeHoldDurations.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.StubTradeHoldDurations.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="M:SteamTrade.TradeOffer.Fakes.StubTradeHoldDurations.InitializeStub">
+            <summary>Initializes a new instance of type StubTradeHoldDurations</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.StubTradeHoldDurations.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:SteamTrade.TradeOffer.Fakes.StubTradeHoldDurations.InstanceObserver">
             <summary>Gets or sets the instance observer.</summary>
         </member>
         <member name="T:SteamTrade.TradeOffer.Fakes.StubTradeOffer">
