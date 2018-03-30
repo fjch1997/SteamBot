@@ -1,4 +1,3 @@
-using System;
 using SteamKit2;
 
 namespace SteamTrade.Exceptions
@@ -18,13 +17,13 @@ namespace SteamTrade.Exceptions
         public SteamID FailingSteamId { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SteamTrade.Exceptions.InventoryFetchException"/> class.
+        /// Initializes a new instance of the <see cref="InventoryFetchException"/> class.
         /// </summary>
         /// <param name='steamId'>
         /// Steam identifier that caused the fetch exception.
         /// </param>
         public InventoryFetchException (SteamID steamId)
-            : base(String.Format("Failed to fetch inventory for: {0}", steamId.ToString()))
+            : base($"Failed to fetch inventory for: {steamId}")
         {
             FailingSteamId = steamId;
         }
