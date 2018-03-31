@@ -19,7 +19,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>
@@ -97,10 +97,12 @@
     <Compile Include="Schema.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="SteamWeb.cs" />
+    <Compile Include="TradeOffer\ITradeOfferStatusPollingService.cs" />
     <Compile Include="TradeOffer\ITradeOfferWebAPI.cs" />
     <Compile Include="TradeOffer\OfferSession.cs" />
     <Compile Include="TradeOffer\TradeOffer.cs" />
     <Compile Include="TradeOffer\TradeOfferManager.cs" />
+    <Compile Include="TradeOffer\TradeOfferStatusPollingService.cs" />
     <Compile Include="TradeOffer\TradeOfferWeb.cs" />
     <Compile Include="TradeOffer\TradeOfferWebAPI.cs" />
     <Compile Include="TradeWebAPI\TradeStatus.cs" />
