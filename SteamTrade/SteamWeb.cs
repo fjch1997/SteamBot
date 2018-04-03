@@ -518,15 +518,6 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         {
             return true;
         }
-        public long GetSteamId64()
-        {
-            var steamLoginCookie = Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin");
-            if (steamLoginCookie == null)
-                return default(long);
-            var value = steamLoginCookie.Value;
-            var index = value.IndexOf('%');
-            return long.TryParse(value.Substring(0, index), out var steamId64) ? steamId64 : throw new Exceptions.SteamWebNotLoggedInException();
-        }
     }
 
     // JSON Classes

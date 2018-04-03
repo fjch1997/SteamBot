@@ -92,6 +92,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SteamWebExtensions.cs" />
     <Compile Include="Tf2Value.cs" />
     <Compile Include="Trade.cs" />
     <Compile Include="Schema.cs" />
