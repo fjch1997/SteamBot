@@ -125,5 +125,6 @@ namespace SteamTrade
         /// </summary>
         /// <returns>true if cookies are correct; false otherwise</returns>
         bool VerifyCookies();
+        long GetSteamId64();
     }
 }
