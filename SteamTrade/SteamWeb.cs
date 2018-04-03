@@ -49,21 +49,17 @@ namespace SteamTrade
         /// <summary>
         /// The Accept-Language header when sending all HTTP requests. Default value is determined according to the constructor caller thread's culture.
         /// </summary>
-        public string AcceptLanguageHeader { get; set; } = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName == "en" ? $"{Thread.CurrentThread.CurrentCulture.ToString()},en;q=0.8" : $"{Thread.CurrentThread.CurrentCulture.ToString()},{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName};q=0.8,en;q=0.6";
+        public string AcceptLanguageHeader { get; set; } = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName == "en" ? $"{Thread.CurrentThread.CurrentCulture},en;q=0.8" : $"{Thread.CurrentThread.CurrentCulture},{Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName};q=0.8,en;q=0.6";
 
         /// <summary>
         /// CookieContainer to save all cookies during the Login. 
         /// </summary>
         public CookieContainer Cookies
         {
-            get
-            {
-                if (_cookies == null)
-                    _cookies = new CookieContainer();
-                return _cookies;
-            }
+            get { return _cookies ?? (_cookies = new CookieContainer()); }
             set => _cookies = value;
         }
+        // ReSharper disable once InconsistentNaming
         private CookieContainer _cookies;
 
         /// <summary>
@@ -117,10 +113,7 @@ namespace SteamTrade
         /// <returns>An instance of a HttpWebResponse object.</returns>
         public HttpWebResponse Request(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false)
         {
-            bool isGetMethod;
-            string dataString;
-            HttpWebRequest request;
-            url = PrepairRequest(url, method, data, ajax, referer, out isGetMethod, out dataString, out request);
+            PrepareRequest(url, method, data, ajax, referer, out var isGetMethod, out var dataString, out var request);
 
             // If the request is a GET request return now the response. If not go on. Because then we need to apply data to the request.
             if (isGetMethod || string.IsNullOrEmpty(dataString))
@@ -161,10 +154,7 @@ namespace SteamTrade
         /// <returns>An instance of a HttpWebResponse object.</returns>
         public async Task<HttpWebResponse> RequestAsync(string url, string method, NameValueCollection data = null, bool ajax = true, string referer = "", bool fetchError = false)
         {
-            bool isGetMethod;
-            string dataString;
-            HttpWebRequest request;
-            url = PrepairRequest(url, method, data, ajax, referer, out isGetMethod, out dataString, out request);
+            PrepareRequest(url, method, data, ajax, referer, out var isGetMethod, out var dataString, out var request);
 
             // If the request is a GET request return now the response. If not go on. Because then we need to apply data to the request.
             if (isGetMethod || string.IsNullOrEmpty(dataString))
@@ -194,7 +184,7 @@ namespace SteamTrade
             }
         }
 
-        private string PrepairRequest(string url, string method, NameValueCollection data, bool ajax, string referer, out bool isGetMethod, out string dataString, out HttpWebRequest request)
+        private void PrepareRequest(string url, string method, NameValueCollection data, bool ajax, string referer, out bool isGetMethod, out string dataString, out HttpWebRequest request)
         {
             // Append the data to the URL for GET-requests.
             isGetMethod = (method.ToLower() == "get");
@@ -234,7 +224,6 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
 
             // Cookies
             request.CookieContainer = _cookies;
-            return url;
         }
 
         /// <summary>
@@ -243,7 +232,10 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         /// </summary>
         /// <param name="username">Your Steam username.</param>
         /// <param name="password">Your Steam password.</param>
+        /// <param name="rememberLogin"></param>
         /// <param name="twoFactorCodeCallback">A function that will return the current Steam Guard Mobile Authenticator/two factor code when needed. If this parameter is null when a code is required, an exception will be thrown.</param>
+        /// <param name="captchaCallback"></param>
+        /// <param name="emailCodeCallback"></param>
         /// <returns>A bool containing a value, if the login was successful.</returns>
         /// <exception cref="ArgumentNullException">One of the callback is null when it's needed.</exception>
         /// <exception cref="SteamWebLoginException">See <see cref="Exception.Message"/> and <see cref="SteamWebLoginException.SteamResult"/> for details.</exception>
@@ -251,9 +243,9 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         public SteamResult DoLogin(string username, string password, bool rememberLogin, Func<string> twoFactorCodeCallback, Func<string, string> captchaCallback, Func<string> emailCodeCallback)
         {
             if (string.IsNullOrEmpty(username))
-                new ArgumentNullException(nameof(username));
+                throw new ArgumentNullException(nameof(username));
             if (string.IsNullOrEmpty(password))
-                new ArgumentNullException(nameof(password));
+                throw new ArgumentNullException(nameof(password));
             var data = new NameValueCollection { { "username", username } };
             // First get the RSA key with which we will encrypt our password.
             string response = Fetch("https://steamcommunity.com/login/getrsakey", "POST", data, false);
@@ -264,8 +256,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             {
                 throw new CryptographicException("Missing RSA key.");
             }
-
-            RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
+            
             byte[] encryptedPasswordBytes;
             using (var rsaEncryptor = new RSACryptoServiceProvider())
             {
@@ -355,7 +346,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 using (HttpWebResponse webResponse = Request("https://steamcommunity.com/login/dologin/", "POST", data, false))
                 {
                     var stream = webResponse.GetResponseStream();
-                    using (StreamReader reader = new StreamReader(stream))
+                    using (StreamReader reader = new StreamReader(stream ?? throw new InvalidOperationException()))
                     {
                         string json = reader.ReadToEnd();
                         loginJson = JsonConvert.DeserializeObject<SteamResult>(json);
@@ -441,7 +432,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 }
 
                 // Adding cookies to the cookie container.
-                foreach (var uri in new Uri[] { new Uri("https://steamcommunity.com/"), new Uri("https://store.steampowered.com/"), new Uri("https://help.steampowered.com/") })
+                foreach (var uri in new[] { new Uri("https://steamcommunity.com/"), new Uri("https://store.steampowered.com/"), new Uri("https://help.steampowered.com/") })
                 {
                     _cookies.SetCookies(uri, $"steamLogin={authResult["token"].AsString()}; path=/; HttpOnly");
                     _cookies.SetCookies(uri, $"steamLoginSecure={authResult["tokensecure"].AsString()}; path=/; secure; HttpOnly");
@@ -516,40 +507,6 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         }
 
         /// <summary>
-        /// Method to convert a Hex to a byte.
-        /// </summary>
-        /// <param name="hex">Input parameter as string.</param>
-        /// <returns>The byte value.</returns>
-        private byte[] HexToByte(string hex)
-        {
-            if (hex.Length % 2 == 1)
-            {
-                throw new Exception("The binary key cannot have an odd number of digits");
-            }
-
-            byte[] arr = new byte[hex.Length >> 1];
-            int l = hex.Length;
-
-            for (int i = 0; i < (l >> 1); ++i)
-            {
-                arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
-            }
-
-            return arr;
-        }
-
-        /// <summary>
-        /// Get the Hex value as int out of an char.
-        /// </summary>
-        /// <param name="hex">Input parameter.</param>
-        /// <returns>A Hex Value as int.</returns>
-        private int GetHexVal(char hex)
-        {
-            int val = hex;
-            return val - (val < 58 ? 48 : 55);
-        }
-
-        /// <summary>
         /// Method to allow all certificates.
         /// </summary>
         /// <param name="sender">An object that contains state information for this validation.</param>
@@ -560,6 +517,15 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         public bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors policyErrors)
         {
             return true;
+        }
+        public long GetSteamId64()
+        {
+            var steamLoginCookie = Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin");
+            if (steamLoginCookie == null)
+                return default(long);
+            var value = steamLoginCookie.Value;
+            var index = value.IndexOf('%');
+            return long.TryParse(value.Substring(0, index), out var steamId64) ? steamId64 : throw new Exceptions.SteamWebNotLoggedInException();
         }
     }
 
