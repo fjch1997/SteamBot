@@ -82,6 +82,7 @@
     <Compile Include="GenericInventory.cs" />
     <Compile Include="GenericInventory2.cs" />
     <Compile Include="ISteamWeb.cs" />
+    <Compile Include="ItemDescription.cs" />
     <Compile Include="Properties\Resources.zh-CN.Designer.cs">
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
       <AutoGen>True</AutoGen>
