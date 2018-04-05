@@ -83,5 +83,9 @@ namespace SteamBotUnitTest.SteamTrade
         {
             throw new NotImplementedException();
         }
+        public long GetSteamId64()
+        {
+            return 0L;
+        }
     }
 }
