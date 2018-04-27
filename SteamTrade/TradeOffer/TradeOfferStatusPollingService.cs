@@ -16,6 +16,9 @@ namespace SteamTrade.TradeOffer
         public Task<TradeOfferState> WaitForStatusChangeAsync(ITradeOfferWebAPI tradeOfferWebApi, string botUsername, string tradeOfferId, TradeOfferState originalState,
             DateTime timeoutTime)
         {
+            if (botUsername == null) throw new ArgumentNullException(nameof(botUsername));
+            if (tradeOfferId == null) throw new ArgumentNullException(nameof(tradeOfferId));
+
             trace.TraceEvent(TraceEventType.Information, 765, "开始刷新报价 " + tradeOfferId + " 的信息，机器人用户名是 " + botUsername);
             var tcs = new TaskCompletionSource<TradeOfferState>();
             var request = (tradeOfferWebApi, botUsername, tradeOfferId, originalState, tcs);
