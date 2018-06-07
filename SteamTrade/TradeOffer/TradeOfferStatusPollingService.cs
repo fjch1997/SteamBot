@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using SteamTrade.Exceptions;
 
@@ -13,8 +14,8 @@ namespace SteamTrade.TradeOffer
         private readonly List<(ITradeOfferWebAPI tradeOfferWebAPI, string botUsername, string tradeOfferId, TradeOfferState originalState, TaskCompletionSource<TradeOfferState> tcs)> pollingRequests =
             new List<(ITradeOfferWebAPI tradeOfferWebAPI, string botUsername, string tradeOfferId, TradeOfferState originalState, TaskCompletionSource<TradeOfferState> tcs)>();
         private Task task;
-        public Task<TradeOfferState> WaitForStatusChangeAsync(ITradeOfferWebAPI tradeOfferWebApi, string botUsername, string tradeOfferId, TradeOfferState originalState,
-            DateTime timeoutTime)
+        public virtual Task<TradeOfferState> WaitForStatusChangeAsync(ITradeOfferWebAPI tradeOfferWebApi, string botUsername, string tradeOfferId, TradeOfferState originalState,
+            DateTime timeoutTime, CancellationToken cancellationToken)
         {
             if (botUsername == null) throw new ArgumentNullException(nameof(botUsername));
             if (tradeOfferId == null) throw new ArgumentNullException(nameof(tradeOfferId));
@@ -30,15 +31,25 @@ namespace SteamTrade.TradeOffer
             {
                 task = Task.Run(PollStatusesAsync);
             }
-            Task.Delay(timeoutTime - DateTime.UtcNow).ContinueWith(t =>
+            var timeoutInMiliseconds = (timeoutTime - DateTime.UtcNow).TotalMilliseconds;
+            if (timeoutInMiliseconds < int.MaxValue)
+            {
+                var timeoutInMilisecondsInt = (int)timeoutInMiliseconds;
+                Task.Delay(timeoutInMilisecondsInt, cancellationToken).ContinueWith(t => SetTaskCompletionSourceTimeout(), cancellationToken);
+            }
+            else
+            {
+                cancellationToken.Register(SetTaskCompletionSourceTimeout);
+            }
+            void SetTaskCompletionSourceTimeout()
             {
                 lock (pollingRequests)
                 {
                     trace.TraceEvent(TraceEventType.Information, 765, "报价 " + tradeOfferId + " 已超时。");
                     pollingRequests.Remove(request);
                 }
-                return tcs.TrySetException(new TradeOfferTimeoutException());
-            });
+                tcs.TrySetException(new TradeOfferTimeoutException());
+            }
             return tcs.Task;
         }
         private async Task PollStatusesAsync()
@@ -57,21 +68,32 @@ namespace SteamTrade.TradeOffer
                 {
                     try
                     {
-                        var api = requestGroup.First().tradeOfferWebAPI;
-                        var offerResponse = api.GetTradeOffers(true, false, true, false, false, "1389106496", "english");
+                        var firstRequest = requestGroup.First();
+                        var api = firstRequest.tradeOfferWebAPI;
+                        var offerResponse = api.GetTradeOffers(GetSentOffers, GetReceivedOffers, false, ActiveOnly, HistoricalOnly, "1389106496", "english");
                         foreach (var request in requestGroup)
                         {
-                            Offer offer = (offerResponse.TradeOffersSent.FirstOrDefault(o => o.TradeOfferId == request.tradeOfferId) ??
-                                           throw new TradeException($"机器人账号上找不到 ID 为 {request.tradeOfferId} 的交易报价。"));
-                            if (offer.TradeOfferState != request.originalState)
+                            var offer = offerResponse.AllOffers.FirstOrDefault(o => o.TradeOfferId == request.tradeOfferId);
+                            if (offer == null)
                             {
-                                request.tcs.TrySetResult(offer.TradeOfferState);
-                                lock (pollingRequests)
+                                if (!string.IsNullOrEmpty(request.tradeOfferId))
                                 {
-                                    pollingRequests.Remove(request);
+                                    request.tcs.SetException(new TradeException($"机器人账号上找不到 ID 为 {request.tradeOfferId} 的交易报价。"));
+                                    lock (pollingRequests)
+                                    {
+                                        pollingRequests.Remove(request);
+                                    }
                                 }
+                                continue;
+                            }
+                            if (offer.TradeOfferState == request.originalState) continue;
+                            request.tcs.TrySetResult(offer.TradeOfferState);
+                            lock (pollingRequests)
+                            {
+                                pollingRequests.Remove(request);
                             }
                         }
+                        HandleLongPoll(offerResponse, api, firstRequest.botUsername);
                     }
                     catch (Exception ex)
                     {
@@ -80,12 +102,11 @@ namespace SteamTrade.TradeOffer
                 }
             }
         }
+        public bool ActiveOnly { get; set; } = true;
+        public bool GetReceivedOffers { get; set; }
+        public bool GetSentOffers { get; set; } = true;
+        public bool HistoricalOnly { get; set; }
+        protected virtual void HandleLongPoll(OffersResponse offerResponse, ITradeOfferWebAPI api, string firstRequestItem2) { }
         public TimeSpan TradeOfferStatePollingInterval { get; set; } = TimeSpan.FromSeconds(10);
-    }
-    public class TradeOfferTimeoutException : TimeoutException
-    {
-        public TradeOfferTimeoutException() : base("报价已超时，请重新发送。")
-        {
-        }
     }
 }
