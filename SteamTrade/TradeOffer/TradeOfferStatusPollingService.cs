@@ -10,10 +10,13 @@ namespace SteamTrade.TradeOffer
 {
     public class TradeOfferStatusPollingService : ITradeOfferStatusPollingService
     {
+        private const long UnixEpochTicks = 621355968000000000L;
+        private const long UnixEpochSeconds = UnixEpochTicks / TimeSpan.TicksPerSecond; // 62,135,596,800
         private static readonly TraceSource trace = new TraceSource(nameof(TradeOfferStatusPollingService));
         private readonly List<(ITradeOfferWebAPI tradeOfferWebAPI, string botUsername, string tradeOfferId, TradeOfferState originalState, TaskCompletionSource<TradeOfferState> tcs)> pollingRequests =
             new List<(ITradeOfferWebAPI tradeOfferWebAPI, string botUsername, string tradeOfferId, TradeOfferState originalState, TaskCompletionSource<TradeOfferState> tcs)>();
         private Task task;
+        private DateTime lastFetchTime = DateTime.UtcNow.AddHours(-1);
         public virtual Task<TradeOfferState> WaitForStatusChangeAsync(ITradeOfferWebAPI tradeOfferWebApi, string botUsername, string tradeOfferId, TradeOfferState originalState,
             DateTime timeoutTime, CancellationToken cancellationToken)
         {
@@ -64,13 +67,15 @@ namespace SteamTrade.TradeOffer
                 }
                 if (requests.Length == 0)
                     return;
+                var hasError = false;
+                var fetchStartTime = DateTime.UtcNow;
                 foreach (var requestGroup in requests.GroupBy(r => r.botUsername))
                 {
                     try
                     {
                         var firstRequest = requestGroup.First();
                         var api = firstRequest.tradeOfferWebAPI;
-                        var offerResponse = api.GetTradeOffers(GetSentOffers, GetReceivedOffers, false, ActiveOnly, HistoricalOnly, "1389106496", "english");
+                        var offerResponse = api.GetTradeOffers(GetSentOffers, GetReceivedOffers, false, ActiveOnly, HistoricalOnly, ToUnixTimeSeconds(lastFetchTime).ToString(), "english");
                         foreach (var request in requestGroup)
                         {
                             var offer = offerResponse.AllOffers.FirstOrDefault(o => o.TradeOfferId == request.tradeOfferId);
@@ -97,10 +102,18 @@ namespace SteamTrade.TradeOffer
                     }
                     catch (Exception ex)
                     {
+                        hasError = true;
                         trace.TraceEvent(TraceEventType.Error, 766, "处理报价时出错。\r\n" + ex);
                     }
                 }
+                if (!hasError)
+                    lastFetchTime = fetchStartTime;
             }
+        }
+        private static long ToUnixTimeSeconds(DateTime dateTime)
+        {
+            long seconds = dateTime.Ticks / TimeSpan.TicksPerSecond;
+            return seconds - UnixEpochSeconds;
         }
         public bool ActiveOnly { get; set; } = true;
         public bool GetReceivedOffers { get; set; }
