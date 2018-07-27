@@ -256,7 +256,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             {
                 throw new CryptographicException("Missing RSA key.");
             }
-            
+
             byte[] encryptedPasswordBytes;
             using (var rsaEncryptor = new RSACryptoServiceProvider())
             {
@@ -518,14 +518,27 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         {
             return true;
         }
+        /// <summary>
+        /// Gets Steam ID from Cookies collection.
+        /// </summary>
+        /// <returns>64 bit Steam ID.</returns>
         public long GetSteamId64()
         {
-            var steamLoginCookie = Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin");
+            var steamLoginCookie = Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin") ?? Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure");
+            string value;
+            int index;
+            long steamId64;
             if (steamLoginCookie == null)
-                return default(long);
-            var value = steamLoginCookie.Value;
-            var index = value.IndexOf('%');
-            return long.TryParse(value.Substring(0, index), out var steamId64) ? steamId64 : throw new Exceptions.SteamWebNotLoggedInException();
+            {
+                var machineAuthCookie = Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamMachineAuth");
+                if (machineAuthCookie == null) return default;
+                value = machineAuthCookie.Value;
+                index = value.IndexOf('=');
+                return long.TryParse(value.Substring(0, index), out steamId64) ? steamId64 : throw new Exceptions.SteamWebNotLoggedInException();
+            }
+            value = steamLoginCookie.Value;
+            index = value.IndexOf('%');
+            return long.TryParse(value.Substring(0, index), out steamId64) ? steamId64 : throw new Exceptions.SteamWebNotLoggedInException();
         }
     }
 
