@@ -78,18 +78,15 @@ namespace SteamTrade.TradeOffer
                         var offerResponse = api.GetTradeOffers(GetSentOffers, GetReceivedOffers, false, ActiveOnly, HistoricalOnly, ToUnixTimeSeconds(lastFetchTime).ToString(), "english");
                         foreach (var request in requestGroup)
                         {
-                            var offer = offerResponse.AllOffers.FirstOrDefault(o => o.TradeOfferId == request.tradeOfferId);
+                            if (string.IsNullOrEmpty(request.tradeOfferId)) continue;
+                            var offer = offerResponse.AllOffers.FirstOrDefault(o => o.TradeOfferId == request.tradeOfferId) ?? api.GetTradeOffer(request.tradeOfferId)?.Offer;
                             if (offer == null)
                             {
-                                if (!string.IsNullOrEmpty(request.tradeOfferId))
+                                request.tcs.SetException(new TradeException($"机器人账号上找不到 ID 为 {request.tradeOfferId} 的交易报价。"));
+                                lock (pollingRequests)
                                 {
-                                    request.tcs.SetException(new TradeException($"机器人账号上找不到 ID 为 {request.tradeOfferId} 的交易报价。"));
-                                    lock (pollingRequests)
-                                    {
-                                        pollingRequests.Remove(request);
-                                    }
+                                    pollingRequests.Remove(request);
                                 }
-                                continue;
                             }
                             if (offer.TradeOfferState == request.originalState) continue;
                             request.tcs.TrySetResult(offer.TradeOfferState);
