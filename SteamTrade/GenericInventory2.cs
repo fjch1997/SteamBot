@@ -236,7 +236,10 @@ namespace SteamTrade
 
             foreach (var response in responses)
             {
-                var assets = ((JArray)response["assets"] ?? throw new TradeJsonException("无法获取库存信息。数据格式有误。", response.ToString())).Values<JObject>().ToArray();
+                var assetsJArray = (JArray) response["assets"];
+                if (assetsJArray == null)
+                    continue; // In RawDownloadAsync we already ensured success: 1. Therefore it must mean that the user has no item in this inventory.
+                var assets = assetsJArray.Values<JObject>().ToArray();
                 var length = assets.Length;
                 var descriptions = (JArray)response.Property("descriptions").Value;
                 for (int _i = 0; _i < length; _i++)
@@ -288,7 +291,7 @@ namespace SteamTrade
             {
                 jsonString = await steamWeb.FetchAsync($"https://steamcommunity.com/inventory/{steamId64}/{appId}/{contextId}?l=schinese&count={maxItemCount}" + (startAssetId != 0UL ? $"&start_assetid={startAssetId}" : ""), "GET");
             }
-            catch (WebException)
+            catch (WebException ex) when (ex.Response == null || ex.Response is HttpWebResponse httpWebResponse && httpWebResponse.StatusCode != HttpStatusCode.Forbidden && httpWebResponse.StatusCode != HttpStatusCode.NotFound)
             {
                 if (retryCount < 3)
                 {
