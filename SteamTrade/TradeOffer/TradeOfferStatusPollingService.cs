@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using SteamTrade.Exceptions;
@@ -101,6 +102,13 @@ namespace SteamTrade.TradeOffer
                     {
                         hasError = true;
                         trace.TraceEvent(TraceEventType.Error, 766, "处理报价时出错。\r\n" + ex);
+                        if (ex is WebException webException && webException.Response != null && webException.Response is HttpWebResponse httpWebResponse && httpWebResponse.StatusCode == HttpStatusCode.Forbidden)
+                        {
+                            foreach (var request in requestGroup)
+                            {
+                                request.tcs.TrySetException(new InvalidOperationException("API Key 不正确。"));
+                            }
+                        }
                     }
                 }
                 if (!hasError)
