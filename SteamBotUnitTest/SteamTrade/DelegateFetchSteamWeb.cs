@@ -34,9 +34,7 @@ namespace SteamBotUnitTest.SteamTrade
         public CookieContainer Cookies { get; set; } = new CookieContainer();
 
         public string SessionId => throw new NotImplementedException();
-
-        public string Token => throw new NotImplementedException();
-
+        
         public string TokenSecure => throw new NotImplementedException();
 
         public void Authenticate(IEnumerable<Cookie> cookies)

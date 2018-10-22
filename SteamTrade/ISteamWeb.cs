@@ -26,11 +26,6 @@ namespace SteamTrade
         /// Session id of Steam after Login.
         /// </summary>  
         [Obsolete("Session ID can be different between store.steampowered.com and steamcommunity.com. Use Cookies.GetCookies(new Uri(\"https://steamcommunity.com/\")).Cast<Cookie>().FirstOrDefault(c => c.Name == \"sessionid\")?.Value to get Session ID for the domain you are working with.")]
-        string SessionId { get; }
-        /// <summary>
-        /// Token of steam. Generated after login.
-        /// </summary>
-        string Token { get; }
         /// <summary>
         /// Token secure as string. It is generated after the Login.
         /// </summary>

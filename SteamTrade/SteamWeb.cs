@@ -29,12 +29,6 @@ namespace SteamTrade
         /// Base steam community domain.
         /// </summary>
         public const string SteamCommunityDomain = "steamcommunity.com";
-
-        /// <summary>
-        /// Token of steam. Generated after login.
-        /// </summary>
-        public string Token => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
-
         /// <summary>
         /// Session id of Steam after Login.
         /// </summary>
