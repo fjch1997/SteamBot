@@ -1162,7 +1162,6 @@ namespace SteamBot
             }
             else
             {
-                SteamGuardAccount.Session.SteamLogin = SteamWeb.Token;
                 SteamGuardAccount.Session.SteamLoginSecure = SteamWeb.TokenSecure;
                 try
                 {

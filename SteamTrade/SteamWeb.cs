@@ -359,10 +359,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 SubmitCookies(_cookies);
                 return loginJson;
             }
-            else
-            {
-                throw new SteamWebLoginException(loginJson);
-            }
+            throw new SteamWebLoginException(loginJson);
         }
 
         public static byte[] HexStringToByteArray(string hex)
@@ -445,21 +442,16 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         public void Authenticate(System.Collections.Generic.IEnumerable<Cookie> cookies)
         {
             var cookieContainer = new CookieContainer();
-            string token = null;
             string tokenSecure = null;
             string sessionId = null;
             foreach (var cookie in cookies)
             {
                 if (cookie.Name == "sessionid")
                     sessionId = cookie.Value;
-                else if (cookie.Name == "steamLogin")
-                    token = cookie.Value;
                 else if (cookie.Name == "steamLoginSecure")
                     tokenSecure = cookie.Value;
                 cookieContainer.Add(cookie);
             }
-            if (token == null)
-                throw new ArgumentException("Cookie with name \"steamLogin\" is not found.");
             if (tokenSecure == null)
                 throw new ArgumentException("Cookie with name \"steamLoginSecure\" is not found.");
             if (sessionId == null)
@@ -497,7 +489,18 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             w.CookieContainer = cookies;
             // Added content-length because it is required.
             w.ContentLength = 0;
-            w.GetResponse().Close();
+            var response = w.GetResponse();
+            try
+            {
+                var cookieHeader = response.Headers[HttpResponseHeader.SetCookie];
+                cookies.SetCookies(new Uri("https://steamcommunity.com/"), cookieHeader);
+                cookies.SetCookies(new Uri("https://store.steampowered.com/"), cookieHeader);
+                cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
+            }
+            finally
+            {
+                response.Close();
+            }
         }
 
         /// <summary>
