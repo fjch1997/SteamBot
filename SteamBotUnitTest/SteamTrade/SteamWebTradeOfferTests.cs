@@ -84,7 +84,6 @@ namespace SteamBotUnitTest.SteamTrade
                     buyerSteamWeb = new SteamWeb();
                     buyerSteamWeb.DoLogin(buyerUsername, buyerPassword, true, () => buyerSteamGuardAccount.GenerateSteamGuardCode(), null, null);
                     Assert.IsTrue(buyerSteamWeb.VerifyCookies());
-                    Assert.NotNull(buyerSteamWeb.Token);
                     Assert.NotNull(buyerSteamWeb.TokenSecure);
                     Assert.NotNull(buyerSteamWeb.SessionId);
                     using (var stream = File.Create(buyerSteamWebFileName))
@@ -131,7 +130,6 @@ namespace SteamBotUnitTest.SteamTrade
                     sellerSteamWeb = new SteamWeb();
                     sellerSteamWeb.DoLogin(sellerUsername, sellerPassword, true, () => sellerSteamGuardAccount.GenerateSteamGuardCode(), null, null);
                     Assert.IsTrue(sellerSteamWeb.VerifyCookies());
-                    Assert.NotNull(sellerSteamWeb.Token);
                     Assert.NotNull(sellerSteamWeb.TokenSecure);
                     Assert.NotNull(sellerSteamWeb.SessionId);
                     using (var stream = File.Create(sellerSteamWebFileName))

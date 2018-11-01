@@ -1,21 +1,24 @@
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Cache;
-using System.Text;
-using System.Web;
-using System.Security.Cryptography;
-using Newtonsoft.Json;
-using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
-using SteamKit2;
+using System.Runtime.Serialization;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using SteamTrade.Properties;
+using System.Web;
 using Lloyd.Shared.Extensions;
+using Newtonsoft.Json;
+using SteamKit2;
+using SteamTrade.Exceptions;
+using SteamTrade.Properties;
 
 namespace SteamTrade
 {
@@ -33,12 +36,12 @@ namespace SteamTrade
         /// Session id of Steam after Login.
         /// </summary>
         [Obsolete("Session ID can be different between store.steampowered.com and steamcommunity.com. Use Cookies.GetCookies(new Uri(\"https://steamcommunity.com/\")).Cast<Cookie>().FirstOrDefault(c => c.Name == \"sessionid\")?.Value to get Session ID for the domain you are working with.")]
-        public string SessionId => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
+        public string SessionId => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new SteamWebNotLoggedInException();
 
         /// <summary>
         /// Token secure as string. It is generated after the Login.
         /// </summary>
-        public string TokenSecure => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure")?.Value ?? throw new Exceptions.SteamWebNotLoggedInException();
+        public string TokenSecure => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure")?.Value ?? throw new SteamWebNotLoggedInException();
 
         /// <summary>
         /// The Accept-Language header when sending all HTTP requests. Default value is determined according to the constructor caller thread's culture.
@@ -112,7 +115,9 @@ namespace SteamTrade
             // If the request is a GET request return now the response. If not go on. Because then we need to apply data to the request.
             if (isGetMethod || string.IsNullOrEmpty(dataString))
             {
-                return request.GetResponse() as HttpWebResponse;
+                var httpWebResponse = request.GetResponse() as HttpWebResponse;
+                ThrowSteamWebNotLoggedInException(httpWebResponse);
+                return httpWebResponse;
             }
 
             // Write the data to the body for POST and other methods.
@@ -127,7 +132,9 @@ namespace SteamTrade
             // Get the response and return it.
             try
             {
-                return request.GetResponse() as HttpWebResponse;
+                var httpWebResponse = request.GetResponse() as HttpWebResponse;
+                ThrowSteamWebNotLoggedInException(httpWebResponse);
+                return httpWebResponse;
             }
             catch (WebException ex) when (fetchError && ex.Response != null)
             {
@@ -153,7 +160,9 @@ namespace SteamTrade
             // If the request is a GET request return now the response. If not go on. Because then we need to apply data to the request.
             if (isGetMethod || string.IsNullOrEmpty(dataString))
             {
-                return await request.GetResponseAsync() as HttpWebResponse;
+                var httpWebResponse = await request.GetResponseAsync() as HttpWebResponse;
+                ThrowSteamWebNotLoggedInException(httpWebResponse);
+                return httpWebResponse;
             }
 
             // Write the data to the body for POST and other methods.
@@ -168,7 +177,9 @@ namespace SteamTrade
             // Get the response and return it.
             try
             {
-                return await request.GetResponseAsync() as HttpWebResponse;
+                var httpWebResponse = await request.GetResponseAsync() as HttpWebResponse;
+                ThrowSteamWebNotLoggedInException(httpWebResponse);
+                return httpWebResponse;
             }
             catch (WebException ex) when (fetchError && ex.Response != null)
             {
@@ -176,6 +187,11 @@ namespace SteamTrade
                 var resp = ex.Response as HttpWebResponse;
                 return resp;
             }
+        }
+        private static void ThrowSteamWebNotLoggedInException(HttpWebResponse httpWebResponse)
+        {
+            if (httpWebResponse.StatusCode == HttpStatusCode.Redirect && Uri.TryCreate(httpWebResponse.Headers[HttpResponseHeader.Location], UriKind.Absolute, out var uri) && uri.AbsolutePath.StartsWith("/login/"))
+                throw new SteamWebNotLoggedInException();
         }
 
         private void PrepareRequest(string url, string method, NameValueCollection data, bool ajax, string referer, out bool isGetMethod, out string dataString, out HttpWebRequest request)
@@ -439,7 +455,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         /// </summary>
         /// <param name="cookies">An array of cookies from a browser or whatever source. Must contain sessionid, steamLogin, steamLoginSecure</param>
         /// <exception cref="ArgumentException">One of the required cookies(steamLogin, steamLoginSecure, sessionid) is missing.</exception>
-        public void Authenticate(System.Collections.Generic.IEnumerable<Cookie> cookies)
+        public void Authenticate(IEnumerable<Cookie> cookies)
         {
             var cookieContainer = new CookieContainer();
             string tokenSecure = null;
@@ -531,11 +547,11 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 if (machineAuthCookie == null) return default;
                 value = machineAuthCookie.Value;
                 index = value.IndexOf('=');
-                return long.TryParse(value.Substring(0, index), out steamId64) ? steamId64 : throw new Exceptions.SteamWebNotLoggedInException();
+                return long.TryParse(value.Substring(0, index), out steamId64) ? steamId64 : throw new SteamWebNotLoggedInException();
             }
             value = steamLoginCookie.Value;
             index = value.IndexOf('%');
-            return long.TryParse(value.Substring(0, index), out steamId64) ? steamId64 : throw new Exceptions.SteamWebNotLoggedInException();
+            return long.TryParse(value.Substring(0, index), out steamId64) ? steamId64 : throw new SteamWebNotLoggedInException();
         }
     }
 
@@ -623,7 +639,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         public SteamWebLoginException(SteamResult steamResult) : base(steamResult.message) { SteamResult = steamResult; }
         public SteamResult SteamResult { get; set; }
         protected SteamWebLoginException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+          SerializationInfo info,
+          StreamingContext context) : base(info, context) { }
     }
 }
