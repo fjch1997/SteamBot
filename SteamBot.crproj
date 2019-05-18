@@ -1,6 +1,4 @@
-<project outputDir="Confused" baseDir=".\" seed="[vmGgrD+`$f8q&quot;M3@A&lt;FJnnC3P*V86e!" debug="true" xmlns="http://confuser.codeplex.com">
-  <rule pattern="true" preset="normal" inherit="false">
-    <protection id="rename" action="remove" />
-  </rule>
+<project outputDir="Confused" baseDir=".\" xmlns="http://confuser.codeplex.com">
+  <rule pattern="true" preset="normal" inherit="false" />
   <module path="SteamBot\Bin\Release\SteamTrade.dll" />
 </project>
