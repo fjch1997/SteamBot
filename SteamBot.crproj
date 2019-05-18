@@ -1,4 +1,0 @@
-<project outputDir="C:\Users\Lloyd.AD-LLOYD97\Source\Repos\fjch1997\SteamBot\Confused" baseDir="C:\Users\Lloyd.AD-LLOYD97\Source\Repos\fjch1997\SteamBot" xmlns="http://confuser.codeplex.com">
-  <rule pattern="true" preset="normal" inherit="false" />
-  <module path="SteamBot\Bin\Release\SteamTrade.dll" />
-</project>
