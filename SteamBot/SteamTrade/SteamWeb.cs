@@ -18,7 +18,7 @@ using Lloyd.Shared.Extensions;
 using Newtonsoft.Json;
 using SteamKit2;
 using SteamTrade.Exceptions;
-using SteamTrade.Properties;
+using SteamBot.Properties;
 
 namespace SteamTrade
 {

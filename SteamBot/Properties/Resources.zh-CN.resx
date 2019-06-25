@@ -153,6 +153,9 @@
   <data name="SteamBotLoggedInCompletely" xml:space="preserve">
     <value>虚拟 Steam 客户端登陆成功！</value>
   </data>
+  <data name="SteamWebNotLoggedInExceptionMessage" xml:space="preserve">
+    <value>Steam 未登录。</value>
+  </data>
   <data name="TradeAccepted" xml:space="preserve">
     <value>交易已被接受。</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="TwoFACodeMismatchRetryIn15Seconds" xml:space="preserve">
     <value>手机验证器代码不正确，15秒后重试。</value>
+  </data>
+  <data name="TwoFactorCodeIsInvalid" xml:space="preserve">
+    <value>Steam Guard 手机代码无效。</value>
   </data>
   <data name="UserAuthenticated" xml:space="preserve">
     <value>Steam 网页登陆成功！</value>

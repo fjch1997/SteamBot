@@ -38,7 +38,6 @@ namespace SteamBot
         #endregion
 
         #region Private variables
-        private Task<Inventory> myInventoryTask;
         private TradeManager tradeManager;
         private TradeOfferManager tradeOfferManager;
         private int tradePollingInterval;
@@ -134,16 +133,7 @@ namespace SteamBot
                 return friends;
             }
         }
-
-        public Inventory MyInventory
-        {
-            get
-            {
-                myInventoryTask.Wait();
-                return myInventoryTask.Result;
-            }
-        }
-
+        
         public CallbackManager SteamCallbackManager { get { return steamCallbackManager; } }
 
         public string SentryFilesDirectoryName => sentryFilesDirectoryName;
@@ -1071,26 +1061,6 @@ namespace SteamBot
             SteamUser.SendMachineAuthResponse(authResponse);
         }
 
-        /// <summary>
-        /// Gets the bot's inventory and stores it in MyInventory.
-        /// </summary>
-        /// <example> This sample shows how to find items in the bot's inventory from a user handler.
-        /// <code>
-        /// Bot.GetInventory(); // Get the inventory first
-        /// foreach (var item in Bot.MyInventory.Items)
-        /// {
-        ///     if (item.Defindex == 5021)
-        ///     {
-        ///         // Bot has a key in its inventory
-        ///     }
-        /// }
-        /// </code>
-        /// </example>
-        public void GetInventory()
-        {
-            myInventoryTask = Task.Factory.StartNew((Func<Inventory>)FetchBotsInventory);
-        }
-
         public void TradeOfferRouter(TradeOffer offer)
         {
             GetUserHandler(offer.PartnerSteamId).OnTradeOfferUpdated(offer);
@@ -1136,19 +1106,6 @@ namespace SteamBot
             trade.OnMessage -= handler.OnTradeMessageHandler;
             trade.OnUserSetReady -= handler.OnTradeReadyHandler;
             trade.OnUserAccept -= handler.OnTradeAcceptHandler;
-        }
-
-        /// <summary>
-        /// Fetch the Bot's inventory and log a warning if it's private
-        /// </summary>
-        private Inventory FetchBotsInventory()
-        {
-            var inventory = Inventory.FetchInventory(SteamUser.SteamID, ApiKey, SteamWeb);
-            if (inventory.IsPrivate)
-            {
-                Log.Warn("The bot's backpack is private! If your bot adds any items it will fail! Your bot's backpack should be Public.");
-            }
-            return inventory;
         }
 
         /// <summary>
@@ -1404,8 +1361,6 @@ namespace SteamBot
                 StopBot();
                 if (Log != null)
                     Log.Dispose();
-                if (myInventoryTask != null)
-                    myInventoryTask.Dispose();
                 CancelTradeOfferPollingThread();
                 disposed = true;
             }

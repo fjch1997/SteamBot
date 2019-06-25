@@ -18,13 +18,20 @@ using Lloyd.Shared.Extensions;
 
 namespace SteamTrade
 {
+    [Obsolete]
+    public class GenericInventory2 : GenericInventory
+    {
+        public GenericInventory2(ISteamWeb steamWeb, ulong steamId64, uint appId, uint contextId, string language = "english") : base(steamWeb, steamId64, appId, contextId, language)
+        {
+        }
+    }
     /// <summary>
     /// An inventory loader and storage for a specific steam ID, appId and contextId. Inventory is loaded asynchronously when this class is created. It becomes immutable once loaded.<para />
     /// This class is thread-safe. <para />
     /// This class is <see cref="Newtonsoft.Json"/> serializable when <see cref="DefaultContractResolver.IgnoreSerializableAttribute"/> is set to false.
     /// </summary>
     [JsonObject(MemberSerialization = MemberSerialization.Fields)]
-    public class GenericInventory2 : IEnumerable<GenericInventory2.Item>
+    public class GenericInventory : IEnumerable<GenericInventory.Item>
     {
         [JsonIgnore]
         private readonly ISteamWeb steamWeb;
@@ -40,11 +47,11 @@ namespace SteamTrade
         private void OnSerializing(StreamingContext context)
         {
             if (!Loaded)
-                throw new InvalidOperationException(nameof(GenericInventory2) + " must be loaded before it can be serialized.");
+                throw new InvalidOperationException(nameof(GenericInventory) + " must be loaded before it can be serialized.");
         }
 
         /// <summary>
-        /// If the inventory data has been loaded. After <see cref="Loaded"/> turns true, <see cref="GenericInventory2"/> becomes immutable.
+        /// If the inventory data has been loaded. After <see cref="Loaded"/> turns true, <see cref="GenericInventory"/> becomes immutable.
         /// </summary>
         public bool Loaded
         {
@@ -71,9 +78,9 @@ namespace SteamTrade
         public List<string> Warnings { get; set; } = new List<string>();
 
         /// <summary>
-        /// Initialize a new instance of <see cref="GenericInventory2"/> and loads data.
+        /// Initialize a new instance of <see cref="GenericInventory"/> and loads data.
         /// </summary>
-        public GenericInventory2(ISteamWeb steamWeb, ulong steamId64, uint appId, uint contextId, string language = "english")
+        public GenericInventory(ISteamWeb steamWeb, ulong steamId64, uint appId, uint contextId, string language = "english")
         {
             this.steamWeb = steamWeb;
             this.steamId64 = steamId64;
@@ -84,17 +91,17 @@ namespace SteamTrade
         }
 
         /// <summary>
-        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory2"/>, create another instance.
+        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory"/>, create another instance.
         /// </summary>
-        /// <exception cref="TradeJsonException">Data has been downloaded but an error occurred while parsing it.</exception>
-        /// <exception cref="WebException">A network error while connecting to steam servers.</exception>
+        /// <exception cref="TradeJsonException"><see cref="AggregateException"/> will be thrown. This is the <see cref="AggregateException.InnerExceptions"/> type. Data has been downloaded but an error occurred while parsing it.</exception>
+        /// <exception cref="WebException"><see cref="AggregateException"/> will be thrown. This is the <see cref="AggregateException.InnerExceptions"/> type. A network error while connecting to steam servers.</exception>
         public void Wait()
         {
             task?.Wait();
         }
 
         /// <summary>
-        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory2"/>, create another instance.
+        /// Wait for the data to be loaded. To reload a <see cref="GenericInventory"/>, create another instance.
         /// </summary>
         /// <exception cref="TradeJsonException">Data has been downloaded but an error occurred while parsing it.</exception>
         /// <exception cref="WebException">A network error while connecting to steam servers.</exception>
@@ -228,7 +235,7 @@ namespace SteamTrade
             List<JObject> responses = new List<JObject>();
 
             //Download
-            (bool moreItem, ulong startAssetId, int totalItemCount, int counter) result = (true, 0, 0, 1);
+            (bool moreItem, ulong startAssetId, int counter) result = (true, 0, 1);
             do
             {
                 result = await RawDownloadAsync(responses, result.startAssetId, result.counter);
@@ -282,7 +289,7 @@ namespace SteamTrade
                 }
             }
         }
-        private async Task<(bool moreItem, ulong lastAssetId, int totalItemCount, int counter)> RawDownloadAsync(List<JObject> responses, ulong startAssetId = 0, int counter = 1, int maxItemCount = 5000)
+        private async Task<(bool moreItem, ulong lastAssetId, int counter)> RawDownloadAsync(List<JObject> responses, ulong startAssetId = 0, int counter = 1, int maxItemCount = 5000)
         {
             string jsonString;
             var retryCount = 0;
@@ -305,13 +312,12 @@ namespace SteamTrade
             if (!(bool)jsonResponse.Property("success").Value)
             {
                 var errorText = jsonResponse.Property("Error")?.Value.ToString() ?? jsonResponse.Property("error")?.Value.ToString();
-                new TradeJsonException("无法获取库存信息：" + errorText, jsonString);
+                throw new TradeJsonException("无法获取库存信息：" + errorText, jsonString);
             }
             responses.Add(jsonResponse);
             var moreItemProperty = jsonResponse.Property("more_items");
             var lastAssetIdProperty = jsonResponse.Property("last_assetid");
-            return (moreItemProperty != null && (bool)moreItemProperty.Value, lastAssetIdProperty == null ? 0 : (ulong)lastAssetIdProperty.Value,
-                (int)jsonResponse.Property("total_inventory_count").Value, counter + 1);
+            return (moreItemProperty != null && (bool)moreItemProperty.Value, lastAssetIdProperty == null ? 0 : (ulong)lastAssetIdProperty.Value, counter + 1);
         }
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

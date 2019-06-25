@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,6 +16,8 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,15 +37,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="HtmlAgilityPack, Version=1.11.7.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.7\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
-    <Reference Include="Lloyd.Shared, Version=1.5.6598.42850, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lloyd.Shared.1.5.6598.42850\lib\net45\Lloyd.Shared.dll</HintPath>
+    <Reference Include="Lloyd.Shared, Version=1.6.7071.26752, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lloyd.Shared.1.6.7071.26752\lib\net45\Lloyd.Shared.dll</HintPath>
     </Reference>
-    <Reference Include="Lloyd.Shared.LanguageResources, Version=1.5.6598.42837, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lloyd.Shared.LanguageResources.1.5.6598.42837\lib\net40-Client\Lloyd.Shared.LanguageResources.dll</HintPath>
+    <Reference Include="Lloyd.Shared.LanguageResources, Version=1.5.7071.26748, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lloyd.Shared.LanguageResources.1.5.7071.26748\lib\net40-Client\Lloyd.Shared.LanguageResources.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
@@ -49,30 +52,29 @@
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=3.4.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.4.0\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.0.0.668\lib\net40\protobuf-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SteamAuth, Version=1.0.6375.41528, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamAuth.1.0.6375.41515\lib\net452\SteamAuth.dll</HintPath>
+    <Reference Include="SteamAuth, Version=1.0.6880.7434, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SteamAuth.1.0.6880.7434\lib\net452\SteamAuth.dll</HintPath>
     </Reference>
-    <Reference Include="SteamKit2, Version=1.8.0.26737, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
-      <HintPath>..\packages\SteamKit2.1.8.0\lib\net45\SteamKit2.dll</HintPath>
+    <Reference Include="SteamBot.Fakes">
+      <HintPath>FakesAssemblies\SteamBot.Fakes.dll</HintPath>
     </Reference>
-    <Reference Include="SteamTrade.Fakes">
-      <HintPath>FakesAssemblies\SteamTrade.Fakes.dll</HintPath>
+    <Reference Include="SteamKit2, Version=1.8.3.0, Culture=neutral, PublicKeyToken=ed3ce47ed5aad940, processorArchitecture=MSIL">
+      <HintPath>..\packages\SteamKit2.1.8.3\lib\net45\SteamKit2.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -92,9 +94,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SteamTrade\DelegateFetchSteamWeb.cs" />
-    <Compile Include="SteamTrade\GenericInventory2Tests.cs" />
-    <Compile Include="SteamTrade\GenericInventoryTest.cs" />
-    <Compile Include="SteamTrade\SteamWebTradeOfferTests.cs" />
+    <Compile Include="SteamTrade\GenericInventoryTests.cs" />
     <Compile Include="SteamTrade\TF2ValueTests.cs" />
     <Compile Include="SteamTrade\TradeOfferWebAPITests.cs" />
     <Compile Include="SteamTrade\TradeOfferWebTests.cs" />
@@ -103,21 +103,17 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SteamTrade\SteamTrade.csproj">
-      <Project>{6cec0333-81eb-40ee-85d1-941363626fc7}</Project>
-      <Name>SteamTrade</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <Fakes Include="Fakes\SteamTrade.fakes" />
+    <Fakes Include="Fakes\SteamBot.fakes" />
     <None Include="packages.config" />
     <None Include="Resources\GetTradeHoldDurations.json" />
     <None Include="Resources\inventoryError.json" />
     <None Include="Resources\NewApiSampleInventoryPage1.json" />
     <None Include="Resources\NewApiSampleInventoryPage2.json" />
     <None Include="Resources\NewApiSampleInventoryPage3.json" />
-    <None Include="Resources\sampleInventory.json" />
+    <None Include="Resources\SampleInventory.json" />
+    <None Include="Resources\SampleInventory2.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -129,7 +125,20 @@
   <ItemGroup>
     <Content Include="Resources\SentTradeOfferPage.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SteamBot\SteamBot.csproj">
+      <Project>{e81ded36-edf5-41a5-8666-a3a0c581762f}</Project>
+      <Name>SteamBot</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.12.0\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.13.0\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

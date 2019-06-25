@@ -153,6 +153,9 @@
   <data name="SteamBotLoggedInCompletely" xml:space="preserve">
     <value>Steam Bot Logged In Completely!</value>
   </data>
+  <data name="SteamWebNotLoggedInExceptionMessage" xml:space="preserve">
+    <value>SteamWeb is not logged in.</value>
+  </data>
   <data name="TradeAccepted" xml:space="preserve">
     <value>Trade Accepted!</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="TwoFACodeMismatchRetryIn15Seconds" xml:space="preserve">
     <value>2FA code mismatch. Retry in 15 seconds.</value>
+  </data>
+  <data name="TwoFactorCodeIsInvalid" xml:space="preserve">
+    <value>Two factor code is invalid.</value>
   </data>
   <data name="UserAuthenticated" xml:space="preserve">
     <value>User Authenticated!</value>

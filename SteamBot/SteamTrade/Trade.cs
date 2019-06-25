@@ -18,8 +18,6 @@ namespace SteamTrade
     {
         #region Static Public data
 
-        public static Schema CurrentSchema = null;
-
         public enum TradeStatusType
         {
             OnGoing = 0,
@@ -103,11 +101,6 @@ namespace SteamTrade
         {
             get { return mySteamId; }
         }
-        
-        /// <summary> 
-        /// Gets the private inventory of the other user. 
-        /// </summary>
-        public ForeignInventory OtherPrivateInventory { get; private set; }
         
         /// <summary>
         /// Gets the items the user has offered, by itemid.
@@ -562,25 +555,7 @@ namespace SteamTrade
             }
             OnUserAddItem?.Invoke(asset);
         }
-
-        private Schema.Item GetItemFromPrivateBp(TradeUserAssets asset)
-        {
-            if (OtherPrivateInventory == null)
-            {
-                dynamic foreignInventory = session.GetForeignInventory(OtherSID, asset.contextid, asset.appid);
-                if (foreignInventory == null || foreignInventory.success == null || !foreignInventory.success.Value)
-                {
-                    return null;
-                }
-
-                OtherPrivateInventory = new ForeignInventory(foreignInventory);
-            }
-
-            int defindex = OtherPrivateInventory.GetDefIndex(asset.assetid);
-            Schema.Item schemaItem = CurrentSchema.GetItem(defindex);
-            return schemaItem;
-        }
-
+        
         /// <summary>
         /// Gets an item from a TradeEvent, and passes it into the UserHandler's implemented OnUserRemoveItem([...]) routine.
         /// Passes in null items if something went wrong.

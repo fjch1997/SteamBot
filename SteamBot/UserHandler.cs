@@ -20,7 +20,6 @@ namespace SteamBot
         public SteamID OtherSID { get; private set; }
 
         private bool _lastMessageWasFromTrade;
-        private Task<Inventory> otherInventoryTask;
         private TaskCompletionSource<string> _waitingOnUserResponse;
 
         protected SteamWeb SteamWeb
@@ -220,10 +219,6 @@ namespace SteamBot
         }
 
         public abstract void OnTradeInit ();
-
-        public abstract void OnTradeAddItem (Schema.Item schemaItem, Inventory.Item inventoryItem);
-
-        public abstract void OnTradeRemoveItem (Schema.Item schemaItem, Inventory.Item inventoryItem);
 
         public void OnTradeMessageHandler(string message)
         {
