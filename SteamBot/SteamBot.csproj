@@ -141,7 +141,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="ExampleBot.nuspec" />
+    <None Include="SteamBot.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.zh-CN.resx" />
