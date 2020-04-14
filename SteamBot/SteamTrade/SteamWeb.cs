@@ -28,6 +28,8 @@ namespace SteamTrade
     [Serializable]
     public class SteamWeb : ISteamWeb
     {
+        private static Uri steamCommunityUri = new Uri("https://" + SteamCommunityDomain);
+        private static Uri storeUri = new Uri("https://store.steampowered.com");
         /// <summary>
         /// Base steam community domain.
         /// </summary>
@@ -36,12 +38,12 @@ namespace SteamTrade
         /// Session id of Steam after Login.
         /// </summary>
         [Obsolete("Session ID can be different between store.steampowered.com and steamcommunity.com. Use Cookies.GetCookies(new Uri(\"https://steamcommunity.com/\")).Cast<Cookie>().FirstOrDefault(c => c.Name == \"sessionid\")?.Value to get Session ID for the domain you are working with.")]
-        public string SessionId => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new SteamWebNotLoggedInException();
+        public string SessionId => _cookies?.GetCookies(storeUri).Cast<Cookie>().FirstOrDefault(c => c.Name == "sessionid")?.Value ?? throw new SteamWebNotLoggedInException();
 
         /// <summary>
         /// Token secure as string. It is generated after the Login.
         /// </summary>
-        public string TokenSecure => _cookies?.GetCookies(new Uri("https://" + SteamCommunityDomain)).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure")?.Value ?? throw new SteamWebNotLoggedInException();
+        public string TokenSecure => _cookies?.GetCookies(storeUri).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure")?.Value ?? throw new SteamWebNotLoggedInException();
 
         /// <summary>
         /// The Accept-Language header when sending all HTTP requests. Default value is determined according to the constructor caller thread's culture.
@@ -258,7 +260,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 throw new ArgumentNullException(nameof(password));
             var data = new NameValueCollection { { "username", username } };
             // First get the RSA key with which we will encrypt our password.
-            string response = Fetch("https://steamcommunity.com/login/getrsakey", "POST", data, false);
+            string response = Fetch("https://store.steampowered.com/login/getrsakey/", "POST", data, false);
             GetRsaKey rsaJson = JsonConvert.DeserializeObject<GetRsaKey>(response);
 
             // Validate, if we could get the rsa key.
@@ -306,7 +308,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 // Captcha Check.
                 string capText = "";
                 if (captcha && captchaCallback != null)
-                    capText = captchaCallback("https://steamcommunity.com/public/captcha.php?gid=" + loginJson.captcha_gid);
+                    capText = captchaCallback("https://store.steampowered.com/public/captcha.php?gid=" + loginJson.captcha_gid);
                 else if (captcha)
                     throw new ArgumentNullException(nameof(captchaCallback));
 
@@ -353,7 +355,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 data.Add("rsatimestamp", time);
 
                 // Sending the actual login.
-                using (HttpWebResponse webResponse = Request("https://steamcommunity.com/login/dologin/", "POST", data, false))
+                using (HttpWebResponse webResponse = Request("https://store.steampowered.com/login/dologin/", "POST", data, false))
                 {
                     var stream = webResponse.GetResponseStream();
                     using (StreamReader reader = new StreamReader(stream ?? throw new InvalidOperationException()))
@@ -369,8 +371,8 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             if (loginJson.success)
             {
                 _cookies = new CookieContainer();
-                _cookies.SetCookies(new Uri("https://steamcommunity.com/"), cookieHeader);
-                _cookies.SetCookies(new Uri("https://store.steampowered.com/"), cookieHeader);
+                _cookies.SetCookies(steamCommunityUri, cookieHeader);
+                _cookies.SetCookies(storeUri, cookieHeader);
                 _cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
                 SubmitCookies(_cookies);
                 return loginJson;
@@ -439,7 +441,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 }
 
                 // Adding cookies to the cookie container.
-                foreach (var uri in new[] { new Uri("https://steamcommunity.com/"), new Uri("https://store.steampowered.com/"), new Uri("https://help.steampowered.com/") })
+                foreach (var uri in new[] { steamCommunityUri, storeUri, new Uri("https://help.steampowered.com/") })
                 {
                     _cookies.SetCookies(uri, $"steamLogin={authResult["token"].AsString()}; path=/; HttpOnly");
                     _cookies.SetCookies(uri, $"steamLoginSecure={authResult["tokensecure"].AsString()}; path=/; secure; HttpOnly");
@@ -481,7 +483,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         /// <returns>true if cookies are correct; false otherwise</returns>
         public bool VerifyCookies()
         {
-            using (HttpWebResponse response = Request("https://steamcommunity.com/", "HEAD"))
+            using (HttpWebResponse response = Request("https://store.steampowered.com/", "HEAD"))
             {
                 return response.Cookies["steamLogin"] == null || !response.Cookies["steamLogin"].Value.Equals("deleted");
             }
@@ -493,7 +495,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         /// <param name="cookies">Cookiecontainer which contains cookies after the login to Steam.</param>
         static void SubmitCookies(CookieContainer cookies)
         {
-            HttpWebRequest w = WebRequest.Create("https://steamcommunity.com/") as HttpWebRequest;
+            HttpWebRequest w = WebRequest.Create("https://store.steampowered.com/") as HttpWebRequest;
 
             // Check, if the request is null.
             if (w == null)
@@ -509,8 +511,8 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             try
             {
                 var cookieHeader = response.Headers[HttpResponseHeader.SetCookie];
-                cookies.SetCookies(new Uri("https://steamcommunity.com/"), cookieHeader);
-                cookies.SetCookies(new Uri("https://store.steampowered.com/"), cookieHeader);
+                cookies.SetCookies(steamCommunityUri, cookieHeader);
+                cookies.SetCookies(storeUri, cookieHeader);
                 cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
             }
             finally
@@ -537,13 +539,13 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
         /// <returns>64 bit Steam ID.</returns>
         public long GetSteamId64()
         {
-            var steamLoginCookie = Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin") ?? Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure");
+            var steamLoginCookie = Cookies.GetCookies(storeUri).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLogin") ?? Cookies.GetCookies(storeUri).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamLoginSecure");
             string value;
             int index;
             long steamId64;
             if (steamLoginCookie == null)
             {
-                var machineAuthCookie = Cookies.GetCookies(new Uri("https://steamcommunity.com")).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamMachineAuth");
+                var machineAuthCookie = Cookies.GetCookies(storeUri).Cast<Cookie>().FirstOrDefault(c => c.Name == "steamMachineAuth");
                 if (machineAuthCookie == null) return default;
                 value = machineAuthCookie.Value;
                 index = value.IndexOf('=');
