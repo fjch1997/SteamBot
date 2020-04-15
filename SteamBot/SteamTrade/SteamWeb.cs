@@ -447,6 +447,7 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                     _cookies.SetCookies(uri, $"steamLoginSecure={authResult["tokensecure"].AsString()}; path=/; secure; HttpOnly");
                     _cookies.SetCookies(uri, $"sessionid={Convert.ToBase64String(Encoding.UTF8.GetBytes(myUniqueId))}; path=/");
                 }
+                SubmitCookies(_cookies);
                 return true;
             }
         }
@@ -511,9 +512,12 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
             try
             {
                 var cookieHeader = response.Headers[HttpResponseHeader.SetCookie];
-                cookies.SetCookies(steamCommunityUri, cookieHeader);
-                cookies.SetCookies(storeUri, cookieHeader);
-                cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
+                if (cookieHeader != null)
+                {
+                    cookies.SetCookies(steamCommunityUri, cookieHeader);
+                    cookies.SetCookies(storeUri, cookieHeader);
+                    cookies.SetCookies(new Uri("https://help.steampowered.com/"), cookieHeader);
+                }
             }
             finally
             {
