@@ -429,8 +429,8 @@ string.Format("{0}={1}", HttpUtility.UrlEncode(key), HttpUtility.UrlEncode(data[
                 {
                     authResult = userAuth.AuthenticateUser(
                         steamid: client.SteamID.ConvertToUInt64(),
-                        sessionkey: HttpUtility.UrlEncode(cryptedSessionKey),
-                        encrypted_loginkey: HttpUtility.UrlEncode(cryptedLoginKey),
+                        sessionkey: cryptedSessionKey,
+                        encrypted_loginkey: cryptedLoginKey,
                         method: "POST",
                         secure: true
                         );
