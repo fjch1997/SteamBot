@@ -555,18 +555,7 @@ namespace SteamBot
             #region Login
             SteamCallbackManager.Subscribe<SteamClient.ConnectedCallback>(callback =>
             {
-                Log.Debug("Connection Callback: {0}", callback.Result);
-
-                if (callback.Result == EResult.OK)
-                {
-                    UserLogOn();
-                }
-                else
-                {
-                    Log.Error("Failed to connect to Steam Community, trying again...");
-                    SteamClient.Connect();
-                }
-
+                UserLogOn();
             });
 
             SteamCallbackManager.Subscribe<SteamUser.LoggedOnCallback>(callback =>
@@ -1126,7 +1115,7 @@ namespace SteamBot
                     {
                         if (SteamGuardAccount.AcceptConfirmation(confirmation))
                         {
-                            Log.Success("Confirmed {0}. (Confirmation ID #{1})", confirmation.Description, confirmation.ID);
+                            Log.Success("Confirmed {0}. (Confirmation ID #{1})", confirmation.ConfType, confirmation.ID);
                         }
                     }
                 }

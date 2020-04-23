@@ -22,7 +22,7 @@ namespace SteamBot.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace SteamBot.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SteamBot.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace SteamBot.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Authentication failed, retrying in 2s....
         /// </summary>
-        internal static string AuthenticationFailedRetryingIn2s {
+        public static string AuthenticationFailedRetryingIn2s {
             get {
                 return ResourceManager.GetString("AuthenticationFailedRetryingIn2s", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Chat Message from {0}: {1}.
         /// </summary>
-        internal static string ChatMessageFrom {
+        public static string ChatMessageFrom {
             get {
                 return ResourceManager.GetString("ChatMessageFrom", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Connecting....
         /// </summary>
-        internal static string Connecting {
+        public static string Connecting {
             get {
                 return ResourceManager.GetString("Connecting", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Could not start the trade session..
         /// </summary>
-        internal static string CouldNotStartTheTradeSession {
+        public static string CouldNotStartTheTradeSession {
             get {
                 return ResourceManager.GetString("CouldNotStartTheTradeSession", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Disconnected from Steam Network!.
         /// </summary>
-        internal static string DisconnectedFromSteamNetwork {
+        public static string DisconnectedFromSteamNetwork {
             get {
                 return ResourceManager.GetString("DisconnectedFromSteamNetwork", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Done Loading Bot..
         /// </summary>
-        internal static string DoneLoadingBot {
+        public static string DoneLoadingBot {
             get {
                 return ResourceManager.GetString("DoneLoadingBot", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Logged off Steam.  Reason: .
         /// </summary>
-        internal static string LoggedOffSteamReason {
+        public static string LoggedOffSteamReason {
             get {
                 return ResourceManager.GetString("LoggedOffSteamReason", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Logged On Callback: .
         /// </summary>
-        internal static string LoggedOnCallback {
+        public static string LoggedOnCallback {
             get {
                 return ResourceManager.GetString("LoggedOnCallback", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Login Error: .
         /// </summary>
-        internal static string LoginError {
+        public static string LoginError {
             get {
                 return ResourceManager.GetString("LoginError", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Received new WebAPIUserNonce..
         /// </summary>
-        internal static string ReceivedNewWebAPIUserNonce {
+        public static string ReceivedNewWebAPIUserNonce {
             get {
                 return ResourceManager.GetString("ReceivedNewWebAPIUserNonce", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Regenerated 2FA code..
         /// </summary>
-        internal static string Regenerated2FACode {
+        public static string Regenerated2FACode {
             get {
                 return ResourceManager.GetString("Regenerated2FACode", resourceCulture);
             }
@@ -162,7 +162,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Steam Bot Logged In Completely!.
         /// </summary>
-        internal static string SteamBotLoggedInCompletely {
+        public static string SteamBotLoggedInCompletely {
             get {
                 return ResourceManager.GetString("SteamBotLoggedInCompletely", resourceCulture);
             }
@@ -171,7 +171,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to SteamWeb is not logged in..
         /// </summary>
-        internal static string SteamWebNotLoggedInExceptionMessage {
+        public static string SteamWebNotLoggedInExceptionMessage {
             get {
                 return ResourceManager.GetString("SteamWebNotLoggedInExceptionMessage", resourceCulture);
             }
@@ -180,7 +180,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Trade Accepted!.
         /// </summary>
-        internal static string TradeAccepted {
+        public static string TradeAccepted {
             get {
                 return ResourceManager.GetString("TradeAccepted", resourceCulture);
             }
@@ -189,7 +189,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Trade failed:.
         /// </summary>
-        internal static string TradeFailed {
+        public static string TradeFailed {
             get {
                 return ResourceManager.GetString("TradeFailed", resourceCulture);
             }
@@ -198,7 +198,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Trade Opened..
         /// </summary>
-        internal static string TradeOpened {
+        public static string TradeOpened {
             get {
                 return ResourceManager.GetString("TradeOpened", resourceCulture);
             }
@@ -207,7 +207,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Trade Status:.
         /// </summary>
-        internal static string TradeStatus {
+        public static string TradeStatus {
             get {
                 return ResourceManager.GetString("TradeStatus", resourceCulture);
             }
@@ -216,7 +216,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to 2FA code mismatch. Retry in 15 seconds..
         /// </summary>
-        internal static string TwoFACodeMismatchRetryIn15Seconds {
+        public static string TwoFACodeMismatchRetryIn15Seconds {
             get {
                 return ResourceManager.GetString("TwoFACodeMismatchRetryIn15Seconds", resourceCulture);
             }
@@ -225,7 +225,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Two factor code is invalid..
         /// </summary>
-        internal static string TwoFactorCodeIsInvalid {
+        public static string TwoFactorCodeIsInvalid {
             get {
                 return ResourceManager.GetString("TwoFactorCodeIsInvalid", resourceCulture);
             }
@@ -234,7 +234,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to User Authenticated!.
         /// </summary>
-        internal static string UserAuthenticated {
+        public static string UserAuthenticated {
             get {
                 return ResourceManager.GetString("UserAuthenticated", resourceCulture);
             }
@@ -243,7 +243,7 @@ namespace SteamBot.Properties {
         /// <summary>
         ///   Looks up a localized string similar to WebAPIUserNonce Error:.
         /// </summary>
-        internal static string WebAPIUserNonceError {
+        public static string WebAPIUserNonceError {
             get {
                 return ResourceManager.GetString("WebAPIUserNonceError", resourceCulture);
             }
