@@ -1156,17 +1156,17 @@
         <member name="P:SteamBot.Fakes.ShimBot.CloseTrade">
             <summary>Sets the shim of Bot.CloseTrade()</summary>
         </member>
-        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringBotUserHandlerCreatorBooleanBoolean">
-            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, UserHandlerCreator handlerCreator, Boolean debug, Boolean process)</summary>
+        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringBotUserHandlerCreatorBooleanBooleanBoolean">
+            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, UserHandlerCreator handlerCreator, Boolean debug, Boolean process, Boolean useTwoFactorByDefault)</summary>
         </member>
-        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringStringBotUserHandlerCreatorBooleanBoolean">
-            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, String sentryFilesDirectoryName, UserHandlerCreator handlerCreator, Boolean debug, Boolean process)</summary>
+        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringStringBotUserHandlerCreatorBooleanBooleanBoolean">
+            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, String sentryFilesDirectoryName, UserHandlerCreator handlerCreator, Boolean debug, Boolean process, Boolean useTwoFactorByDefault)</summary>
         </member>
-        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringStringStringBotUserHandlerCreatorBooleanBoolean">
-            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, String sentryFilesDirectoryName, String authFilesDirectoryName, UserHandlerCreator handlerCreator, Boolean debug, Boolean process)</summary>
+        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringStringStringBotUserHandlerCreatorBooleanBooleanBoolean">
+            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, String sentryFilesDirectoryName, String authFilesDirectoryName, UserHandlerCreator handlerCreator, Boolean debug, Boolean process, Boolean useTwoFactorByDefault)</summary>
         </member>
-        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringStringStringBotUserHandlerCreatorILogBooleanBoolean">
-            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, String sentryFilesDirectoryName, String authFilesDirectoryName, UserHandlerCreator handlerCreator, ILog log, Boolean debug, Boolean process)</summary>
+        <member name="P:SteamBot.Fakes.ShimBot.ConstructorConfigurationBotInfoStringStringStringBotUserHandlerCreatorILogBooleanBooleanBoolean">
+            <summary>Sets the shim of Bot.Bot(BotInfo config, String apiKey, String sentryFilesDirectoryName, String authFilesDirectoryName, UserHandlerCreator handlerCreator, ILog log, Boolean debug, Boolean process, Boolean useTwoFactorByDefault)</summary>
         </member>
         <member name="P:SteamBot.Fakes.ShimBot.CreateFriendsListIfNecessary">
             <summary>Sets the shim of Bot.CreateFriendsListIfNecessary()</summary>
@@ -1458,6 +1458,138 @@
         </member>
         <member name="P:SteamBot.Fakes.ShimBot.logGet">
             <summary>Sets the shim of Bot.get_log()</summary>
+        </member>
+        <member name="T:SteamBot.Fakes.ShimBotFile">
+            <summary>Shim type of SteamBot.BotFile</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotFile.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotFile.#ctor(SteamBot.BotFile)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AdminsGet">
+            <summary>Sets the shim of BotFile.get_Admins()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AdminsSetUInt64Array">
+            <summary>Sets the shim of BotFile.set_Admins(UInt64[] value)</summary>
+        </member>
+        <member name="T:SteamBot.Fakes.ShimBotFile.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AllInstances.AdminsGet">
+            <summary>Sets the shim of BotFile.get_Admins()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AllInstances.AdminsSetUInt64Array">
+            <summary>Sets the shim of BotFile.set_Admins(UInt64[] value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AllInstances.ApiKeyGet">
+            <summary>Sets the shim of BotFile.get_ApiKey()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AllInstances.ApiKeySetString">
+            <summary>Sets the shim of BotFile.set_ApiKey(String value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AllInstances.BotsGet">
+            <summary>Sets the shim of BotFile.get_Bots()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.AllInstances.BotsSetBotInfoArray">
+            <summary>Sets the shim of BotFile.set_Bots(BotInfo[] value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.ApiKeyGet">
+            <summary>Sets the shim of BotFile.get_ApiKey()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.ApiKeySetString">
+            <summary>Sets the shim of BotFile.set_ApiKey(String value)</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotFile.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotFile.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.BotsGet">
+            <summary>Sets the shim of BotFile.get_Bots()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.BotsSetBotInfoArray">
+            <summary>Sets the shim of BotFile.set_Bots(BotInfo[] value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotFile.Constructor">
+            <summary>Sets the shim of BotFile.BotFile()</summary>
+        </member>
+        <member name="T:SteamBot.Fakes.ShimBotInfo">
+            <summary>Shim type of SteamBot.BotInfo</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotInfo.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotInfo.#ctor(SteamBot.BotInfo)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:SteamBot.Fakes.ShimBotInfo.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.ChatResponseGet">
+            <summary>Sets the shim of BotInfo.get_ChatResponse()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.ChatResponseSetString">
+            <summary>Sets the shim of BotInfo.set_ChatResponse(String value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.DisplayNameGet">
+            <summary>Sets the shim of BotInfo.get_DisplayName()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.DisplayNameSetString">
+            <summary>Sets the shim of BotInfo.set_DisplayName(String value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.PasswordGet">
+            <summary>Sets the shim of BotInfo.get_Password()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.PasswordSetString">
+            <summary>Sets the shim of BotInfo.set_Password(String value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.UsernameGet">
+            <summary>Sets the shim of BotInfo.get_Username()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.AllInstances.UsernameSetString">
+            <summary>Sets the shim of BotInfo.set_Username(String value)</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotInfo.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.ShimBotInfo.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.ChatResponseGet">
+            <summary>Sets the shim of BotInfo.get_ChatResponse()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.ChatResponseSetString">
+            <summary>Sets the shim of BotInfo.set_ChatResponse(String value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.Constructor">
+            <summary>Sets the shim of BotInfo.BotInfo()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.DisplayNameGet">
+            <summary>Sets the shim of BotInfo.get_DisplayName()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.DisplayNameSetString">
+            <summary>Sets the shim of BotInfo.set_DisplayName(String value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.PasswordGet">
+            <summary>Sets the shim of BotInfo.get_Password()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.PasswordSetString">
+            <summary>Sets the shim of BotInfo.set_Password(String value)</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.UsernameGet">
+            <summary>Sets the shim of BotInfo.get_Username()</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.ShimBotInfo.UsernameSetString">
+            <summary>Sets the shim of BotInfo.set_Username(String value)</summary>
         </member>
         <member name="T:SteamBot.Fakes.ShimBotManager">
             <summary>Shim type of SteamBot.BotManager</summary>
@@ -2653,16 +2785,16 @@
         <member name="T:SteamBot.Fakes.StubBot">
             <summary>Stub type of SteamBot.Bot</summary>
         </member>
-        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,SteamBot.Bot.UserHandlerCreator,System.Boolean,System.Boolean)">
+        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,SteamBot.Bot.UserHandlerCreator,System.Boolean,System.Boolean,System.Boolean)">
             <summary>Initializes a new instance</summary>
         </member>
-        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,System.String,SteamBot.Bot.UserHandlerCreator,System.Boolean,System.Boolean)">
+        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,System.String,SteamBot.Bot.UserHandlerCreator,System.Boolean,System.Boolean,System.Boolean)">
             <summary>Initializes a new instance</summary>
         </member>
-        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,System.String,System.String,SteamBot.Bot.UserHandlerCreator,System.Boolean,System.Boolean)">
+        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,System.String,System.String,SteamBot.Bot.UserHandlerCreator,System.Boolean,System.Boolean,System.Boolean)">
             <summary>Initializes a new instance</summary>
         </member>
-        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,System.String,System.String,SteamBot.Bot.UserHandlerCreator,SteamBot.ILog,System.Boolean,System.Boolean)">
+        <member name="M:SteamBot.Fakes.StubBot.#ctor(SteamBot.Configuration.BotInfo,System.String,System.String,System.String,SteamBot.Bot.UserHandlerCreator,SteamBot.ILog,System.Boolean,System.Boolean,System.Boolean)">
             <summary>Initializes a new instance</summary>
         </member>
         <member name="M:SteamBot.Fakes.StubBot.AcceptAllMobileTradeConfirmations">
@@ -2687,6 +2819,42 @@
             <summary>Gets or sets the instance behavior.</summary>
         </member>
         <member name="P:SteamBot.Fakes.StubBot.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:SteamBot.Fakes.StubBotFile">
+            <summary>Stub type of SteamBot.BotFile</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.StubBotFile.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.StubBotFile.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.StubBotFile.InitializeStub">
+            <summary>Initializes a new instance of type StubBotFile</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.StubBotFile.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.StubBotFile.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:SteamBot.Fakes.StubBotInfo">
+            <summary>Stub type of SteamBot.BotInfo</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.StubBotInfo.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.StubBotInfo.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="M:SteamBot.Fakes.StubBotInfo.InitializeStub">
+            <summary>Initializes a new instance of type StubBotInfo</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.StubBotInfo.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:SteamBot.Fakes.StubBotInfo.InstanceObserver">
             <summary>Gets or sets the instance observer.</summary>
         </member>
         <member name="T:SteamBot.Fakes.StubBotManager">
@@ -4495,6 +4663,321 @@
         <member name="P:SteamTrade.Fakes.ShimItemDescription.UrlSetString">
             <summary>Sets the shim of ItemDescription.set_Url(String value)</summary>
         </member>
+        <member name="T:SteamTrade.Fakes.ShimSchema">
+            <summary>Shim type of SteamTrade.Schema</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.#ctor(SteamTrade.Schema)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:SteamTrade.Fakes.ShimSchema.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.GetItemInt32">
+            <summary>Sets the shim of Schema.GetItem(Int32 defindex)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.GetItems">
+            <summary>Sets the shim of Schema.GetItems()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.GetItemsByCraftingMaterialString">
+            <summary>Sets the shim of Schema.GetItemsByCraftingMaterial(String material)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.ItemsGameUrlGet">
+            <summary>Sets the shim of Schema.get_ItemsGameUrl()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.ItemsGameUrlSetString">
+            <summary>Sets the shim of Schema.set_ItemsGameUrl(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.ItemsGet">
+            <summary>Sets the shim of Schema.get_Items()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.ItemsSetSchemaItemArray">
+            <summary>Sets the shim of Schema.set_Items(Item[] value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.NextGet">
+            <summary>Sets the shim of Schema.get_Next()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.NextSetInt32">
+            <summary>Sets the shim of Schema.set_Next(Int32 value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.OriginNamesGet">
+            <summary>Sets the shim of Schema.get_OriginNames()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.OriginNamesSetSchemaItemOriginArray">
+            <summary>Sets the shim of Schema.set_OriginNames(ItemOrigin[] value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.StatusGet">
+            <summary>Sets the shim of Schema.get_Status()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.AllInstances.StatusSetInt32">
+            <summary>Sets the shim of Schema.set_Status(Int32 value)</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.Constructor">
+            <summary>Sets the shim of Schema.Schema()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.FetchSchemaStringString">
+            <summary>Sets the shim of Schema.FetchSchema(String apiKey, String schemaLang)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.GetItemInt32">
+            <summary>Sets the shim of Schema.GetItem(Int32 defindex)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.GetItems">
+            <summary>Sets the shim of Schema.GetItems()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.GetItemsByCraftingMaterialString">
+            <summary>Sets the shim of Schema.GetItemsByCraftingMaterial(String material)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.GetSchemaStringHttpWebResponseDateTime">
+            <summary>Sets the shim of Schema.GetSchemaString(HttpWebResponse response, DateTime schemaLastModified)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ItemsGameUrlGet">
+            <summary>Sets the shim of Schema.get_ItemsGameUrl()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ItemsGameUrlSetString">
+            <summary>Sets the shim of Schema.set_ItemsGameUrl(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ItemsGet">
+            <summary>Sets the shim of Schema.get_Items()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ItemsSetSchemaItemArray">
+            <summary>Sets the shim of Schema.set_Items(Item[] value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.NextGet">
+            <summary>Sets the shim of Schema.get_Next()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.NextSetInt32">
+            <summary>Sets the shim of Schema.set_Next(Int32 value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.OriginNamesGet">
+            <summary>Sets the shim of Schema.get_OriginNames()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.OriginNamesSetSchemaItemOriginArray">
+            <summary>Sets the shim of Schema.set_OriginNames(ItemOrigin[] value)</summary>
+        </member>
+        <member name="T:SteamTrade.Fakes.ShimSchema.ShimItem">
+            <summary>Shim type of SteamTrade.Schema+Item</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItem.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItem.#ctor(SteamTrade.Schema.Item)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.CraftClassGet">
+            <summary>Sets the shim of Item.get_CraftClass()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.CraftClassSetString">
+            <summary>Sets the shim of Item.set_CraftClass(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.CraftMaterialTypeGet">
+            <summary>Sets the shim of Item.get_CraftMaterialType()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.CraftMaterialTypeSetString">
+            <summary>Sets the shim of Item.set_CraftMaterialType(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.DefindexGet">
+            <summary>Sets the shim of Item.get_Defindex()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.DefindexSetUInt16">
+            <summary>Sets the shim of Item.set_Defindex(UInt16 value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemClassGet">
+            <summary>Sets the shim of Item.get_ItemClass()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemClassSetString">
+            <summary>Sets the shim of Item.set_ItemClass(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemNameGet">
+            <summary>Sets the shim of Item.get_ItemName()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemNameSetString">
+            <summary>Sets the shim of Item.set_ItemName(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemQualityGet">
+            <summary>Sets the shim of Item.get_ItemQuality()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemQualitySetInt32">
+            <summary>Sets the shim of Item.set_ItemQuality(Int32 value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemSlotGet">
+            <summary>Sets the shim of Item.get_ItemSlot()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemSlotSetString">
+            <summary>Sets the shim of Item.set_ItemSlot(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemTypeNameGet">
+            <summary>Sets the shim of Item.get_ItemTypeName()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ItemTypeNameSetString">
+            <summary>Sets the shim of Item.set_ItemTypeName(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.NameGet">
+            <summary>Sets the shim of Item.get_Name()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.NameSetString">
+            <summary>Sets the shim of Item.set_Name(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ProperNameGet">
+            <summary>Sets the shim of Item.get_ProperName()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.ProperNameSetBoolean">
+            <summary>Sets the shim of Item.set_ProperName(Boolean value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.UsableByClassesGet">
+            <summary>Sets the shim of Item.get_UsableByClasses()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.AllInstances.UsableByClassesSetStringArray">
+            <summary>Sets the shim of Item.set_UsableByClasses(String[] value)</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItem.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItem.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.Constructor">
+            <summary>Sets the shim of Item.Item()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.CraftClassGet">
+            <summary>Sets the shim of Item.get_CraftClass()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.CraftClassSetString">
+            <summary>Sets the shim of Item.set_CraftClass(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.CraftMaterialTypeGet">
+            <summary>Sets the shim of Item.get_CraftMaterialType()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.CraftMaterialTypeSetString">
+            <summary>Sets the shim of Item.set_CraftMaterialType(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.DefindexGet">
+            <summary>Sets the shim of Item.get_Defindex()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.DefindexSetUInt16">
+            <summary>Sets the shim of Item.set_Defindex(UInt16 value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemClassGet">
+            <summary>Sets the shim of Item.get_ItemClass()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemClassSetString">
+            <summary>Sets the shim of Item.set_ItemClass(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemNameGet">
+            <summary>Sets the shim of Item.get_ItemName()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemNameSetString">
+            <summary>Sets the shim of Item.set_ItemName(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemQualityGet">
+            <summary>Sets the shim of Item.get_ItemQuality()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemQualitySetInt32">
+            <summary>Sets the shim of Item.set_ItemQuality(Int32 value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemSlotGet">
+            <summary>Sets the shim of Item.get_ItemSlot()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemSlotSetString">
+            <summary>Sets the shim of Item.set_ItemSlot(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemTypeNameGet">
+            <summary>Sets the shim of Item.get_ItemTypeName()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ItemTypeNameSetString">
+            <summary>Sets the shim of Item.set_ItemTypeName(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.NameGet">
+            <summary>Sets the shim of Item.get_Name()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.NameSetString">
+            <summary>Sets the shim of Item.set_Name(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ProperNameGet">
+            <summary>Sets the shim of Item.get_ProperName()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.ProperNameSetBoolean">
+            <summary>Sets the shim of Item.set_ProperName(Boolean value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.UsableByClassesGet">
+            <summary>Sets the shim of Item.get_UsableByClasses()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItem.UsableByClassesSetStringArray">
+            <summary>Sets the shim of Item.set_UsableByClasses(String[] value)</summary>
+        </member>
+        <member name="T:SteamTrade.Fakes.ShimSchema.ShimItemOrigin">
+            <summary>Shim type of SteamTrade.Schema+ItemOrigin</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.#ctor">
+            <summary>Initializes a new shim instance</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.#ctor(SteamTrade.Schema.ItemOrigin)">
+            <summary>Initializes a new shim for the given instance</summary>
+        </member>
+        <member name="T:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.AllInstances">
+            <summary>Define shims for all instances members</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.AllInstances.NameGet">
+            <summary>Sets the shim of ItemOrigin.get_Name()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.AllInstances.NameSetString">
+            <summary>Sets the shim of ItemOrigin.set_Name(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.AllInstances.OriginGet">
+            <summary>Sets the shim of ItemOrigin.get_Origin()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.AllInstances.OriginSetInt32">
+            <summary>Sets the shim of ItemOrigin.set_Origin(Int32 value)</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.BehaveAsCurrent">
+            <summary>Assigns the &apos;Current&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.BehaveAsNotImplemented">
+            <summary>Assigns the &apos;NotImplemented&apos; behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.Behavior">
+            <summary>Assigns the behavior for all methods of the shimmed type</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.Constructor">
+            <summary>Sets the shim of ItemOrigin.ItemOrigin()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.NameGet">
+            <summary>Sets the shim of ItemOrigin.get_Name()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.NameSetString">
+            <summary>Sets the shim of ItemOrigin.set_Name(String value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.OriginGet">
+            <summary>Sets the shim of ItemOrigin.get_Origin()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.ShimItemOrigin.OriginSetInt32">
+            <summary>Sets the shim of ItemOrigin.set_Origin(Int32 value)</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.StaticConstructor">
+            <summary>Sets the shim of Schema.Schema()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.StatusGet">
+            <summary>Sets the shim of Schema.get_Status()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSchema.StatusSetInt32">
+            <summary>Sets the shim of Schema.set_Status(Int32 value)</summary>
+        </member>
         <member name="T:SteamTrade.Fakes.ShimSteamResult">
             <summary>Shim type of SteamTrade.SteamResult</summary>
         </member>
@@ -4755,6 +5238,9 @@
         </member>
         <member name="P:SteamTrade.Fakes.ShimSteamWeb.SessionIdGet">
             <summary>Sets the shim of SteamWeb.get_SessionId()</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.ShimSteamWeb.StaticConstructor">
+            <summary>Sets the shim of SteamWeb.SteamWeb()</summary>
         </member>
         <member name="P:SteamTrade.Fakes.ShimSteamWeb.SubmitCookiesCookieContainer">
             <summary>Sets the shim of SteamWeb.SubmitCookies(CookieContainer cookies)</summary>
@@ -5618,6 +6104,24 @@
             <summary>Gets or sets the instance behavior.</summary>
         </member>
         <member name="P:SteamTrade.Fakes.StubItemDescription.InstanceObserver">
+            <summary>Gets or sets the instance observer.</summary>
+        </member>
+        <member name="T:SteamTrade.Fakes.StubSchema">
+            <summary>Stub type of SteamTrade.Schema</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.StubSchema.#ctor">
+            <summary>Initializes a new instance</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.StubSchema.CallBase">
+            <summary>Gets or sets a value that indicates if the base method should be called instead of the fallback behavior</summary>
+        </member>
+        <member name="M:SteamTrade.Fakes.StubSchema.InitializeStub">
+            <summary>Initializes a new instance of type StubSchema</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.StubSchema.InstanceBehavior">
+            <summary>Gets or sets the instance behavior.</summary>
+        </member>
+        <member name="P:SteamTrade.Fakes.StubSchema.InstanceObserver">
             <summary>Gets or sets the instance observer.</summary>
         </member>
         <member name="T:SteamTrade.Fakes.StubSteamResult">

@@ -14,7 +14,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Diagnostics;
-using Lloyd.Shared.Extensions;
 
 namespace SteamTrade
 {

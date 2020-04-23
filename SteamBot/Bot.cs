@@ -182,7 +182,7 @@ namespace SteamBot
         /// <param name="handlerCreator">A delegate to create <see cref="UserHandler"/>. All user handlers will be created using this.</param>
         /// <param name="debug">Debug mode shows more details when logging.</param>
         /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
-        public Bot(Configuration.BotInfo config, string apiKey, UserHandlerCreator handlerCreator, bool debug = false, bool process = false) : this(config, apiKey, Environment.CurrentDirectory + "\\sentryfiles", handlerCreator, debug, process) { }
+        public Bot(Configuration.BotInfo config, string apiKey, UserHandlerCreator handlerCreator, bool debug = false, bool process = false, bool useTwoFactorByDefault = false) : this(config, apiKey, Environment.CurrentDirectory + "\\sentryfiles", handlerCreator, debug, process, useTwoFactorByDefault) { }
 
         /// <summary>
         /// Initialize a new instance of <see cref="Bot"/>. 
@@ -193,7 +193,7 @@ namespace SteamBot
         /// <param name="handlerCreator">A delegate to create <see cref="UserHandler"/>. All user handlers will be created using this.</param>
         /// <param name="debug">Debug mode shows more details when logging.</param>
         /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
-        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false) : this(config, apiKey, sentryFilesDirectoryName, Environment.CurrentDirectory + "\\authfiles", handlerCreator, null, debug, process) { }
+        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false, bool useTwoFactorByDefault = false) : this(config, apiKey, sentryFilesDirectoryName, Environment.CurrentDirectory + "\\authfiles", handlerCreator, null, debug, process, useTwoFactorByDefault) { }
         /// <summary>
         /// Initialize a new instance of <see cref="Bot"/>.
         /// </summary>
@@ -204,22 +204,9 @@ namespace SteamBot
         /// <param name="handlerCreator">A delegate to create <see cref="UserHandler"/>. All user handlers will be created using this.</param>
         /// <param name="debug">Debug mode shows more details when logging.</param>
         /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
-        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false) : this(config, apiKey, sentryFilesDirectoryName, authFilesDirectoryName, handlerCreator, null, debug, process)
-        {
+        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false, bool useTwoFactorByDefault = false) : this(config, apiKey, sentryFilesDirectoryName, authFilesDirectoryName, handlerCreator, null, debug, process, useTwoFactorByDefault) { }
 
-        }
-
-        /// <summary>
-        /// Initialize a new instance of <see cref="Bot"/>.
-        /// </summary>
-        /// <param name="config"></param>
-        /// <param name="apiKey">If an API Key exists in parameter <paramref name="config"/>, the one in <paramref name="config"/> takes precedence.</param>
-        /// <param name="sentryFilesDirectoryName">Sentry files will be saved under this directory.</param>
-        /// <param name="authFilesDirectoryName">Auth files will be saved under this directory.</param>
-        /// <param name="handlerCreator">A delegate to create <see cref="UserHandler"/>. All user handlers will be created using this.</param>
-        /// <param name="debug">Debug mode shows more details when logging.</param>
-        /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
-        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, ILog log = null, bool debug = false, bool process = false)
+        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, ILog log = null, bool debug = false, bool process = false, bool useTwoFactorByDefault = false)
         {
             this.sentryFilesDirectoryName = sentryFilesDirectoryName;
             this.authFilesDirectoryName = authFilesDirectoryName;
@@ -270,6 +257,19 @@ namespace SteamBot
                 Log = new Log(logFile, DisplayName, consoleLogLevel, fileLogLevel);
             else
                 Log = log;
+            if (useTwoFactorByDefault)
+            {
+                var mobileAuthCode = GetMobileAuthCode();
+                if (string.IsNullOrEmpty(mobileAuthCode))
+                {
+                    Log.Error("Failed to generate 2FA code. Make sure you have linked the authenticator via SteamBot.");
+                }
+                else
+                {
+                    logOnDetails.TwoFactorCode = mobileAuthCode;
+                    Log.Success("Generated 2FA code.");
+                }
+            }
             createHandler = handlerCreator;
             BotControlClass = config.BotControlClass;
             SteamWeb = new SteamWeb();
@@ -555,18 +555,7 @@ namespace SteamBot
             #region Login
             SteamCallbackManager.Subscribe<SteamClient.ConnectedCallback>(callback =>
             {
-                Log.Debug("Connection Callback: {0}", callback.Result);
-
-                if (callback.Result == EResult.OK)
-                {
-                    UserLogOn();
-                }
-                else
-                {
-                    Log.Error("Failed to connect to Steam Community, trying again...");
-                    SteamClient.Connect();
-                }
-
+                UserLogOn();
             });
 
             SteamCallbackManager.Subscribe<SteamUser.LoggedOnCallback>(callback =>
@@ -1126,7 +1115,7 @@ namespace SteamBot
                     {
                         if (SteamGuardAccount.AcceptConfirmation(confirmation))
                         {
-                            Log.Success("Confirmed {0}. (Confirmation ID #{1})", confirmation.Description, confirmation.ID);
+                            Log.Success("Confirmed {0}. (Confirmation ID #{1})", confirmation.ConfType, confirmation.ID);
                         }
                     }
                 }

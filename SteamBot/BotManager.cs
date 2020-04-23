@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows.Forms;
 using Newtonsoft.Json;
 using SteamKit2;
 
@@ -23,7 +22,6 @@ namespace SteamBot
         public BotManager()
         {
             useSeparateProcesses = false;
-            new List<Bot>();
             botProcs = new List<RunningBot>();
         }
 
