@@ -206,7 +206,7 @@ namespace SteamBot
         /// <param name="process">This parameter indicates if the bot is launched in a seperate process. However, this value, in fact, is simply a marker and is not used anywhere.</param>
         public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, bool debug = false, bool process = false, bool useTwoFactorByDefault = false) : this(config, apiKey, sentryFilesDirectoryName, authFilesDirectoryName, handlerCreator, null, debug, process, useTwoFactorByDefault) { }
 
-        public Bot(Configuration.BotInfo config, string apiKey, UserHandlerCreator handlerCreator, bool debug = false, bool process = false, bool useTwoFactorByDefault = false)
+        public Bot(Configuration.BotInfo config, string apiKey, string sentryFilesDirectoryName, string authFilesDirectoryName, UserHandlerCreator handlerCreator, ILog log = null, bool debug = false, bool process = false, bool useTwoFactorByDefault = false)
         {
             this.sentryFilesDirectoryName = sentryFilesDirectoryName;
             this.authFilesDirectoryName = authFilesDirectoryName;
